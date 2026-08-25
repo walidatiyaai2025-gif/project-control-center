@@ -1,0 +1,18 @@
+{
+  "PROJECT_ID": "<project-id>",
+  "VERSIONS": [
+    {
+      "PRODUCT_VERSION": "<version>",
+      "SOURCE_SHA": "<sha>",
+      "RELEASE_TAG": "v<version>",
+      "BUILD_ID": "<build-id>",
+      "ARTIFACT_DIGEST": null,
+      "TASK_IDS": [],
+      "USER_REVIEWED": false,
+      "PRODUCTION": false,
+      "RELEASED_AT": null,
+      "PREVIOUS_KNOWN_GOOD_VERSION": null,
+      "PREVIOUS_KNOWN_GOOD_SHA": null
+    }
+  ]
+}

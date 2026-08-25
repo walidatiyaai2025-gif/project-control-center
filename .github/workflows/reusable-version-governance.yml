@@ -1,0 +1,85 @@
+name: Reusable Version Governance
+on:
+  workflow_call:
+    inputs:
+      project_id: {required: true, type: string}
+      control_plane_ref:
+        description: Immutable PCC SHA/tag recorded by the managed repository
+        required: true
+        type: string
+      version_source: {required: false, type: string, default: VERSION}
+      version_policy: {required: false, type: string, default: semantic}
+      display_version: {required: false, type: string, default: ''}
+      package_version: {required: false, type: string, default: ''}
+      endpoint_version: {required: false, type: string, default: ''}
+      display_required: {required: false, type: boolean, default: false}
+      endpoint_required: {required: false, type: boolean, default: false}
+      official: {required: false, type: boolean, default: false}
+      artifact_name: {required: false, type: string, default: ''}
+      artifact_path: {required: false, type: string, default: ''}
+      artifact_pattern: {required: false, type: string, default: '{project}-{version}'}
+      release_tag: {required: false, type: string, default: ''}
+      tag_pattern: {required: false, type: string, default: 'v{version}'}
+      release_notes_path: {required: false, type: string, default: ''}
+      released_mapping:
+        description: Optional product path to JSON version map or VERSION_HISTORY-compatible document
+        required: false
+        type: string
+        default: ''
+permissions:
+  contents: read
+jobs:
+  version-governance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout product repository
+        uses: actions/checkout@v4
+        with:
+          path: product
+          fetch-depth: 0
+          fetch-tags: true
+      - name: Checkout pinned Project Control Center
+        uses: actions/checkout@v4
+        with:
+          repository: walidatiyaai2025-gif/project-control-center
+          ref: ${{ inputs.control_plane_ref }}
+          path: pcc
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Validate immutable version identity
+        shell: bash
+        env:
+          PROJECT_ID: ${{ inputs.project_id }}
+          VERSION_SOURCE: ${{ inputs.version_source }}
+          VERSION_POLICY: ${{ inputs.version_policy }}
+          DISPLAY_VERSION: ${{ inputs.display_version }}
+          PACKAGE_VERSION: ${{ inputs.package_version }}
+          ENDPOINT_VERSION: ${{ inputs.endpoint_version }}
+          DISPLAY_REQUIRED: ${{ inputs.display_required }}
+          ENDPOINT_REQUIRED: ${{ inputs.endpoint_required }}
+          OFFICIAL: ${{ inputs.official }}
+          ARTIFACT_NAME: ${{ inputs.artifact_name }}
+          ARTIFACT_PATH: ${{ inputs.artifact_path }}
+          ARTIFACT_PATTERN: ${{ inputs.artifact_pattern }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+          TAG_PATTERN: ${{ inputs.tag_pattern }}
+          RELEASE_NOTES_PATH: ${{ inputs.release_notes_path }}
+          RELEASED_MAPPING: ${{ inputs.released_mapping }}
+        run: |
+          args=(--repo product --project "$PROJECT_ID" --version-source "$VERSION_SOURCE" --version-policy "$VERSION_POLICY" --source-sha "$GITHUB_SHA" --tag-pattern "$TAG_PATTERN" --artifact-pattern "$ARTIFACT_PATTERN" --control-plane-version "$(cat pcc/VERSION)" --manifest-out version-manifest.json)
+          if [ -n "$DISPLAY_VERSION" ]; then args+=(--display-version "$DISPLAY_VERSION"); fi
+          if [ -n "$PACKAGE_VERSION" ]; then args+=(--package-version "$PACKAGE_VERSION"); fi
+          if [ -n "$ENDPOINT_VERSION" ]; then args+=(--endpoint-version "$ENDPOINT_VERSION"); fi
+          if [ "$DISPLAY_REQUIRED" = "true" ]; then args+=(--display-required); fi
+          if [ "$ENDPOINT_REQUIRED" = "true" ]; then args+=(--endpoint-required); fi
+          if [ "$OFFICIAL" = "true" ]; then args+=(--official); fi
+          if [ -n "$ARTIFACT_NAME" ]; then args+=(--artifact-name "$ARTIFACT_NAME"); fi
+          if [ -n "$ARTIFACT_PATH" ]; then args+=(--artifact-path "product/$ARTIFACT_PATH"); fi
+          if [ -n "$RELEASE_TAG" ]; then args+=(--release-tag "$RELEASE_TAG"); fi
+          if [ -n "$RELEASE_NOTES_PATH" ]; then args+=(--release-notes "product/$RELEASE_NOTES_PATH"); fi
+          if [ -n "$RELEASED_MAPPING" ]; then args+=(--released-mapping "product/$RELEASED_MAPPING"); fi
+          python pcc/scripts/version_governance.py "${args[@]}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.project_id }}-version-manifest
+          path: version-manifest.json

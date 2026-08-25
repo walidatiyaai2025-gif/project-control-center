@@ -3,9 +3,13 @@ on:
   push:
     paths:
       - 'portfolio/**'
+      - 'orchestration/**'
       - 'dashboard/**'
+      - 'schemas/**'
       - '.github/workflows/portfolio-dashboard.yml'
   workflow_dispatch:
+permissions:
+  contents: read
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,3 +25,4 @@ jobs:
           path: |
             dashboard/
             portfolio/status/index.json
+            portfolio/version-history/

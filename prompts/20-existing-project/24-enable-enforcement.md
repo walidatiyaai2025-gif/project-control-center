@@ -1,31 +1,34 @@
 # 24 — Enable Enforcement
 
 PROMPT_ID: PCC-24
-VERSION: 1.0.0
+VERSION: 1.1.0
 APPLIES_TO: ACTIVE_EXISTING_PROJECT
 PREVIOUS_STEP: PCC-23
 NEXT_STEP: PCC-25
 REQUIRES_WRITE_ACCESS: true
-CONTROL_PLANE_VERSION: v1.0.0
+CONTROL_PLANE_VERSION: v1.1.0
 
 ## Must exist before running
 
-- Control-plane installation from PCC-23 on the verified development lineage.
-- Canonical task mapping for existing active work.
-- CI/QA/release requirements identified for the project.
+- PCC-23 installation on verified development lineage.
+- Canonical task mapping for active work.
+- CI/QA/release requirements identified.
+- Product version baseline/profile installed where applicable.
 
 ## Mission
 
-Turn governance from documentation into enforceable delivery gates without breaking valid existing work.
+Turn governance into staged enforceable delivery gates without breaking valid existing work.
 
 ## Execute
 
-Enable/adjust branch/PR/CI conventions available through repository files: require Task ID traceability in PR templates/checks, validate canonical status/task records, bind CI evidence to exact SHAs, protect official build identity, and require QA/integration/release evidence before DONE.
+Enable Task-ID PR traceability, canonical status/task validation, exact-SHA CI evidence, official build identity, and QA/integration/release evidence before DONE.
 
-Where repository settings or external branch protection cannot be changed by this prompt, record the exact manual/platform setting still required. Do not weaken existing quality gates. Grandfather only explicitly documented pre-control-plane work and map it to canonical tasks.
+For central/version policy, progress deliberately through `OBSERVE → WARN → CANARY → ENFORCE`. Existing repositories begin OBSERVE unless stronger readiness is proven. Before CANARY/ENFORCE confirm discovery complete, baseline locked, version baseline established, canonical version source valid, display/package reconciliation supported, immutable tag/version guard wired, version manifest generation available, and rollback identity represented.
 
-Ensure stale work is recoverable by same task/branch/SHA, and worker-local reports cannot publish authoritative project state.
+Use dry-run/compatibility/drift reports before changing mode. Never force policy ENFORCE to hide unresolved version/history conflicts. Where repository settings/branch protection remain external, record exact manual settings.
+
+Ensure stale work remains recoverable by same task/branch/SHA and Worker-local reports cannot publish overall project state.
 
 ## Required output
 
-Return enforcement changes, exact SHA/PR, checks enabled, settings still external/manual, exceptions with Task IDs, and next prompt PCC-25.
+Return enforcement changes, exact SHA/PR, orchestration mode/wave, compatibility/drift result, version guards enabled, external settings, exceptions with Task IDs, and PCC-25.

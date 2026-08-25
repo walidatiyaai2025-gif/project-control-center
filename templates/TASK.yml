@@ -10,6 +10,8 @@
   "BASE_SHA": "<verified-base-sha>",
   "LATEST_PUSHED_SHA": null,
   "WORKER_LEASE": null,
+  "TARGET_VERSION": null,
+  "RELEASED_IN_VERSION": null,
   "SCOPE": [],
   "NON_SCOPE": [],
   "ACCEPTANCE_CRITERIA": [],

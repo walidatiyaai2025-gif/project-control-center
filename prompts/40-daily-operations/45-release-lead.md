@@ -1,30 +1,48 @@
 # 45 — Release Lead
 
 PROMPT_ID: PCC-45
-VERSION: 1.0.0
+VERSION: 1.1.0
 APPLIES_TO: MANAGED_PROJECT_RELEASE
 PREVIOUS_STEP: PCC-44
 NEXT_STEP: PCC-46
 REQUIRES_WRITE_ACCESS: true
-CONTROL_PLANE_VERSION: v1.0.0
+CONTROL_PLANE_VERSION: v1.1.0
 
 ## Must exist before running
 
-- Exact canonical integration SHA eligible for release.
+- Exact canonical integration SHA eligible for release/review candidate.
 - Required integrated CI and QA evidence.
-- Release version/tag plan, deployment target, and rollback/forward-fix strategy.
-- Controlled CI capable of producing official artifacts.
+- Verified project profile with canonical VERSION_SOURCE and version policy.
+- Candidate PRODUCT_VERSION, tag plan, artifact naming plan, deployment target and rollback/forward-fix strategy.
+- Controlled CI capable of official artifacts/version manifest.
 
 ## Mission
 
-Create and verify an official release from an immutable controlled source.
+Create/verify an official or user-reviewable release from immutable controlled source with a unique version identity.
+
+## Version change gate
+
+Before delivery/build publication validate:
+
+1. canonical version exists and format is valid;
+2. customer-visible version matches canonical source where required;
+3. package/manifest version matches where required;
+4. intended tag equals VERSION_TAG_PATTERN;
+5. version/tag/history is not already mapped to another distributed/released SHA;
+6. official artifact name includes correct version and is not ambiguous;
+7. release notes identify version;
+8. SOURCE_SHA equals approved immutable integration/candidate SHA;
+9. CI/QA evidence belongs to same SHA/build;
+10. version manifest is generated with PRODUCT_VERSION, SOURCE_SHA, BUILD_ID, BUILD_TIME, CONTROL_PLANE_VERSION, CI_RUN_ID and digest where applicable.
+
+Any mismatch is release-blocking `VERSION_DRIFT`/identity failure. Never move/reuse a distributed candidate or release tag. If `2.8.0-rc.1` changes, issue `rc.2`; if `2.8.0` changes after release, issue an appropriate new semantic version.
 
 ## Execute
 
-Generate official artifacts only from controlled CI at the exact canonical integration SHA. Record workflow/run, artifact/build identifiers and checksums where feasible. Create release candidate evidence, deploy through approved path, then verify production artifact/source identity and smoke checks.
+Generate official artifacts only from controlled CI at exact approved SHA. Record version manifest, workflow/run, artifact identity/digest, release candidate evidence and immutable tag mapping. Deploy through approved path and verify production artifact/source/version identity and smoke checks.
 
-Record release/tag, PRODUCTION_SHA, rollback reference, migration execution/validation when relevant, incidents if any, and tasks actually included. Never substitute a local build for official evidence.
+Record PREVIOUS_KNOWN_GOOD_VERSION/SHA for rollback. After proven release, set included Tasks' `RELEASED_IN_VERSION` to actual PRODUCT_VERSION.
 
 ## Required output
 
-Return release/version, source integration SHA, official artifact identities, deployment evidence, production branch/SHA, production verification, rollback reference, included Task IDs, and eligibility for PCC-46.
+Return PRODUCT_VERSION, release tag, SOURCE_SHA/integration SHA, BUILD_ID, manifest/artifact identities, CI/QA, deployment/production SHA, previous known-good version/SHA, included Task IDs, and PCC-46 eligibility.

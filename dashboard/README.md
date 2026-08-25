@@ -1,5 +1,7 @@
 # Portfolio Dashboard
 
-`index.html` is a read-only portfolio view. It renders `portfolio/status/index.json` when served from the repository/site layout. `build_portfolio.py` derives the summary from `portfolio/projects.yml` and canonical status records without accepting Worker percentage estimates.
+Read-only projection of canonical portfolio and orchestration state.
 
-The GitHub workflow builds and uploads a dashboard artifact. Publishing through GitHub Pages is intentionally not assumed; Pages can be enabled later without changing the data contract.
+Shows portfolio totals plus project health, progress, production version/SHA, development/target version/SHA, next release candidate, latest user-review candidate, P0, blocked, QA, stale, waiting-for-user, policy/version drift, last sync, maturity and control-plane version.
+
+`build_portfolio.py` merges the project registry with observed orchestration metadata and generates `portfolio/status/index.json`. The dashboard never invents missing versions or SHAs.

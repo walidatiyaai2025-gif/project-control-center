@@ -1,0 +1,12 @@
+{
+  "PROJECT_ID": "<project-id>",
+  "PRODUCT_VERSION": "<version>",
+  "SOURCE_SHA": "<immutable-source-sha>",
+  "BUILD_ID": "<build-id>",
+  "BUILD_TIME": "<ISO-8601>",
+  "CONTROL_PLANE_VERSION": "v1.1.0",
+  "CI_RUN_ID": "<ci-run-id>",
+  "ARTIFACT_DIGEST": null,
+  "RELEASE_TAG": null,
+  "ARTIFACT_NAME": null
+}

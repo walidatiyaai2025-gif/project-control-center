@@ -1,0 +1,43 @@
+name: Central Orchestrator
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Reconciliation rollout mode
+        required: true
+        default: OBSERVE
+        type: choice
+        options: [OBSERVE, WARN, CANARY, ENFORCE]
+      project_id:
+        description: Optional PROJECT_ID; blank means all desired projects
+        required: false
+        type: string
+      apply_safe:
+        description: Apply only allow-listed PCC-local safe self-healing
+        required: true
+        default: false
+        type: boolean
+permissions:
+  contents: read
+concurrency:
+  group: pcc-orchestrator-${{ inputs.project_id || 'portfolio' }}-${{ inputs.mode }}
+  cancel-in-progress: false
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Reconcile desired vs observed
+        shell: bash
+        run: |
+          args=(--mode "${{ inputs.mode }}" --report-out orchestration-report.json)
+          if [ -n "${{ inputs.project_id }}" ]; then args+=(--project "${{ inputs.project_id }}"); fi
+          if [ "${{ inputs.apply_safe }}" = "true" ]; then args+=(--apply-safe); fi
+          python scripts/orchestrator.py "${args[@]}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pcc-orchestration-${{ inputs.mode }}
+          path: orchestration-report.json

@@ -1,22 +1,22 @@
 # 63 — Executive Portfolio Status
 
 PROMPT_ID: PCC-63
-VERSION: 1.0.0
+VERSION: 1.1.0
 APPLIES_TO: AUTHORITATIVE_PORTFOLIO_STATUS
 PREVIOUS_STEP: PCC-61_OR_PCC-62
 NEXT_STEP: PCC-40_OR_END
 REQUIRES_WRITE_ACCESS: true
-CONTROL_PLANE_VERSION: v1.0.0
+CONTROL_PLANE_VERSION: v1.1.0
 
 ## Must exist before running
 
 - Current portfolio registry/priorities.
-- Canonical project status for every project being represented.
+- Canonical project status for every represented project.
 - Freshness/drift findings from PCC-61 or equivalent reconciliation.
 
 ## Authority
 
-Operate as the portfolio-level DELIVERY / CONTROL LEAD. Worker-local summaries are not authoritative.
+Operate as portfolio-level DELIVERY / CONTROL LEAD. Worker-local summaries are not authoritative.
 
 ## Mission
 
@@ -24,12 +24,12 @@ Publish one canonical portfolio view and refresh dashboard status.
 
 ## Execute
 
-For each project show Project, Health, Progress, Production, Development, P0, Blocked, QA, Stale, Waiting for User, Last Sync, and Control Plane Maturity. Include portfolio totals for TOTAL PROJECTS, HEALTHY, NEEDS ATTENTION, CRITICAL, ACTIVE TASKS, WAITING FOR USER, and UNTRACKED REQUESTS.
+For each project show Project, Health, Progress, Production Version@SHA, Development/Target Version@SHA, Next Release Candidate, Latest User Review Candidate, P0, Blocked, QA, Stale, Waiting for User, Version/Policy Drift, Last Sync, Control Plane Maturity and Control Plane Version.
 
-Reference immutable SHAs/releases where applicable. Keep unknown values explicit. Progress must come only from canonical scope/evidence.
+Include totals for TOTAL PROJECTS, HEALTHY, NEEDS ATTENTION, CRITICAL, ACTIVE TASKS, WAITING FOR USER, UNTRACKED REQUESTS and VERSION DRIFT PROJECTS.
 
-Regenerate `portfolio/status/index.json`/dashboard projection and record the exact control-center SHA used.
+Reference immutable SHAs/releases; unknown explicit; progress only canonical evidence. Regenerate dashboard and record exact PCC SHA.
 
 ## Required output
 
-Return the authoritative portfolio summary, top cross-project risks/actions, projects needing reconciliation/onboarding, dashboard generation status, and exact source SHA.
+Return authoritative portfolio summary, top cross-project/version/policy risks, projects needing reconciliation/onboarding, dashboard status and exact source SHA.

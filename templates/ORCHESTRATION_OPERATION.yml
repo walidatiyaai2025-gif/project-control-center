@@ -1,0 +1,12 @@
+{
+  "PROJECT_ID": "<project-id>",
+  "OPERATION_KEY": "<stable-idempotency-key>",
+  "MODE": "OBSERVE",
+  "DESIRED_CONTROL_PLANE_VERSION": "v1.1.0",
+  "DESIRED_POLICY_VERSION": "1.0.0",
+  "OBSERVED_CONTROL_PLANE_VERSION": null,
+  "OBSERVED_POLICY_VERSION": null,
+  "DRIFT": [],
+  "RESULT": "NOOP",
+  "TIMESTAMP": "<ISO-8601>"
+}

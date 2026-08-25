@@ -1,8 +1,10 @@
 {
   "CONTROL_PLANE_REPOSITORY": "walidatiyaai2025-gif/project-control-center",
-  "CONTROL_PLANE_VERSION": "v1.0.0",
+  "CONTROL_PLANE_VERSION": "v1.1.0",
   "CONTROL_PLANE_SHA": "<immutable-control-plane-sha>",
   "PROJECT_ID": "<project-id>",
   "CANONICAL_STATUS_PATH": "<path-in-managed-repository-or-control-center>",
+  "PROJECT_PROFILE_PATH": "<project-profile-path>",
+  "POLICY_ENFORCEMENT_MODE": "OBSERVE",
   "LAST_CONTROL_PLANE_SYNC": "<ISO-8601>"
 }
