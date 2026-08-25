@@ -2,6 +2,9 @@
   "TASK_ID": "<project>-T####",
   "PROJECT_ID": "<project-id>",
   "REQUIREMENT_ID": "<requirement-id>",
+  "FEATURE_IDS": [],
+  "SCREENS_AFFECTED": [],
+  "ACTIONS_AFFECTED": [],
   "TITLE": "<title>",
   "STATE": "READY",
   "PRIORITY": "P1",
@@ -17,6 +20,7 @@
   "ACCEPTANCE_CRITERIA": [],
   "DUPLICATE_CHECK": [],
   "DEPENDENCIES": [],
+  "FEATURE_DELIVERY_EVIDENCE": [],
   "EVIDENCE": [],
   "UPDATED_AT": "<ISO-8601>"
 }

@@ -1,9 +1,9 @@
 # Official Builds, Artifact Identity and Release Candidates
 
-Official builds are generated only by controlled CI from immutable SHAs. Each official/reviewable artifact must identify project, `PRODUCT_VERSION`, source SHA, workflow/run, build ID, environment/target, creation time, control-plane version and checksum/digest where feasible.
+Official builds are generated only by controlled CI from immutable SHAs. Each artifact identifies project, product version, source SHA, workflow/run, build identity, environment/target, creation time and checksum where feasible.
 
-All customer/reviewable product versions are additionally governed by `IMMUTABLE_PRODUCT_VERSION_POLICY.md`: one canonical product version source, immutable version→SHA mapping, non-ambiguous versioned artifact names, user-visible/package reconciliation where required, and an immutable version manifest.
+A release candidate references the canonical integration SHA, immutable product version, all required QA evidence, and the canonical Feature Delivery Matrix audit. A feature is `PRESENT_IN_CANDIDATE` only when its exact implementation is contained in the candidate source SHA; a feature is `PRESENT_IN_PRODUCTION` only when contained in the verified production SHA.
 
-A release candidate must reference the canonical integration SHA, unique candidate version, build ID and all required QA evidence. A release must record immutable source SHA, artifact identity, immutable tag/version, deployment target, release notes, previous known-good version/SHA, rollback reference, and production verification state.
+A release must record immutable source SHA, artifact identity, tag/version, deployment target, release notes, rollback reference, production verification, included Task/Feature IDs and released-version mapping. A release must not promote requested customer-review scope with unresolved required `IMPLEMENTED_NOT_CONNECTED`, `UNREACHABLE_SCREEN`, `MISSING_UI_BINDING`, `PERSISTENCE_GAP`, `FALSE_SUCCESS_RISK`, or `FALSE_DONE_FEATURE` findings unless an approved exception is recorded.
 
-Local untracked builds, Worker-branch builds and anonymous artifacts such as `latest.*` or `final.*` are never authoritative customer/release evidence.
+Local untracked builds and Worker branches are never authoritative customer-visible release evidence.

@@ -1,0 +1,32 @@
+name: Reusable Feature Delivery Governance
+on:
+  workflow_call:
+    inputs:
+      control_plane_ref: {required: true, type: string}
+      feature_matrix_path: {required: false, type: string, default: governance/FEATURE_DELIVERY_MATRIX.yml}
+      screen_inventory_path: {required: false, type: string, default: governance/SCREEN_INVENTORY.yml}
+      screen_action_matrix_path: {required: false, type: string, default: governance/SCREEN_ACTION_MATRIX.yml}
+permissions:
+  contents: read
+jobs:
+  end-to-end-feature-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout product repository
+        uses: actions/checkout@v4
+        with: {path: product}
+      - name: Checkout pinned Project Control Center
+        uses: actions/checkout@v4
+        with:
+          repository: walidatiyaai2025-gif/project-control-center
+          ref: ${{ inputs.control_plane_ref }}
+          path: pcc
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Validate end-to-end feature delivery
+        run: python pcc/scripts/feature_delivery_audit.py --matrix "product/${{ inputs.feature_matrix_path }}" --screens "product/${{ inputs.screen_inventory_path }}" --actions "product/${{ inputs.screen_action_matrix_path }}" --report-out feature-delivery-report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: feature-delivery-governance
+          path: feature-delivery-report.json

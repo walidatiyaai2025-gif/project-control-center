@@ -14,8 +14,9 @@ jobs:
         with:
           python-version: '3.12'
       - run: python scripts/self_audit.py
-      - run: python -m unittest scripts/test_control_plane.py -v
+      - run: python -m unittest scripts/test_control_plane.py scripts/test_feature_delivery.py -v
       - run: python scripts/orchestrator.py --report-out /tmp/orchestration-report.json
+      - run: python dashboard/build_portfolio.py > /tmp/dashboard.json
       - run: python -m json.tool portfolio/projects.yml > /dev/null
       - run: python -m json.tool portfolio/priorities.yml > /dev/null
       - run: python -m json.tool schemas/project.schema.json > /dev/null
@@ -25,3 +26,6 @@ jobs:
       - run: python -m json.tool schemas/version-manifest.schema.json > /dev/null
       - run: python -m json.tool schemas/version-history.schema.json > /dev/null
       - run: python -m json.tool schemas/orchestration-operation.schema.json > /dev/null
+      - run: python -m json.tool schemas/feature-delivery-matrix.schema.json > /dev/null
+      - run: python -m json.tool schemas/screen-inventory.schema.json > /dev/null
+      - run: python -m json.tool schemas/screen-action-matrix.schema.json > /dev/null

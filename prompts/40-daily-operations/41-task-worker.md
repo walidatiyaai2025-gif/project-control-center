@@ -1,35 +1,31 @@
 # 41 — Task Worker
 
 PROMPT_ID: PCC-41
-VERSION: 1.1.0
+VERSION: 1.2.0
 APPLIES_TO: CANONICAL_TASK_IMPLEMENTATION
 PREVIOUS_STEP: PCC-40
 NEXT_STEP: PCC-43_OR_PCC-44
 REQUIRES_WRITE_ACCESS: true
-CONTROL_PLANE_VERSION: v1.1.0
+CONTROL_PLANE_VERSION: v1.2.0
 
 ## Must exist before running
 
-- Canonical TASK_ID in READY/CLAIMED/IN_PROGRESS.
+- Canonical TASK_ID in READY/CLAIMED/IN_PROGRESS state.
 - Duplicate check completed.
 - Canonical task branch and verified base SHA identified.
-- Acceptance criteria/validation defined.
-- For versioned customer-impacting work: canonical development branch/SHA, current release version, target development version and task TARGET_VERSION are supplied or explicitly null/pending.
+- Acceptance criteria and required validation defined.
+- Product-function tasks have FEATURE_ID(s), applicable Screen/Action IDs and Feature Delivery Matrix records.
 
 ## Mission
 
-Implement only the assigned canonical Task without inventing branch or product-version context.
+Implement only the assigned canonical Task and prove applicable end-to-end delivery dimensions without representing disconnected code as complete.
 
 ## Execute
 
-Confirm branch represents same Task ID and fetch latest remote before editing. Claim/refresh Worker lease. Work only within scope; unrelated findings become linked requests/tasks.
+Confirm branch/Task identity and fetch latest remote state. Claim/refresh the Worker lease. Work only within Task scope. Update canonical feature/screen/action evidence for backend, API, UI, navigation, UI/API/data binding, mutation, permissions, persistence/reload, QA, customer visibility and target version as applicable. Irrelevant dimensions are explicitly NOT_APPLICABLE.
 
-Do not independently change `TARGET_VERSION` or invent which release the work belongs to. If implementation requires a version bump/type change not covered by the task, raise it to Dispatcher/Release Lead as a traceable decision. Product version changes themselves must use the canonical version source.
-
-Commit/push traceable changes to canonical task branch. Run required tests/analysis and capture exact-head evidence. Never weaken tests/fabricate evidence. Update task-local state/evidence.
-
-Worker reports Task-local state only.
+Commit/push traceable changes and run required tests. Never weaken tests, fabricate evidence, use fake production data, or show local success as server-authoritative success. A Worker may not manually return DONE when `scripts/feature_delivery_audit.py` derives an integration-gap state.
 
 ## Required output
 
-Return TASK_ID, TARGET_VERSION, canonical branch, exact latest pushed SHA, scope/files changed, validation evidence, remaining criteria, blocker state and next gate.
+Return TASK, FEATURE, SCREENS AFFECTED, BACKEND STATUS, API STATUS, UI STATUS, NAVIGATION STATUS, UI/API BINDING STATUS, PERSISTENCE STATUS, QA STATUS, CUSTOMER VISIBLE, TARGET VERSION, CURRENT HEAD, NEXT GAP, and the derived feature state. `DONE` alone is forbidden.
