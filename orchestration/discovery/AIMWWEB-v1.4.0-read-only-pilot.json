@@ -1,0 +1,196 @@
+{
+  "CONTROL_PLANE_VERSION": "v1.4.0",
+  "BASE_CONTROL_PLANE_HEAD": "825f4d77404f1947ed3b1c052733c007965cca02",
+  "PROJECT_ID": "AIMWWEB",
+  "TARGET_REPOSITORY": "walidatiyaai2025-gif/AIMWWeb",
+  "COLLECTION_TIMESTAMP": "2026-08-25T14:40:57+03:00",
+  "MODE": "OBSERVE",
+  "WRITE_AUTHORIZED": false,
+  "CANONICAL_DEVELOPMENT_LINEAGE": "UNRESOLVED",
+  "TARGET_MUTATED": false,
+  "REPOSITORY_IDENTITY": {
+    "DEFAULT_BRANCH": "main",
+    "DEFAULT_BRANCH_HEAD": "359da588157797c24eb708e06669d19491d8e56e",
+    "VISIBILITY": "public",
+    "ARCHIVED": false,
+    "LAST_REPOSITORY_PUSH": "2026-08-24T17:08:49Z"
+  },
+  "BRANCH_INVENTORY": {
+    "COUNT": 195,
+    "PAGINATION": "COMPLETE",
+    "PAGE_COUNTS": [100, 95, 0],
+    "OPEN_PR_HEAD_BRANCHES": [
+      "automation/183-security-audit-email-relay-durability",
+      "automation/183-notification-inbox-reconciliation",
+      "automation/183-site-settings-truthful-security",
+      "agent2/183-planner-publish-runtime-closure",
+      "automation/183-live-circuit-authorization",
+      "agent4/reports-automation-tenant-isolation",
+      "agent1/183-configuration-validation-truthfulness",
+      "agent4/content-planner-tenant-isolation",
+      "automation/183-ai-usage-account-profile-acceptance",
+      "agent2/183-bulk-result-reconciliation",
+      "fix/183-prompt-templates-browser-closure",
+      "agent3/sync-browser-acceptance-183",
+      "release/rel-003-offline-wrapped-key-installer"
+    ],
+    "UNRESOLVED_NON_MAIN_NON_OPEN_PR_HEAD_CANDIDATES": 181,
+    "AUTO_DELETE_ALLOWED": false
+  },
+  "PULL_REQUEST_INVENTORY": {
+    "OPEN_COUNT": 13,
+    "OPEN_NUMBERS": [234, 233, 232, 231, 229, 228, 227, 226, 225, 222, 219, 216, 171],
+    "RELEVANT_RECENTLY_MERGED": [230],
+    "STACKED_DEPENDENCIES": [{"PR": 231, "STACKED_ON": 226}],
+    "MERGEABILITY_FALSE_IS_NOT_CLASSIFIED_AS_CI_FAILURE": true,
+    "STALE_EXACT_HEAD_EVIDENCE": [{"PR": 227, "CURRENT_HEAD": "1ad94dff", "CLAIMED_EVIDENCE_HEAD": "6496...", "CLASSIFICATION": "STALE_OR_UNVERIFIED_ARTIFACT"}]
+  },
+  "ISSUE_INVENTORY": {
+    "OPEN_COUNT": 5,
+    "OPEN_NUMBERS": [183, 3, 173, 172, 167],
+    "ACTIVE_RECORD_COUNT_WITH_OPEN_PRS": 18,
+    "DEDUPLICATED_REQUIREMENT_TOTAL": null,
+    "REQUIREMENT_TOTAL_STATUS": "COMPLETION_NOT_YET_AUTHORITATIVE"
+  },
+  "DEVELOPMENT_LINEAGE": {
+    "RESULT": "UNRESOLVED",
+    "CONFIDENCE": "LOW",
+    "RANKED_CANDIDATES": [
+      {"REF": "main", "ROLE": "PRODUCTION_INTEGRATION_ANCHOR", "EVIDENCE": "default branch; dominant PR base; recent merged integration"},
+      {"REF": "agent4/content-planner-tenant-isolation", "ROLE": "STACK_BASE_CANDIDATE", "EVIDENCE": "PR #231 is stacked on PR #226"},
+      {"REF": "open PR head branches", "ROLE": "ACTIVE_TASK_LINEAGES", "EVIDENCE": "13 open PRs"}
+    ],
+    "BASELINE_LOCK_ALLOWED": false
+  },
+  "CI_QA_STATE": {
+    "EXACT_MAIN_HEAD": "359da588157797c24eb708e06669d19491d8e56e",
+    "CI": [
+      {"WORKFLOW": ".NET Build Verification", "RUN_ID": 32728175580, "CONCLUSION": "success"},
+      {"WORKFLOW": "Build", "RUN_ID": 32728175612, "CONCLUSION": "success"}
+    ],
+    "VISUAL_QA": {"WORKFLOW": "UX Regression Gate", "RUN_ID": 32728175539, "CONCLUSION": "success", "EXACT_HEAD_ARTIFACT_COUNT": 22},
+    "PATCH_AUTOMATION_FAILURES_SEPARATE_FROM_CANONICAL_CI": true,
+    "RELEASE_EVIDENCE": "NO_GITHUB_RELEASES_OR_TAGS"
+  },
+  "ARTIFACT_PROVENANCE": {
+    "EXACT_MAIN_UX_RUN": 32728175539,
+    "EXACT_MAIN_SOURCE_SHA": "359da588157797c24eb708e06669d19491d8e56e",
+    "EXACT_MAIN_ARTIFACTS_VERIFIED": 22,
+    "PRE_PROMOTION_SITE_OPERATIONS": {
+      "RUN_ID": 32726701999,
+      "SOURCE_SHA": "ed2a68224e9183c45b6e89005483529e2674155e",
+      "ARTIFACT_ID": 9519837668,
+      "DIGEST": "sha256:32093c5c8d7b74325c7b8a80cd63b50481ca80edad9472b1a1b24480ee686d27"
+    },
+    "GAPS": [
+      "PR #227 current head does not match the head cited by its PR-body CI evidence",
+      "Artifact existence is not promoted to functional QA for capability dimensions not proven by the associated gate"
+    ]
+  },
+  "VERSION_BASELINE": {
+    "CURRENT_PRODUCT_VERSION_CANDIDATE": "155.152.0",
+    "SOURCE": "src/AIWordPressManager.Web/AIWordPressManager.Web.csproj",
+    "ROOT_VERSION_FILE": "ABSENT",
+    "GITHUB_TAGS": 0,
+    "GITHUB_RELEASES": 0,
+    "LATEST_RELEASE_VERSION": null,
+    "LATEST_RELEASE_SHA": null,
+    "CONFIDENCE": "MEDIUM",
+    "STATUS": "PARTIAL_CANDIDATE_NOT_RELEASE_BASELINE"
+  },
+  "REQUIREMENT_BASELINE": {
+    "TOTAL_IDENTIFIED_REQUIREMENTS": "COMPLETION_NOT_YET_AUTHORITATIVE",
+    "ACTIVE_ISSUE_PR_RECORDS": 18,
+    "ROADMAP_PHASES": 9,
+    "NOTE": "Overlap exists between roadmap, umbrella issue #183, open issues, and PR work; no fabricated deduplicated denominator."
+  },
+  "FEATURE_DELIVERY_BASELINE": {
+    "MAJOR_CAPABILITY_ROUTE_GROUPS_IDENTIFIED": 26,
+    "STATUS": "INITIAL_EVIDENCE_BACKED_BASELINE",
+    "UNKNOWN_REMAINS_UNKNOWN": true,
+    "CONFIRMED_FALSE_DONE_CANDIDATES": [
+      {"CAPABILITY": "Planner Publish runtime execution", "CLASSIFICATION": "IMPLEMENTED_NOT_CONNECTED", "EVIDENCE": "open PR #231 exists specifically to execute Planner Publish jobs end-to-end and is stacked on #226"}
+    ],
+    "BACKEND_ONLY_CONFIRMED": 0,
+    "UI_ONLY_CONFIRMED": 0,
+    "MISSING_BINDINGS_CONFIRMED": 1
+  },
+  "SCREEN_BASELINE": {
+    "MAJOR_ROUTE_SCREEN_GROUPS_IDENTIFIED": 26,
+    "STATUS": "INITIAL_EVIDENCE_BACKED_BASELINE",
+    "UNREACHABLE_CONFIRMED": 0,
+    "FULL_RAZOR_CONTROL_CENSUS_COMPLETE": false,
+    "VISUAL_AND_FUNCTIONAL_COMPLETION_KEPT_SEPARATE": true
+  },
+  "ACTION_BASELINE": {
+    "STATUS": "INITIAL_EVIDENCE_BACKED_BASELINE",
+    "VISIBLE_CONTROL_WITHOUT_PROVEN_PRODUCTION_BEHAVIOR": ["Planner Publish runtime execution"],
+    "UNKNOWN_ACTIONS_NOT_UPGRADED_TO_PASS": true
+  },
+  "FALSE_DONE_AUDIT": {
+    "PERFORMED": true,
+    "CONFIRMED_CANDIDATE_COUNT": 1,
+    "CANDIDATES": ["Planner Publish runtime execution"],
+    "QA_GAPS_NOT_AUTOMATICALLY_CLASSIFIED_AS_FALSE_DONE": true
+  },
+  "DEAD_DISCONNECTED_AUDIT": {
+    "PERFORMED": true,
+    "UNCONNECTED_FEATURES_CONFIRMED": 1,
+    "DELETE_ALLOWED": false
+  },
+  "COMPLETION_MODEL": {
+    "CODE_COMPLETION": "COMPLETION_NOT_YET_AUTHORITATIVE",
+    "CONNECTIVITY_COMPLETION": "COMPLETION_NOT_YET_AUTHORITATIVE",
+    "QA_COMPLETION": "COMPLETION_NOT_YET_AUTHORITATIVE",
+    "CUSTOMER_READY_COMPLETION": "COMPLETION_NOT_YET_AUTHORITATIVE",
+    "RELEASE_COMPLETION": "COMPLETION_NOT_YET_AUTHORITATIVE",
+    "REASON": "Canonical deduplicated product/screen/action denominator is not yet complete; historical worker percentages are excluded."
+  },
+  "WORK_TOPOLOGY": {
+    "ORPHAN_CANDIDATES": 181,
+    "ORPHAN_STATUS": "UNRESOLVED_PENDING_CLOSED_MERGED_PR_RECONCILIATION",
+    "STALE_RECLAIMABLE": "UNRESOLVED",
+    "DUPLICATE_ACTIVE_WORK_CONFIRMED": 0,
+    "STACKED_WORK_NOT_COUNTED_AS_DUPLICATE": [231, 226]
+  },
+  "POLICY_DRIFT": [
+    "missing .control-plane.yml",
+    "missing .pcc/managed-repository-control.json",
+    "missing reusable-version-governance workflow",
+    "missing reusable-feature-delivery-governance workflow",
+    "missing root VERSION/release anchor",
+    "missing machine-readable PCC Feature Delivery Matrix",
+    "missing PCC Screen Inventory and Screen Action Matrix",
+    "missing PCC v1.4.0 output-discipline/structured-handoff/provenance enforcement in target",
+    "main branch is unprotected",
+    "canonical development lineage is unresolved",
+    "task traceability is not yet PCC-native"
+  ],
+  "MIGRATION_BLOCKERS": {
+    "UNKNOWN_UNMERGED_WORK": true,
+    "UNRESOLVED_DEVELOPMENT_LINEAGE": true,
+    "VERSION_BASELINE_UNRESOLVED": true,
+    "ORPHAN_WORK": "UNRESOLVED_181_CANDIDATES",
+    "DUPLICATE_WORK": "NONE_CONFIRMED",
+    "CURRENT_RED_CI": "NO_CANONICAL_EXACT_MAIN_RED_CI; PATCH_AUTOMATION_FAILURES_EXIST_SEPARATELY",
+    "QA_EVIDENCE_GAPS": true,
+    "POLICY_COMPATIBILITY_RISK": true
+  },
+  "ACCEPTANCE": {
+    "TARGET_MUTATION": "NO",
+    "LIVE_COLLECTION": "PASS",
+    "PAGINATION": "COMPLETE",
+    "DEFAULT_BRANCH_HEAD_VERIFIED": "YES",
+    "OPEN_PRS_COLLECTED": "YES",
+    "BRANCH_INVENTORY_COLLECTED": "YES",
+    "VERSION_DISCOVERY_PERFORMED": "YES",
+    "FEATURE_BASELINE_CREATED": "YES",
+    "SCREEN_BASELINE_CREATED": "YES",
+    "ACTION_BASELINE_CREATED": "YES",
+    "FALSE_DONE_AUDIT_PERFORMED": "YES",
+    "ARTIFACT_PROVENANCE_CHECKED": "YES",
+    "POLICY_DRIFT_GENERATED": "YES",
+    "MIGRATION_RISKS_GENERATED": "YES"
+  },
+  "NEXT_ACTION": "Keep AIMWWeb in OBSERVE with WRITE_AUTHORIZED=false; reconcile the 181 branch candidates against closed/merged PR history and resolve canonical development lineage before any baseline lock or migration."
+}
