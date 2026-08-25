@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "worker-handoff.schema.json",
+  "title": "WORKER_HANDOFF",
+  "type": "object",
+  "required": ["HANDOFF_TYPE","RESULT_CONFIDENCE","TASK","STATUS","HEAD","CHANGED","VALIDATION","BLOCKER","NEXT_ACTION"],
+  "properties": {
+    "HANDOFF_TYPE": {"const": "WORKER_HANDOFF"},
+    "RESULT_CONFIDENCE": {"enum": ["VERIFIED","PARTIALLY_VERIFIED","BLOCKED","UNKNOWN"]},
+    "TASK": {"type": "string","minLength": 1},
+    "STATUS": {"type": "string","minLength": 1},
+    "HEAD": {"type": ["string","null"]},
+    "CHANGED": {"type": "array"},
+    "VALIDATION": {"type": ["array","object"]},
+    "BLOCKER": {"type": ["string","null"]},
+    "REQUIRED_ACTION": {"type": ["string","null"]},
+    "NEXT_ACTION": {"type": "string","minLength": 1}
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "integration-handoff.schema.json",
+  "title": "INTEGRATION_HANDOFF",
+  "type": "object",
+  "required": ["HANDOFF_TYPE","RESULT_CONFIDENCE","INTEGRATION_HEAD","CANDIDATE","MERGE_STATE","CI","QA","BLOCKERS","RESULT","NEXT_ACTION"],
+  "properties": {
+    "HANDOFF_TYPE": {"const": "INTEGRATION_HANDOFF"},
+    "RESULT_CONFIDENCE": {"enum": ["VERIFIED","PARTIALLY_VERIFIED","BLOCKED","UNKNOWN"]},
+    "INTEGRATION_HEAD": {"type": ["string","null"]},
+    "CANDIDATE": {"type": ["string","object"]},
+    "MERGE_STATE": {"type": "string"},
+    "CI": {"type": ["string","object"]},
+    "QA": {"type": ["string","object"]},
+    "BLOCKERS": {"type": "array"},
+    "RESULT": {"type": "string"},
+    "REQUIRED_ACTION": {"type": ["string","null"]},
+    "NEXT_ACTION": {"type": "string"}
+  },
+  "additionalProperties": true
+}

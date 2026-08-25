@@ -7,3 +7,6 @@ A release candidate references the canonical integration SHA, immutable product 
 A release must record immutable source SHA, artifact identity, tag/version, deployment target, release notes, rollback reference, production verification, included Task/Feature IDs and released-version mapping. A release must not promote requested customer-review scope with unresolved required `IMPLEMENTED_NOT_CONNECTED`, `UNREACHABLE_SCREEN`, `MISSING_UI_BINDING`, `PERSISTENCE_GAP`, `FALSE_SUCCESS_RISK`, or `FALSE_DONE_FEATURE` findings unless an approved exception is recorded.
 
 Local untracked builds and Worker branches are never authoritative customer-visible release evidence.
+
+## Integration and release output
+Integration Lead and Release Lead are governed by `EXECUTION_OUTPUT_DISCIPLINE_POLICY`. Merge/release investigation remains in machine/audit evidence. Human handoffs use `INTEGRATION_HANDOFF` and `RELEASE_HANDOFF`, are bound to exact source identity, and cannot claim authoritative QA/release state from artifacts whose provenance does not match the candidate SHA.

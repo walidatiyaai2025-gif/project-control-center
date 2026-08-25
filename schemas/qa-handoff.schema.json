@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "qa-handoff.schema.json",
+  "title": "QA_HANDOFF",
+  "type": "object",
+  "required": ["HANDOFF_TYPE","RESULT_CONFIDENCE","QA_RESULT","EXACT_HEAD","BUILD_VERSION","ACCEPTANCE_GATES","FAILED_GATES","EVIDENCE","PROVENANCE_VERIFIED","AUTHORITATIVE","BLOCKER","NEXT_ACTION"],
+  "properties": {
+    "HANDOFF_TYPE": {"const": "QA_HANDOFF"},
+    "RESULT_CONFIDENCE": {"enum": ["VERIFIED","PARTIALLY_VERIFIED","BLOCKED","UNKNOWN"]},
+    "QA_RESULT": {"enum": ["PASS","FAIL","BLOCKED","UNKNOWN","PRELIMINARY"]},
+    "EXACT_HEAD": {"type": ["string","null"]},
+    "BUILD_VERSION": {"type": ["string","null"]},
+    "ACCEPTANCE_GATES": {"type": ["array","object"]},
+    "FAILED_GATES": {"type": "array"},
+    "EVIDENCE": {"type": ["array","object"]},
+    "PROVENANCE_VERIFIED": {"type": "boolean"},
+    "AUTHORITATIVE": {"type": "boolean"},
+    "ARTIFACT_SOURCE_SHA": {"type": ["string","null"]},
+    "BLOCKER": {"type": ["string","null"]},
+    "REQUIRED_ACTION": {"type": ["string","null"]},
+    "NEXT_ACTION": {"type": "string","minLength": 1}
+  },
+  "additionalProperties": true
+}

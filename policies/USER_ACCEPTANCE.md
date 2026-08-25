@@ -7,3 +7,6 @@ Authoritative delivery references `CANONICAL_INTEGRATION_SHA`, `PRODUCTION_SHA`,
 `READY_FOR_USER` requires the requested customer-review scope to have no unresolved applicable `IMPLEMENTED_NOT_CONNECTED`, `UI_ONLY`, `BACKEND_ONLY`, `UNREACHABLE_SCREEN`, `MISSING_UI_BINDING`, `PERSISTENCE_GAP`, `FALSE_SUCCESS_RISK`, fake-data path or official-build-identity gap unless explicitly waived by documented policy exception.
 
 The user-facing handoff distinguishes code completion, connectivity completion, QA completion, customer-ready completion and release completion. Competing Worker summaries and raw code percentages are non-authoritative.
+
+## Human delivery discipline
+Delivery / Control Lead may synthesize project-wide narrative, but is still bound by `EXECUTION_OUTPUT_DISCIPLINE_POLICY`: no investigation diary, no temporary hypothesis as status, no stale evidence described as current, and no unresolved contradiction disguised as a conclusion. Human delivery reports verified state, evidence, blocker and next action.

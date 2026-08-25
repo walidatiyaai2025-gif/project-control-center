@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ci-handoff.schema.json",
+  "title": "CI_HANDOFF",
+  "type": "object",
+  "required": ["HANDOFF_TYPE","RESULT_CONFIDENCE","EXACT_HEAD","WORKFLOW","JOB","STEP","TEST","ROOT_CAUSE","CLASSIFICATION","OWNER","BLOCKER","NEXT_ACTION"],
+  "properties": {
+    "HANDOFF_TYPE": {"const": "CI_HANDOFF"},
+    "RESULT_CONFIDENCE": {"enum": ["VERIFIED","PARTIALLY_VERIFIED","BLOCKED","UNKNOWN"]},
+    "EXACT_HEAD": {"type": ["string","null"]},
+    "WORKFLOW": {"type": "string"},
+    "JOB": {"type": "string"},
+    "STEP": {"type": "string"},
+    "TEST": {"type": ["string","null"]},
+    "ROOT_CAUSE": {"type": ["string","null"]},
+    "CLASSIFICATION": {"type": "string"},
+    "OWNER": {"type": ["string","null"]},
+    "BLOCKER": {"type": ["string","null"]},
+    "REQUIRED_ACTION": {"type": ["string","null"]},
+    "NEXT_ACTION": {"type": "string"}
+  },
+  "additionalProperties": true
+}

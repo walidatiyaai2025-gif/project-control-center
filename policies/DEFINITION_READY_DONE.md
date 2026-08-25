@@ -13,3 +13,5 @@ DONE is terminal, evidence-based, and derived. Required evidence includes, when 
 For product functionality, a Worker may not manually choose DONE. `scripts/feature_delivery_audit.py` must derive a state compatible with DONE from the canonical Feature Delivery Matrix, Screen Inventory, and Screen Action Matrix. `IMPLEMENTED_NOT_CONNECTED`, `BACKEND_ONLY`, `UI_ONLY`, `UNREACHABLE_SCREEN`, `MISSING_UI_BINDING`, `PERSISTENCE_GAP`, `FALSE_SUCCESS_RISK`, fake-data paths, or absence from the official build block DONE unless explicitly not applicable or covered by an approved policy exception.
 
 Target invariant: `FALSE_DONE_FEATURES = 0`.
+
+A human-facing handoff cannot support DONE if it violates `EXECUTION_OUTPUT_DISCIPLINE_POLICY`: unsupported DONE, missing exact-head evidence, unresolved contradictory final state, or authoritative QA based on stale/unverified artifact provenance blocks completion.

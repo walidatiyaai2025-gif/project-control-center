@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "release-handoff.schema.json",
+  "title": "RELEASE_HANDOFF",
+  "type": "object",
+  "required": ["HANDOFF_TYPE","RESULT_CONFIDENCE","VERSION","SOURCE_SHA","BUILD_ID","QA","RELEASE_STATE","PRODUCTION_STATE","ROLLBACK","BLOCKER","NEXT_ACTION"],
+  "properties": {
+    "HANDOFF_TYPE": {"const": "RELEASE_HANDOFF"},
+    "RESULT_CONFIDENCE": {"enum": ["VERIFIED","PARTIALLY_VERIFIED","BLOCKED","UNKNOWN"]},
+    "VERSION": {"type": ["string","null"]},
+    "SOURCE_SHA": {"type": ["string","null"]},
+    "BUILD_ID": {"type": ["string","null"]},
+    "QA": {"type": ["string","object"]},
+    "RELEASE_STATE": {"type": "string"},
+    "PRODUCTION_STATE": {"type": "string"},
+    "ROLLBACK": {"type": ["string","object","null"]},
+    "BLOCKER": {"type": ["string","null"]},
+    "REQUIRED_ACTION": {"type": ["string","null"]},
+    "NEXT_ACTION": {"type": "string"}
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "visual-qa-handoff.schema.json",
+  "title": "VISUAL_QA_HANDOFF",
+  "type": "object",
+  "required": ["HANDOFF_TYPE","RESULT_CONFIDENCE","EXACT_HEAD","REFERENCE_SOURCE","REFERENCE_VERSION","REFERENCE_SHA","CANDIDATE_SOURCE_SHA","CANDIDATE_ARTIFACT","ARTIFACT_GENERATED_AT","PROVENANCE_VERIFIED","AUTHORITATIVE","DELTA","CLASSIFICATION","QA_RESULT","BLOCKER","NEXT_ACTION"],
+  "properties": {
+    "HANDOFF_TYPE": {"const": "VISUAL_QA_HANDOFF"},
+    "RESULT_CONFIDENCE": {"enum": ["VERIFIED","PARTIALLY_VERIFIED","BLOCKED","UNKNOWN"]},
+    "EXACT_HEAD": {"type": ["string","null"]},
+    "REFERENCE_SOURCE": {"type": "string"},
+    "REFERENCE_VERSION": {"type": ["string","null"]},
+    "REFERENCE_SHA": {"type": ["string","null"]},
+    "CANDIDATE_SOURCE_SHA": {"type": ["string","null"]},
+    "CANDIDATE_ARTIFACT": {"type": ["string","object","null"]},
+    "ARTIFACT_GENERATED_AT": {"type": ["string","null"]},
+    "PROVENANCE_VERIFIED": {"type": "boolean"},
+    "AUTHORITATIVE": {"type": "boolean"},
+    "DELTA": {"type": ["array","object","string"]},
+    "CLASSIFICATION": {"type": "string"},
+    "QA_RESULT": {"enum": ["PASS","FAIL","BLOCKED","UNKNOWN","PRELIMINARY"]},
+    "BLOCKER": {"type": ["string","null"]},
+    "REQUIRED_ACTION": {"type": ["string","null"]},
+    "NEXT_ACTION": {"type": "string"}
+  },
+  "additionalProperties": true
+}
