@@ -47,13 +47,53 @@ jobs:
           cat > _site/index.html <<'EOF2'
           <!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=dashboard/"><title>PCC Dashboard</title>
           EOF2
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
+      - name: Detect Pages site
+        id: pages_preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          code="$(curl -sS -o /tmp/pages-site.json -w '%{http_code}' \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages")"
+          if [ "$code" = "200" ]; then
+            echo 'enabled=true' >> "$GITHUB_OUTPUT"
+            printf '%s\n' '{"STATUS":"ENABLED","BLOCKER":null}' > _site/pages-status.json
+          elif [ "$code" = "403" ] || [ "$code" = "404" ]; then
+            echo 'enabled=false' >> "$GITHUB_OUTPUT"
+            printf '%s\n' '{"STATUS":"EXTERNAL_BLOCKER","BLOCKER":"PAGES_SITE_NOT_ENABLED_OR_ADMIN_ENABLEMENT_REQUIRED"}' > _site/pages-status.json
+            echo '### GitHub Pages external blocker' >> "$GITHUB_STEP_SUMMARY"
+            echo 'The dashboard was built and archived, but the repository Pages site is not enabled and the workflow token cannot perform first-time repository-admin enablement.' >> "$GITHUB_STEP_SUMMARY"
+          else
+            cat /tmp/pages-site.json || true
+            echo "Unexpected GitHub Pages API status: $code" >&2
+            exit 1
+          fi
+      - name: Archive deployable dashboard
+        uses: actions/upload-artifact@v4
         with:
-          enablement: true
-      - uses: actions/upload-pages-artifact@v3
+          name: pcc-dashboard-static-${{ github.sha }}
+          path: _site
+          retention-days: 30
+      - name: Configure existing Pages site
+        if: steps.pages_preflight.outputs.enabled == 'true'
+        id: pages_config
+        uses: actions/configure-pages@v5
+      - name: Upload Pages artifact
+        if: steps.pages_preflight.outputs.enabled == 'true'
+        uses: actions/upload-pages-artifact@v3
         with:
           path: _site
       - name: Deploy Pages
+        if: steps.pages_preflight.outputs.enabled == 'true'
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Record Pages validation status
+        shell: bash
+        run: |
+          if [ "${{ steps.pages_preflight.outputs.enabled }}" = "true" ]; then
+            echo 'PAGES=DEPLOYED' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'PAGES=EXTERNAL_BLOCKER' >> "$GITHUB_STEP_SUMMARY"
+          fi
