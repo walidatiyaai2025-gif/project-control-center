@@ -37,7 +37,7 @@ contain('scripts/feature_delivery_audit.py',['derive_feature_state','FALSE_DONE_
 contain('prompts/40-daily-operations/41-task-worker.md',['BACKEND STATUS','UI/API BINDING STATUS','PERSISTENCE STATUS','CUSTOMER VISIBLE','NEXT GAP'])
 contain('prompts/40-daily-operations/43-qa-worker.md',['reachable screen','authoritative data','persistence','official candidate'])
 contain('prompts/40-daily-operations/46-user-delivery-lead.md',['CODE COMPLETION','CONNECTIVITY COMPLETION','CUSTOMER READY COMPLETION','FALSE_DONE_FEATURES'])
-contain('dashboard/index.html',['REQUIREMENTS','FEATURES','SCREENS','INTEGRATION GAPS','CUSTOMER READY'])
+contain('dashboard/app.js',['REQUIREMENTS','FEATURES','SCREENS','INTEGRATION GAPS','CUSTOMER READY'])
 contain('templates/PROJECT_STATUS.yml',['FEATURES_IMPLEMENTED_NOT_CONNECTED','UNREACHABLE_SCREENS','FALSE_DONE_FEATURES','CODE_COMPLETION','CONNECTIVITY_COMPLETION','CUSTOMER_READY_COMPLETION'])
 contain('.github/workflows/reusable-feature-delivery-governance.yml',['workflow_call','feature_delivery_audit.py','feature-delivery-report.json'])
 contain('policies/TASK_LIFECYCLE_AND_LEASE.md',['AVAILABLE','READY','CLAIMED','IN_PROGRESS','BLOCKED','STALE','RECLAIMABLE','READY_FOR_REVIEW','READY_FOR_QA','QA_PASS','INTEGRATED','RELEASED','DONE'])
