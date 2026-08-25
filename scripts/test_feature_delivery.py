@@ -35,4 +35,22 @@ class FeatureDeliveryTests(unittest.TestCase):
         d=base_dims(); d.update({k:'VERIFIED' for k in d}); d['USER_ACCEPTED']='NOT_STARTED'
         f={'DELIVERY_TYPE':'CUSTOMER_UI','DIMENSIONS':d,'PRESENT_IN_CANDIDATE':True,'PRESENT_IN_PRODUCTION':False}
         _,findings,_=fd.audit_feature(f); self.assertIn('RELEASE_IDENTITY_GAP',{x['TYPE'] for x in findings})
+    def test_dead_feature_and_unused_endpoint_signals(self):
+        d=base_dims(); d.update(API_IMPLEMENTED='IMPLEMENTED')
+        f={'DELIVERY_TYPE':'API_ONLY','DIMENSIONS':d,'DETECTION_SIGNALS':{'UNUSED_PRODUCTION_SERVICE':True,'ENDPOINT_WITHOUT_EXPECTED_CONSUMER':True}}
+        _,findings,_=fd.audit_feature(f); types={x['TYPE'] for x in findings}
+        self.assertIn('DEAD_CODE_CANDIDATE',types); self.assertIn('UNUSED_ENDPOINT',types)
+    def test_expected_consumer_missing(self):
+        d=base_dims(); d.update(API_IMPLEMENTED='IMPLEMENTED')
+        f={'DELIVERY_TYPE':'API_ONLY','DIMENSIONS':d,'EXPECTED_CONSUMERS':['mobile-ui'],'OBSERVED_CONSUMERS':[]}
+        _,findings,_=fd.audit_feature(f); types={x['TYPE'] for x in findings}
+        self.assertIn('UNUSED_ENDPOINT',types); self.assertIn('MISSING_CONSUMER',types)
+    def test_development_only_feature_not_in_official_build(self):
+        d=base_dims(); d.update(BACKEND_IMPLEMENTED='IMPLEMENTED')
+        f={'DELIVERY_TYPE':'API_ONLY','DIMENSIONS':d,'PRESENT_IN_DEVELOPMENT':True,'PRESENT_IN_CANDIDATE':False,'PRESENT_IN_PRODUCTION':False}
+        _,findings,_=fd.audit_feature(f); self.assertIn('NOT_IN_OFFICIAL_BUILD',{x['TYPE'] for x in findings})
+    def test_customer_visible_without_qa(self):
+        d=base_dims(); d.update(UI_IMPLEMENTED='IMPLEMENTED',CUSTOMER_VISIBLE='VERIFIED',QA_VERIFIED='NOT_STARTED')
+        f={'DELIVERY_TYPE':'UI_ONLY','DIMENSIONS':d,'PRESENT_IN_CANDIDATE':True}
+        _,findings,_=fd.audit_feature(f); self.assertIn('CUSTOMER_VISIBLE_WITHOUT_QA',{x['TYPE'] for x in findings})
 if __name__=='__main__': unittest.main()
