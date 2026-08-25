@@ -1,0 +1,20 @@
+{
+  "TASK_ID": "<project>-T####",
+  "PROJECT_ID": "<project-id>",
+  "REQUIREMENT_ID": "<requirement-id>",
+  "TITLE": "<title>",
+  "STATE": "READY",
+  "PRIORITY": "P1",
+  "CANONICAL_BRANCH": "task/<task-id>-<slug>",
+  "BASE_BRANCH": "<verified-base>",
+  "BASE_SHA": "<verified-base-sha>",
+  "LATEST_PUSHED_SHA": null,
+  "WORKER_LEASE": null,
+  "SCOPE": [],
+  "NON_SCOPE": [],
+  "ACCEPTANCE_CRITERIA": [],
+  "DUPLICATE_CHECK": [],
+  "DEPENDENCIES": [],
+  "EVIDENCE": [],
+  "UPDATED_AT": "<ISO-8601>"
+}

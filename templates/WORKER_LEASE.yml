@@ -1,0 +1,10 @@
+{
+  "TASK_ID": "<task-id>",
+  "CANONICAL_BRANCH": "<branch>",
+  "LATEST_PUSHED_SHA": "<sha>",
+  "WORKER": "<worker-id>",
+  "LEASE_STATE": "CLAIMED",
+  "CLAIMED_AT": "<ISO-8601>",
+  "LAST_EVIDENCE_AT": "<ISO-8601>",
+  "HANDOFF_NOTES": []
+}

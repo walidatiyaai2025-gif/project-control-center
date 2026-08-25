@@ -1,0 +1,12 @@
+{
+  "PROJECT_ID": "<project-id>",
+  "RELEASE": "<version-or-tag>",
+  "CANONICAL_INTEGRATION_SHA": "<sha>",
+  "ARTIFACTS": [],
+  "CI_EVIDENCE": [],
+  "QA_EVIDENCE": [],
+  "DEPLOYMENT_TARGET": "<target>",
+  "PRODUCTION_SHA": "<sha>",
+  "ROLLBACK_REFERENCE": "<reference>",
+  "PRODUCTION_VERIFICATION": []
+}

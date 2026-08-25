@@ -1,0 +1,12 @@
+{
+  "PROJECT_ID": "<project-id>",
+  "DELIVERY_ID": "<delivery-id>",
+  "CANONICAL_INTEGRATION_SHA": "<sha>",
+  "PRODUCTION_SHA": "<sha>",
+  "LATEST_RELEASE": "<release>",
+  "DELIVERED_SCOPE": [],
+  "KNOWN_OPEN_SCOPE": [],
+  "WAITING_FOR_USER": [],
+  "USER_ACCEPTANCE_STATE": "PENDING",
+  "EVIDENCE": []
+}

@@ -1,0 +1,11 @@
+{
+  "CONTROL_PLANE_VERSION": "v1.0.0",
+  "UPDATED_AT": null,
+  "PORTFOLIO_OBJECTIVES": [],
+  "PRIORITY_ORDER": [],
+  "RULES": [
+    "P0 and production safety outrank feature throughput",
+    "Blocked work must name blocker and owner",
+    "Cross-project priority changes require evidence and timestamp"
+  ]
+}

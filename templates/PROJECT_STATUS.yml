@@ -1,0 +1,23 @@
+{
+  "PROJECT_ID": "<project-id>",
+  "REQUESTED_SCOPE": [],
+  "COMPLETED_SCOPE": [],
+  "IN_PROGRESS": [],
+  "BLOCKED": [],
+  "QA": [],
+  "INTEGRATED": [],
+  "RELEASED": [],
+  "WAITING_FOR_USER": [],
+  "STALE_RECLAIMABLE": [],
+  "ORPHAN_WORK": [],
+  "DUPLICATE_ACTIVE_WORK": [],
+  "PRODUCTION_BRANCH": null,
+  "PRODUCTION_SHA": null,
+  "CANONICAL_DEVELOPMENT_BRANCH": null,
+  "CANONICAL_DEVELOPMENT_SHA": null,
+  "LATEST_RELEASE": null,
+  "PROGRESS": null,
+  "LAST_SYNC": "<ISO-8601>",
+  "STATUS_AUTHORITY": "DELIVERY_CONTROL_LEAD",
+  "EVIDENCE": []
+}
