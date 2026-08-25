@@ -1,10 +1,10 @@
 {
-  "CONTROL_PLANE_VERSION": "v1.3.0",
+  "CONTROL_PLANE_VERSION": "v1.4.0",
   "PROJECTS": [
     {
       "PROJECT_ID": "AIMWWEB",
       "REPOSITORY": "walidatiyaai2025-gif/AIMWWeb",
-      "CONTROL_PLANE_VERSION": "v1.3.0",
+      "CONTROL_PLANE_VERSION": "v1.4.0",
       "DESIRED_POLICY_VERSION": "1.1.0",
       "POLICY_ENFORCEMENT_MODE": "OBSERVE",
       "ROLLOUT_WAVE": 0,
