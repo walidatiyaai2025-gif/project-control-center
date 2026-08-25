@@ -14,11 +14,19 @@ jobs:
         with:
           python-version: '3.12'
       - run: python scripts/self_audit.py
-      - run: python -m unittest scripts/test_control_plane.py scripts/test_feature_delivery.py -v
+      - run: python -m unittest scripts/test_control_plane.py scripts/test_feature_delivery.py scripts/test_fleet_control.py -v
       - run: python scripts/orchestrator.py --report-out /tmp/orchestration-report.json
       - run: python dashboard/build_portfolio.py > /tmp/dashboard.json
+      - name: Audit PCC main protection (non-blocking until admin credential is configured)
+        continue-on-error: true
+        run: python scripts/self_protection.py
       - run: python -m json.tool portfolio/projects.yml > /dev/null
       - run: python -m json.tool portfolio/priorities.yml > /dev/null
+      - run: python -m json.tool orchestration/desired-state.json > /dev/null
+      - run: python -m json.tool orchestration/observed-state.json > /dev/null
+      - run: python -m json.tool orchestration/audit-ledger.json > /dev/null
+      - run: python -m json.tool orchestration/baselines/AIMWWEB.json > /dev/null
+      - run: python -m json.tool orchestration/reconciliation/AIMWWEB.json > /dev/null
       - run: python -m json.tool schemas/project.schema.json > /dev/null
       - run: python -m json.tool schemas/task.schema.json > /dev/null
       - run: python -m json.tool schemas/project-status.schema.json > /dev/null

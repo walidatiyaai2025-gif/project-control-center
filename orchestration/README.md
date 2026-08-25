@@ -1,27 +1,29 @@
-# Central Orchestration
+# PCC Fleet Orchestration
 
-PCC v1.1.0 orchestration is declarative and non-destructive by default.
+PCC v1.3.0 extends the existing desired-vs-observed controller into a live cross-repository fleet control loop while preserving v1.2.0 Feature/Screen/Action governance.
 
-## Components
+## Canonical loop
 
-- `desired-state.json` — operator-approved target state.
-- `observed-state.json` — latest collected repository state.
-- `policy-catalog.json` — current/previous policy versions and rollout defaults.
-- `audit-ledger.json` — append-only logical operation ledger snapshot.
-- `scripts/enrollment_controller.py` — idempotent PCC-local repository enrollment planning/application; it never edits the product repository.
-- `scripts/orchestrator.py` — compatibility scan, desired-vs-observed reconciliation, drift report, rollout selection, stable operation keys and per-project locks.
-- `.github/workflows/central-orchestrator.yml` — controlled observe/warn/canary/enforce reconciliation.
+`ENROLL -> COLLECT -> DISCOVER -> BASELINE -> RECONCILE -> DRIFT -> PLAN -> OBSERVE/WARN/CANARY/ENFORCE -> AGGREGATE -> AUDIT`
 
-## Authentication abstraction
+The default is read-only. Existing repositories are not modified until all write gates in `policies/CENTRAL_ORCHESTRATION_POLICY.md` and `policies/FLEET_CONTROL_POLICY.md` pass.
 
-Profiles name `AUTH_PROVIDER` only: `github_app`, `connector`, `token_runtime`, or `none/read_only`. Credentials are injected at runtime and never persisted.
+## Runtime entry points
 
-## Safe self-healing boundary
+- `scripts/enrollment_controller.py` — idempotent PCC-local repository enrollment; never writes the target repository.
+- `scripts/github_fleet_client.py` — authenticated GitHub REST abstraction with pagination, bounded retries and rate-limit handling.
+- `scripts/fleet_control.py` — live discovery, baseline lock, reconciliation, drift, rollout, stale/orphan recovery, policy sync and portfolio aggregation.
+- `scripts/self_protection.py` — audits/configures PCC main protection when admin credentials are available.
+- `.github/workflows/fleet-control.yml` — scheduled/manual live collection.
+- `.github/workflows/portfolio-dashboard.yml` — live collection + static dashboard deployment to GitHub Pages.
 
-The v1.1.0 orchestrator repairs only allow-listed PCC-derived local metadata when explicitly invoked with `--apply-safe`. It does not delete/force-push branches, move tags, edit product code, deploy, change databases, or publish builds. Cross-repository writes require an explicitly authorized project prompt/workflow.
+## State
 
-## Enrollment lifecycle
+- Desired fleet membership: `portfolio/projects.yml` and `orchestration/desired-state.json`.
+- Seed/last committed observations: `orchestration/observed-state.json`.
+- Read-only baseline anchors: `orchestration/baselines/`.
+- Reconciliation evidence: `orchestration/reconciliation/`.
+- Canonical seed ledger: `orchestration/audit-ledger.json`.
+- Per-run runtime ledger/report: uploaded GitHub Actions artifacts.
 
-DISCOVER → PROFILE → DESIRED_STATE → OBSERVE → WARN → CANARY → ENFORCE.
-
-Existing repositories cannot skip lineage/version baseline discovery merely because they are centrally enrolled.
+AIMWWeb is enrolled as OBSERVE/CANARY-capable but `WRITE_AUTHORIZED=false`; this v1.3.0 closure does not mutate AIMWWeb.

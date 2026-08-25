@@ -1,10 +1,40 @@
 {
-  "CONTROL_PLANE_VERSION": "v1.2.0",
+  "CONTROL_PLANE_VERSION": "v1.3.0",
   "POLICIES": {
-    "core-governance": {"CURRENT": "1.0.0", "PREVIOUS": null},
-    "central-orchestration": {"CURRENT": "1.0.0", "PREVIOUS": null},
-    "immutable-product-version": {"CURRENT": "1.0.0", "PREVIOUS": null},
-    "end-to-end-feature-delivery": {"CURRENT": "1.0.0", "PREVIOUS": null}
+    "core-governance": {
+      "CURRENT": "1.0.0",
+      "PREVIOUS": null
+    },
+    "central-orchestration": {
+      "CURRENT": "1.1.0",
+      "PREVIOUS": "1.0.0"
+    },
+    "immutable-product-version": {
+      "CURRENT": "1.0.0",
+      "PREVIOUS": null
+    },
+    "end-to-end-feature-delivery": {
+      "CURRENT": "1.0.0",
+      "PREVIOUS": null
+    },
+    "autonomous-fleet-control": {
+      "CURRENT": "1.1.0",
+      "PREVIOUS": null
+    }
   },
-  "ROLLOUT": {"DEFAULT_MODE": "OBSERVE", "WAVES": [0,1,2,3]}
+  "ROLLOUT": {
+    "DEFAULT_MODE": "OBSERVE",
+    "SEQUENCE": [
+      "OBSERVE",
+      "WARN",
+      "CANARY",
+      "ENFORCE"
+    ],
+    "WAVES": [
+      0,
+      1,
+      2,
+      3
+    ]
+  }
 }

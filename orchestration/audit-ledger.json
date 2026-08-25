@@ -1,4 +1,46 @@
 {
-  "CONTROL_PLANE_VERSION": "v1.2.0",
-  "OPERATIONS": []
+  "CONTROL_PLANE_VERSION": "v1.3.0",
+  "OPERATIONS": [],
+  "EVENTS": [
+    {
+      "PROJECT_ID": "AIMWWEB",
+      "OPERATION_KEY": "seed-enrollment-aimwweb-v1.3.0",
+      "TYPE": "ENROLLMENT",
+      "ACTOR": "PCC",
+      "AUTH_PROVIDER": "connector/read-only",
+      "RESULT": "REGISTERED",
+      "TARGET_MUTATED": false,
+      "TIMESTAMP": "2026-08-25T10:20:00Z"
+    },
+    {
+      "PROJECT_ID": "AIMWWEB",
+      "OPERATION_KEY": "seed-discovery-aimwweb-359da588",
+      "TYPE": "LIVE_DISCOVERY",
+      "ACTOR": "PCC",
+      "AUTH_PROVIDER": "connector/read-only",
+      "RESULT": "PASS",
+      "TARGET_MUTATED": false,
+      "TIMESTAMP": "2026-08-25T10:20:00Z"
+    },
+    {
+      "PROJECT_ID": "AIMWWEB",
+      "OPERATION_KEY": "seed-baseline-95c9adfa3e88622b",
+      "TYPE": "BASELINE_LOCK",
+      "ACTOR": "PCC",
+      "AUTH_PROVIDER": "connector/read-only",
+      "RESULT": "LOCKED",
+      "TARGET_MUTATED": false,
+      "TIMESTAMP": "2026-08-25T10:20:00Z"
+    },
+    {
+      "PROJECT_ID": "AIMWWEB",
+      "OPERATION_KEY": "seed-reconcile-95c9adfa3e88622b",
+      "TYPE": "RECONCILIATION",
+      "ACTOR": "PCC",
+      "AUTH_PROVIDER": "connector/read-only",
+      "RESULT": "RECONCILED_READ_ONLY",
+      "TARGET_MUTATED": false,
+      "TIMESTAMP": "2026-08-25T10:20:00Z"
+    }
+  ]
 }

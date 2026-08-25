@@ -1,0 +1,71 @@
+name: Fleet Control Live Collection
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'portfolio/**'
+      - 'orchestration/**'
+      - 'scripts/github_fleet_client.py'
+      - 'scripts/fleet_control.py'
+      - 'scripts/self_protection.py'
+      - 'policies/FLEET_CONTROL_POLICY.md'
+      - '.github/workflows/fleet-control.yml'
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Fleet rollout mode
+        required: true
+        default: OBSERVE
+        type: choice
+        options: [OBSERVE, WARN, CANARY, ENFORCE]
+      project_id:
+        description: Optional PROJECT_ID
+        required: false
+        type: string
+      apply_policy_sync:
+        description: Apply allow-listed policy sync (requires runtime write token and project authorization)
+        required: true
+        default: false
+        type: boolean
+permissions:
+  contents: read
+concurrency:
+  group: pcc-fleet-live-${{ inputs.project_id || 'portfolio' }}
+  cancel-in-progress: false
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      PCC_GITHUB_TOKEN: ${{ secrets.PCC_GITHUB_TOKEN }}
+      PCC_GITHUB_WRITE_TOKEN: ${{ secrets.PCC_GITHUB_WRITE_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Live GitHub fleet collection
+        shell: bash
+        run: |
+          args=(--report-out /tmp/fleet-report.json --portfolio-out /tmp/fleet-live.json)
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            args+=(--mode "${{ inputs.mode }}")
+            if [ -n "${{ inputs.project_id }}" ]; then args+=(--project "${{ inputs.project_id }}"); fi
+            if [ "${{ inputs.apply_policy_sync }}" = "true" ]; then args+=(--apply-policy-sync); fi
+          fi
+          python scripts/fleet_control.py "${args[@]}"
+      - name: Audit PCC self-protection
+        continue-on-error: true
+        run: python scripts/self_protection.py
+      - name: Publish live state artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pcc-fleet-live-${{ github.run_id }}
+          path: |
+            /tmp/fleet-report.json
+            /tmp/fleet-live.json
+            /tmp/pcc-audit-ledger-runtime.json
+          retention-days: 30

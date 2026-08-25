@@ -1,4 +1,51 @@
 {
-  "CONTROL_PLANE_VERSION": "v1.2.0",
-  "PROJECTS": []
+  "CONTROL_PLANE_VERSION": "v1.3.0",
+  "PROJECTS": [
+    {
+      "PROJECT_ID": "AIMWWEB",
+      "REPOSITORY": "walidatiyaai2025-gif/AIMWWeb",
+      "COLLECTOR_RESULT": "PASS",
+      "COLLECTED_AT": "2026-08-25T10:20:00Z",
+      "DISCOVERY_COMPLETE": true,
+      "DISCOVERY_SCOPE": "READ_ONLY_LIVE_GITHUB",
+      "DEFAULT_BRANCH": "main",
+      "DEFAULT_BRANCH_SHA": "359da588157797c24eb708e06669d19491d8e56e",
+      "DEFAULT_BRANCH_PROTECTED": false,
+      "BRANCH_COUNT": 195,
+      "OPEN_PR_COUNT": "10-20; live collector authoritative",
+      "OPEN_PR_EVIDENCE": [
+        {
+          "NUMBER": 234,
+          "HEAD_BRANCH": "automation/183-security-audit-email-relay-durability",
+          "HEAD_SHA": "eaaa4b3a985971a41c0b667bcd041a0fd402fae5",
+          "BASE_BRANCH": "main",
+          "BASE_SHA": "359da588157797c24eb708e06669d19491d8e56e",
+          "CI": ".NET Build Verification=success"
+        },
+        {
+          "NUMBER": 219,
+          "HEAD_BRANCH": "fix/183-prompt-templates-browser-closure",
+          "HEAD_SHA": "a12a14074195b680f4c305a8355412a3a1890747",
+          "BASE_BRANCH": "main"
+        }
+      ],
+      "RELEASE_COUNT": 0,
+      "LATEST_WORKFLOW_RUN": {
+        "ID": 32754936892,
+        "NAME": ".NET Build Verification",
+        "HEAD_SHA": "eaaa4b3a985971a41c0b667bcd041a0fd402fae5",
+        "CONCLUSION": "success"
+      },
+      "BASELINE_LOCKED": true,
+      "BASELINE_SCOPE": "READ_ONLY_OBSERVATION_ANCHORS",
+      "CANONICAL_DEVELOPMENT_LINEAGE": "UNRESOLVED",
+      "TARGET_MUTATED": false,
+      "OBSERVED_POLICY_VERSION": null,
+      "DRIFT": [
+        "CONTROL_MANIFEST_MISSING",
+        "POLICY_VERSION_UNKNOWN"
+      ],
+      "VERSION_BASELINE_ESTABLISHED": false
+    }
+  ]
 }

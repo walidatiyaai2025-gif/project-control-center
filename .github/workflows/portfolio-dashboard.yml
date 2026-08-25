@@ -1,28 +1,59 @@
 name: Portfolio Dashboard Build
 on:
   push:
+    branches: [main]
     paths:
       - 'portfolio/**'
       - 'orchestration/**'
       - 'dashboard/**'
-      - 'schemas/**'
+      - 'scripts/fleet_control.py'
+      - 'scripts/github_fleet_client.py'
       - '.github/workflows/portfolio-dashboard.yml'
+  schedule:
+    - cron: '47 */6 * * *'
   workflow_dispatch:
 permissions:
   contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pcc-pages
+  cancel-in-progress: true
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      PCC_GITHUB_TOKEN: ${{ secrets.PCC_GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python dashboard/build_portfolio.py
-      - uses: actions/upload-artifact@v4
+      - name: Collect live fleet state for published projection
+        run: python scripts/fleet_control.py --report-out /tmp/fleet-report.json --portfolio-out portfolio/status/fleet-live.json --ledger-out /tmp/pcc-audit-ledger-runtime.json
+      - name: Build portfolio projection
+        run: python dashboard/build_portfolio.py
+      - name: Stage static site
+        run: |
+          rm -rf _site
+          mkdir -p _site/dashboard _site/portfolio/status
+          cp dashboard/index.html dashboard/app.js _site/dashboard/
+          cp portfolio/status/*.json _site/portfolio/status/
+          cat > _site/index.html <<'EOF2'
+          <!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=dashboard/"><title>PCC Dashboard</title>
+          EOF2
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
         with:
-          name: project-control-center-dashboard
-          path: |
-            dashboard/
-            portfolio/status/index.json
-            portfolio/version-history/
+          enablement: true
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

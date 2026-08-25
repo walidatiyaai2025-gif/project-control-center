@@ -3,41 +3,50 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: Reconciliation rollout mode
+        description: Fleet rollout mode
         required: true
         default: OBSERVE
         type: choice
         options: [OBSERVE, WARN, CANARY, ENFORCE]
       project_id:
-        description: Optional PROJECT_ID; blank means all desired projects
+        description: Optional PROJECT_ID; blank means all enrolled projects
         required: false
         type: string
-      apply_safe:
-        description: Apply only allow-listed PCC-local safe self-healing
+      apply_policy_sync:
+        description: Apply allow-listed policy sync after all gates pass
         required: true
         default: false
         type: boolean
 permissions:
   contents: read
 concurrency:
-  group: pcc-orchestrator-${{ inputs.project_id || 'portfolio' }}-${{ inputs.mode }}
+  group: pcc-central-${{ inputs.project_id || 'portfolio' }}-${{ inputs.mode }}
   cancel-in-progress: false
 jobs:
   reconcile:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      PCC_GITHUB_TOKEN: ${{ secrets.PCC_GITHUB_TOKEN }}
+      PCC_GITHUB_WRITE_TOKEN: ${{ secrets.PCC_GITHUB_WRITE_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Reconcile desired vs observed
+      - name: Live collect and reconcile
         shell: bash
         run: |
-          args=(--mode "${{ inputs.mode }}" --report-out orchestration-report.json)
+          args=(--mode "${{ inputs.mode }}" --report-out /tmp/fleet-report.json --portfolio-out /tmp/fleet-live.json --ledger-out /tmp/pcc-audit-ledger-runtime.json)
           if [ -n "${{ inputs.project_id }}" ]; then args+=(--project "${{ inputs.project_id }}"); fi
-          if [ "${{ inputs.apply_safe }}" = "true" ]; then args+=(--apply-safe); fi
-          python scripts/orchestrator.py "${args[@]}"
+          if [ "${{ inputs.apply_policy_sync }}" = "true" ]; then args+=(--apply-policy-sync); fi
+          python scripts/fleet_control.py "${args[@]}"
       - uses: actions/upload-artifact@v4
         with:
-          name: pcc-orchestration-${{ inputs.mode }}
-          path: orchestration-report.json
+          name: pcc-central-orchestration-${{ github.run_id }}
+          path: |
+            /tmp/fleet-report.json
+            /tmp/fleet-live.json
+            /tmp/pcc-audit-ledger-runtime.json
+          retention-days: 30
