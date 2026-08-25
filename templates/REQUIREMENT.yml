@@ -1,0 +1,12 @@
+{
+  "REQUIREMENT_ID": "<project>-R####",
+  "PROJECT_ID": "<project-id>",
+  "SOURCE": "<user-request|issue|incident|audit|other>",
+  "TITLE": "<title>",
+  "REQUESTED_SCOPE": [],
+  "ACCEPTANCE_OUTCOME": [],
+  "TASK_IDS": [],
+  "STATUS": "OPEN",
+  "CREATED_AT": "<ISO-8601>",
+  "UPDATED_AT": "<ISO-8601>"
+}
