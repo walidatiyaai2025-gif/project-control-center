@@ -61,22 +61,22 @@ Immediate output is allowed only when execution cannot safely continue. A blocke
 When the operator explicitly requests live progress, concise milestone updates are allowed. Multi-paragraph reasoning narratives remain prohibited.
 
 ## Structured role contracts
-### Implementation / Continuation Worker
-`TASK`, `STATUS`, `HEAD`, `CHANGED`, `VALIDATION`, `NEXT_ACTION`.
+### WORKER_HANDOFF — Implementation / Continuation / Recovery Worker
+`TASK`, `STATUS`, `HEAD`, `CHANGED`, `VALIDATION`, `BLOCKER`, `NEXT_ACTION`.
 
-### QA Worker
+### QA_HANDOFF — QA Worker
 `QA_RESULT`, `EXACT_HEAD`, `BUILD_VERSION`, `ACCEPTANCE_GATES`, `FAILED_GATES`, `EVIDENCE`.
 
-### CI Investigator
+### CI_HANDOFF — CI Investigator
 `EXACT_HEAD`, `WORKFLOW`, `JOB`, `STEP`, `TEST`, `ROOT_CAUSE`, `CLASSIFICATION`, `OWNER`.
 
-### Visual QA
+### VISUAL_QA_HANDOFF — Visual QA
 `EXACT_HEAD`, `REFERENCE_SOURCE`, `REFERENCE_VERSION`, `REFERENCE_SHA`, `CANDIDATE_SOURCE_SHA`, `CANDIDATE_ARTIFACT`, `ARTIFACT_GENERATED_AT`, `PROVENANCE_VERIFIED`, `DELTA`, `CLASSIFICATION`, `QA_RESULT`.
 
-### Integration Lead
+### INTEGRATION_HANDOFF — Integration Lead
 `INTEGRATION_HEAD`, `CANDIDATE`, `MERGE_STATE`, `CI`, `QA`, `BLOCKERS`, `RESULT`.
 
-### Release Lead
+### RELEASE_HANDOFF — Release Lead
 `VERSION`, `SOURCE_SHA`, `BUILD_ID`, `QA`, `RELEASE_STATE`, `PRODUCTION_STATE`, `ROLLBACK`.
 
 Each contract is machine-checkable through the matching schema and `scripts/output_discipline.py`.
