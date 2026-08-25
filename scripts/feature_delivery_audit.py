@@ -56,11 +56,27 @@ def audit_feature(feature):
     if state=="BACKEND_ONLY": findings.append({"TYPE":"BACKEND_ONLY_FEATURE"})
     if state=="UI_ONLY": findings.append({"TYPE":"UI_ONLY_FEATURE"})
     if state=="IMPLEMENTED_NOT_CONNECTED": findings.append({"TYPE":"UNCONNECTED_FEATURE"})
-    if d.get("API_IMPLEMENTED") in {"IMPLEMENTED","CONNECTED","VERIFIED"} and d.get("UI_API_CONNECTED") not in {"NOT_APPLICABLE","CONNECTED","VERIFIED"}: findings.append({"TYPE":"MISSING_UI_BINDING"})
+    if d.get("API_IMPLEMENTED") in {"IMPLEMENTED","CONNECTED","VERIFIED"} and d.get("UI_API_CONNECTED") not in {"NOT_APPLICABLE","CONNECTED","VERIFIED"} and feature.get("DELIVERY_TYPE","CUSTOMER_UI")!="API_ONLY": findings.append({"TYPE":"MISSING_UI_BINDING"})
     if d.get("UI_IMPLEMENTED") in {"IMPLEMENTED","CONNECTED","VERIFIED"} and d.get("NAVIGATION_CONNECTED") not in {"NOT_APPLICABLE","CONNECTED","VERIFIED"}: findings.append({"TYPE":"MISSING_NAVIGATION"})
     if d.get("MUTATION_CONNECTED") in {"CONNECTED","VERIFIED"} and (d.get("PERSISTENCE_VERIFIED") not in {"NOT_APPLICABLE","VERIFIED"} or d.get("RELOAD_VERIFIED") not in {"NOT_APPLICABLE","VERIFIED"}): findings.append({"TYPE":"PERSISTENCE_GAP"})
     if feature.get("USES_FAKE_DATA") is True: findings.append({"TYPE":"FAKE_DATA_PATH"})
-    if d.get("CUSTOMER_VISIBLE")=="VERIFIED" and not (feature.get("PRESENT_IN_CANDIDATE") or feature.get("PRESENT_IN_PRODUCTION")): findings.append({"TYPE":"NOT_IN_OFFICIAL_BUILD"})
+
+    signals=feature.get("DETECTION_SIGNALS",{}) or {}
+    if signals.get("UNUSED_PRODUCTION_SERVICE"): findings.append({"TYPE":"DEAD_CODE_CANDIDATE","DETAIL":"UNUSED_PRODUCTION_SERVICE"})
+    if signals.get("ENDPOINT_WITHOUT_EXPECTED_CONSUMER"): findings.append({"TYPE":"UNUSED_ENDPOINT","DETAIL":"ENDPOINT_WITHOUT_EXPECTED_CONSUMER"})
+    if signals.get("BACKGROUND_JOB_WITHOUT_CONSUMER"): findings.append({"TYPE":"MISSING_CONSUMER","DETAIL":"BACKGROUND_JOB_WITHOUT_CONSUMER"})
+    if signals.get("EVENT_PRODUCER_WITHOUT_LISTENER"): findings.append({"TYPE":"MISSING_CONSUMER","DETAIL":"EVENT_PRODUCER_WITHOUT_LISTENER"})
+    if signals.get("NOTIFICATION_PATH_DISCONNECTED"): findings.append({"TYPE":"UNCONNECTED_FEATURE","DETAIL":"NOTIFICATION_PATH_DISCONNECTED"})
+    if signals.get("DUPLICATE_LOCAL_ONLY_IMPLEMENTATION"): findings.append({"TYPE":"UNCONNECTED_FEATURE","DETAIL":"DUPLICATE_LOCAL_ONLY_IMPLEMENTATION"})
+
+    expected=set(feature.get("EXPECTED_CONSUMERS",[]) or []); observed=set(feature.get("OBSERVED_CONSUMERS",[]) or [])
+    if d.get("API_IMPLEMENTED") in {"IMPLEMENTED","CONNECTED","VERIFIED"} and expected and not expected.intersection(observed):
+        findings.append({"TYPE":"UNUSED_ENDPOINT","DETAIL":"NO_EXPECTED_CONSUMER_OBSERVED"})
+        findings.append({"TYPE":"MISSING_CONSUMER","DETAIL":"EXPECTED_CONSUMER_NOT_OBSERVED"})
+
+    if feature.get("PRESENT_IN_DEVELOPMENT") and not (feature.get("PRESENT_IN_CANDIDATE") or feature.get("PRESENT_IN_PRODUCTION")): findings.append({"TYPE":"NOT_IN_OFFICIAL_BUILD"})
+    elif d.get("CUSTOMER_VISIBLE")=="VERIFIED" and not (feature.get("PRESENT_IN_CANDIDATE") or feature.get("PRESENT_IN_PRODUCTION")): findings.append({"TYPE":"NOT_IN_OFFICIAL_BUILD"})
+    if d.get("CUSTOMER_VISIBLE")=="VERIFIED" and d.get("QA_VERIFIED") not in {"NOT_APPLICABLE","VERIFIED"}: findings.append({"TYPE":"CUSTOMER_VISIBLE_WITHOUT_QA"})
     if d.get("RELEASED")=="VERIFIED" and not feature.get("PRESENT_IN_PRODUCTION"): findings.append({"TYPE":"RELEASE_IDENTITY_GAP"})
     if d.get("FEATURE_FLAG_ENABLED") in {"NOT_STARTED","FAILED","BLOCKED"} and any(is_pass(k,v) for k,v in d.items() if k in CODE_DIMS): findings.append({"TYPE":"UNCONNECTED_FEATURE","DETAIL":"FEATURE_FLAG_OFF"})
     if declared=="DONE" and (state!="DONE" or findings): findings.append({"TYPE":"FALSE_DONE_FEATURE"})
@@ -96,8 +112,8 @@ def audit_documents(matrix,screens,actions):
             findings=audit_action(a); report["ACTIONS"].append({"SCREEN_ID":screen.get("SCREEN_ID"),"ACTION_ID":a.get("ACTION_ID"),"FINDINGS":findings}); report["FINDINGS"] += [{"SCREEN_ID":screen.get("SCREEN_ID"),"ACTION_ID":a.get("ACTION_ID"),**x} for x in findings]
     counts={}
     for finding in report["FINDINGS"]: counts[finding["TYPE"]]=counts.get(finding["TYPE"],0)+1
-    gap_types={"UNCONNECTED_FEATURE","MISSING_UI_BINDING","MISSING_NAVIGATION","PERSISTENCE_GAP","FALSE_SUCCESS_RISK","UNREACHABLE_SCREEN","BACKEND_ONLY_FEATURE","UI_ONLY_FEATURE","NOT_IN_OFFICIAL_BUILD"}
-    report["SUMMARY"]={"FALSE_DONE_FEATURES":counts.get("FALSE_DONE_FEATURE",0),"INTEGRATION_GAPS":sum(v for k,v in counts.items() if k in gap_types),"UNREACHABLE_SCREENS":counts.get("UNREACHABLE_SCREEN",0),"BACKEND_ONLY_FEATURES":counts.get("BACKEND_ONLY_FEATURE",0),"UI_ONLY_FEATURES":counts.get("UI_ONLY_FEATURE",0),"MISSING_BINDINGS":counts.get("MISSING_UI_BINDING",0),"CUSTOMER_READY_FEATURES":sum(r["DERIVED_STATE"] in {"CUSTOMER_READY","RELEASED","USER_ACCEPTED","DONE"} for r in report["FEATURES"])}
+    gap_types={"UNCONNECTED_FEATURE","MISSING_UI_BINDING","MISSING_NAVIGATION","MISSING_CONSUMER","UNUSED_ENDPOINT","PERSISTENCE_GAP","FALSE_SUCCESS_RISK","UNREACHABLE_SCREEN","BACKEND_ONLY_FEATURE","UI_ONLY_FEATURE","NOT_IN_OFFICIAL_BUILD","CUSTOMER_VISIBLE_WITHOUT_QA"}
+    report["SUMMARY"]={"FALSE_DONE_FEATURES":counts.get("FALSE_DONE_FEATURE",0),"INTEGRATION_GAPS":sum(v for k,v in counts.items() if k in gap_types),"DEAD_CODE_CANDIDATES":counts.get("DEAD_CODE_CANDIDATE",0),"UNUSED_ENDPOINTS":counts.get("UNUSED_ENDPOINT",0),"MISSING_CONSUMERS":counts.get("MISSING_CONSUMER",0),"UNREACHABLE_SCREENS":counts.get("UNREACHABLE_SCREEN",0),"BACKEND_ONLY_FEATURES":counts.get("BACKEND_ONLY_FEATURE",0),"UI_ONLY_FEATURES":counts.get("UI_ONLY_FEATURE",0),"MISSING_BINDINGS":counts.get("MISSING_UI_BINDING",0),"CUSTOMER_READY_FEATURES":sum(r["DERIVED_STATE"] in {"CUSTOMER_READY","RELEASED","USER_ACCEPTED","DONE"} for r in report["FEATURES"])}
     report["PASS"]=report["SUMMARY"]["FALSE_DONE_FEATURES"]==0
     return report
 
