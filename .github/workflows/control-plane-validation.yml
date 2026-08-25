@@ -14,7 +14,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python scripts/self_audit.py
-      - run: python -m unittest scripts/test_control_plane.py scripts/test_feature_delivery.py scripts/test_fleet_control.py -v
+      - run: python -m unittest scripts/test_control_plane.py scripts/test_feature_delivery.py scripts/test_fleet_control.py scripts/test_output_discipline.py -v
       - run: python scripts/orchestrator.py --report-out /tmp/orchestration-report.json
       - run: python dashboard/build_portfolio.py > /tmp/dashboard.json
       - name: Audit PCC main protection (non-blocking until admin credential is configured)
@@ -37,3 +37,9 @@ jobs:
       - run: python -m json.tool schemas/feature-delivery-matrix.schema.json > /dev/null
       - run: python -m json.tool schemas/screen-inventory.schema.json > /dev/null
       - run: python -m json.tool schemas/screen-action-matrix.schema.json > /dev/null
+      - run: python -m json.tool schemas/worker-handoff.schema.json > /dev/null
+      - run: python -m json.tool schemas/qa-handoff.schema.json > /dev/null
+      - run: python -m json.tool schemas/ci-handoff.schema.json > /dev/null
+      - run: python -m json.tool schemas/visual-qa-handoff.schema.json > /dev/null
+      - run: python -m json.tool schemas/integration-handoff.schema.json > /dev/null
+      - run: python -m json.tool schemas/release-handoff.schema.json > /dev/null
