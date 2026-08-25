@@ -73,9 +73,69 @@ class OrchestratorTests(unittest.TestCase):
         self.assertTrue(observed["UNRELATED"])
 
 class EnrollmentTests(unittest.TestCase):
-    def test_idempotent_same_profile(self):
-        profile={"PROJECT_ID":"P","REPOSITORY":"o/r","CONTROL_PLANE_VERSION":"v1.1.0","POLICY_ENFORCEMENT_MODE":"OBSERVE","VERSION_POLICY":"semantic","VERSION_SOURCE":"VERSION"}
+    def legacy_profile(self, **kw):
+        p={"PROJECT_ID":"P","REPOSITORY":"o/r","CONTROL_PLANE_VERSION":"v1.2.0","POLICY_ENFORCEMENT_MODE":"OBSERVE","VERSION_POLICY":"semantic","VERSION_SOURCE":"VERSION"}
+        p.update(kw); return p
+
+    def fleet_profile(self, **kw):
+        p={
+            "PROJECT_ID":"P","DISPLAY_NAME":"Project P","REPOSITORY":"o/r",
+            "ENROLLMENT_STATE":"REGISTERED","DISCOVERY_STATE":"PENDING_DISCOVERY",
+            "CONTROL_PLANE_VERSION":"v1.3.0","DESIRED_POLICY_VERSION":"1.1.0",
+            "POLICY_ENFORCEMENT_MODE":"OBSERVE","ROLLOUT_WAVE":0,
+            "CANARY":True,"WRITE_AUTHORIZED":False,
+            "CANONICAL_DEVELOPMENT_LINEAGE":"UNRESOLVED",
+            "AUTH_PROVIDER":"none/read_only","VERSION_POLICY":"semantic","VERSION_SOURCE":"VERSION",
+        }
+        p.update(kw); return p
+
+    def test_legacy_idempotent_same_profile(self):
+        profile=self.legacy_profile()
         self.assertEqual(enroll.plan(profile,{"PROJECTS":[profile]})["RESULT"],"NOOP")
+
+    def test_legacy_conflicting_repository_is_blocked(self):
+        profile=self.legacy_profile(REPOSITORY="o/new")
+        existing=self.legacy_profile(REPOSITORY="o/old")
+        result=enroll.plan(profile,{"PROJECTS":[existing]})
+        self.assertEqual(result["RESULT"],"BLOCKED")
+        self.assertEqual(result["REASON"],"PROJECT_ID_REPOSITORY_CONFLICT")
+
+    def test_legacy_required_fields_remain_v12_contract(self):
+        profile=self.legacy_profile()
+        self.assertNotIn("DISPLAY_NAME",profile)
+        self.assertEqual(enroll.plan(profile,{"PROJECTS":[]})["RESULT"],"PLANNED_ENROLLMENT")
+
+    def test_modern_plan_noop_identical(self):
+        profile=self.fleet_profile(); desired=enroll.desired_from(profile)
+        result=enroll.plan(profile,{"PROJECTS":[profile]},{"PROJECTS":[desired]})
+        self.assertEqual(result["RESULT"],"NOOP")
+        self.assertFalse(result["TARGET_MUTATED"])
+
+    def test_modern_required_fleet_metadata_enforced(self):
+        profile=self.fleet_profile(); profile.pop("DISPLAY_NAME")
+        result=enroll.plan(profile,{"PROJECTS":[]},{"PROJECTS":[]})
+        self.assertEqual(result["RESULT"],"BLOCKED")
+        self.assertIn("DISPLAY_NAME",result["MISSING"])
+
+    def test_modern_conflicting_repository_is_blocked(self):
+        profile=self.fleet_profile(REPOSITORY="o/new")
+        existing=self.fleet_profile(REPOSITORY="o/old")
+        result=enroll.plan(profile,{"PROJECTS":[existing]},{"PROJECTS":[]})
+        self.assertEqual(result["RESULT"],"BLOCKED")
+        self.assertEqual(result["REASON"],"PROJECT_ID_REPOSITORY_CONFLICT")
+
+    def test_modern_duplicate_apply_is_idempotent(self):
+        profile=self.fleet_profile(); registry={"PROJECTS":[]}; desired={"PROJECTS":[]}
+        registry,desired,first=enroll.apply(profile,registry,desired)
+        self.assertEqual(first["RESULT"],"ENROLLED")
+        registry2,desired2,second=enroll.apply(profile,registry,desired)
+        self.assertEqual(second["RESULT"],"NOOP")
+        self.assertEqual(registry2,registry); self.assertEqual(desired2,desired)
+
+    def test_explicit_none_uses_modern_contract_and_blocks(self):
+        result=enroll.plan(self.fleet_profile(),{"PROJECTS":[]},None)
+        self.assertEqual(result["RESULT"],"BLOCKED")
+        self.assertEqual(result["REASON"],"DESIRED_STATE_REQUIRED")
 
 class RepresentationTests(unittest.TestCase):
     def test_target_and_release_versions_represented(self):
