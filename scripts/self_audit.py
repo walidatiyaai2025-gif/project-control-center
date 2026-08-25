@@ -57,7 +57,7 @@ contain("scripts/github_fleet_client.py",["paginate","X-RateLimit-Remaining","Re
 contain("scripts/self_protection.py",["MAIN_PROTECTION_NOT_CONFIGURED","REPOSITORY_ADMIN_WRITE_CREDENTIAL_REQUIRED","Control Plane Validation / self-audit"])
 contain("scripts/fleet_control.py",["collect_project","lock_baseline","reconcile_existing_work","migration_plan","apply_policy_sync","stale_task_recovery","orphan_audit","append_ledger","acquire_lock"])
 contain(".github/workflows/fleet-control.yml",["Live GitHub fleet collection","concurrency:","PCC_GITHUB_TOKEN"])
-contain(".github/workflows/portfolio-dashboard.yml",["actions/configure-pages","actions/deploy-pages","enablement: true"])
+contain(".github/workflows/portfolio-dashboard.yml",["Detect Pages site","pcc-dashboard-static-","actions/configure-pages@v5","steps.pages_preflight.outputs.enabled == 'true'","actions/deploy-pages@v4","PAGES=EXTERNAL_BLOCKER"])
 contain("portfolio/projects.yml",["AIMWWEB","PENDING_DISCOVERY","OBSERVE","WRITE_AUTHORIZED"])
 contain("orchestration/reconciliation/AIMWWEB.json",["UNIQUE_WORK_PRESERVATION_REQUIRED","TARGET_MUTATED"])
 
