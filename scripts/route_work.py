@@ -34,11 +34,7 @@ def names_for_variant(row: dict[str, Any]) -> set[str]:
 
 def git_sha(root: Path) -> str | None:
     try:
-        return subprocess.check_output(
-            ["git", "-C", str(root), "rev-parse", "HEAD"],
-            text=True,
-            stderr=subprocess.DEVNULL,
-        ).strip()
+        return subprocess.check_output(["git", "-C", str(root), "rev-parse", "HEAD"], text=True, stderr=subprocess.DEVNULL).strip()
     except Exception:
         return None
 
@@ -56,7 +52,6 @@ def resolve_project(identifier: str, routing: dict[str, Any]) -> tuple[dict[str,
     if not matches:
         return None, None, "PROJECT_OR_VARIANT_NOT_REGISTERED"
     if len(unique) > 1:
-        # Prefer an exact project identity over its primary variant when they share a name.
         project_only = [m for m in matches if m[2] == "PROJECT"]
         distinct_projects = {m[0].get("PROJECT_ID") for m in matches}
         if len(project_only) == 1 and len(distinct_projects) == 1:
@@ -100,13 +95,11 @@ def route(root: Path, identifier: str, variant_name: str | None = None, scope: s
 
     constitution_state = project.get("CONSTITUTION_STATE")
     if constitution_state != "READY":
-        return blocked(
-            "REPOSITORY_CONSTITUTION_NOT_READY",
-            PROJECT_ID=project.get("PROJECT_ID"),
-            REPOSITORY=project.get("REPOSITORY"),
-            CONSTITUTION_STATE=constitution_state,
-            CONSTITUTION_PATH=project.get("CONSTITUTION_PATH"),
-        )
+        return blocked("REPOSITORY_CONSTITUTION_NOT_READY", PROJECT_ID=project.get("PROJECT_ID"), REPOSITORY=project.get("REPOSITORY"), CONSTITUTION_STATE=constitution_state, CONSTITUTION_PATH=project.get("CONSTITUTION_PATH"))
+
+    normalization_state = project.get("ONBOARDING_NORMALIZATION_STATE")
+    if normalization_state != "READY":
+        return blocked("PROJECT_ONBOARDING_NORMALIZATION_NOT_READY", PROJECT_ID=project.get("PROJECT_ID"), ONBOARDING_NORMALIZATION_STATE=normalization_state)
 
     model = project.get("PROJECT_MODEL")
     target_scope = (scope or "").upper() or None
@@ -118,6 +111,9 @@ def route(root: Path, identifier: str, variant_name: str | None = None, scope: s
             return blocked(error, PROJECT_ID=project.get("PROJECT_ID"), VARIANT_INPUT=variant_name)
         if inferred_variant and target_variant.get("VARIANT_ID") != inferred_variant.get("VARIANT_ID"):
             return blocked("PROJECT_INPUT_AND_VARIANT_INPUT_CONFLICT")
+
+    target_location = None
+    target_location_state = None
 
     if model == "STANDALONE":
         if target_variant or variant_name:
@@ -132,17 +128,14 @@ def route(root: Path, identifier: str, variant_name: str | None = None, scope: s
         if target_variant and not target_scope:
             target_scope = "VARIANT"
         if not target_scope:
-            return blocked(
-                "TARGET_SCOPE_REQUIRED_FOR_PRODUCT_FAMILY",
-                PROJECT_ID=project.get("PROJECT_ID"),
-                ALLOWED_SCOPES=["CORE", "VARIANT"],
-            )
+            return blocked("TARGET_SCOPE_REQUIRED_FOR_PRODUCT_FAMILY", PROJECT_ID=project.get("PROJECT_ID"), ALLOWED_SCOPES=["CORE", "VARIANT"])
         if target_scope == "CORE":
             if target_variant:
                 return blocked("CORE_SCOPE_CANNOT_TARGET_SINGLE_VARIANT")
-            impacted_variants = [
-                v.get("VARIANT_ID") for v in project.get("VARIANTS", []) if v.get("STATUS") == "ACTIVE"
-            ]
+            core_state = project.get("CORE_ROUTING_STATE")
+            if core_state != "READY":
+                return blocked("SHARED_CORE_BOUNDARY_NOT_READY", PROJECT_ID=project.get("PROJECT_ID"), CORE_ROUTING_STATE=core_state)
+            impacted_variants = [v.get("VARIANT_ID") for v in project.get("VARIANTS", []) if v.get("STATUS") == "ACTIVE"]
             cross_variant = True
             change_boundary = "SHARED_CORE"
         elif target_scope == "VARIANT":
@@ -150,6 +143,16 @@ def route(root: Path, identifier: str, variant_name: str | None = None, scope: s
                 return blocked("TARGET_VARIANT_REQUIRED", PROJECT_ID=project.get("PROJECT_ID"))
             if target_variant.get("STATUS") != "ACTIVE":
                 return blocked("TARGET_VARIANT_NOT_ACTIVE", TARGET_VARIANT=target_variant.get("VARIANT_ID"))
+            if target_variant.get("ROUTING_STATE") != "READY":
+                return blocked(
+                    "TARGET_VARIANT_BOUNDARY_NOT_READY",
+                    PROJECT_ID=project.get("PROJECT_ID"),
+                    TARGET_VARIANT=target_variant.get("VARIANT_ID"),
+                    ROUTING_STATE=target_variant.get("ROUTING_STATE"),
+                    IMPLEMENTATION_LOCATION_STATE=target_variant.get("IMPLEMENTATION_LOCATION_STATE"),
+                )
+            target_location = target_variant.get("IMPLEMENTATION_LOCATION")
+            target_location_state = target_variant.get("IMPLEMENTATION_LOCATION_STATE")
             impacted_variants = [target_variant.get("VARIANT_ID")]
             cross_variant = False
             change_boundary = f"{target_variant.get('VARIANT_ID')}_ONLY"
@@ -171,9 +174,14 @@ def route(root: Path, identifier: str, variant_name: str | None = None, scope: s
         "PROJECT_ID": project.get("PROJECT_ID"),
         "REPOSITORY": project.get("REPOSITORY"),
         "PROJECT_MODEL": model,
+        "ONBOARDING_NORMALIZATION_STATE": normalization_state,
+        "VARIANT_GOVERNANCE_STATE": project.get("VARIANT_GOVERNANCE_STATE"),
+        "CORE_ROUTING_STATE": project.get("CORE_ROUTING_STATE"),
         "TARGET_SCOPE": target_scope,
         "TARGET_VARIANT": target_variant.get("VARIANT_ID") if target_variant else None,
         "TARGET_VARIANT_DISPLAY_NAME": target_variant.get("DISPLAY_NAME") if target_variant else None,
+        "TARGET_IMPLEMENTATION_LOCATION": target_location,
+        "TARGET_IMPLEMENTATION_LOCATION_STATE": target_location_state,
         "IMPACTED_VARIANTS": impacted_variants,
         "REQUIRES_CROSS_VARIANT_VALIDATION": cross_variant,
         "CHANGE_BOUNDARY": change_boundary,
@@ -182,7 +190,7 @@ def route(root: Path, identifier: str, variant_name: str | None = None, scope: s
         "FAMILY_MANIFEST_PATH": project.get("FAMILY_MANIFEST_PATH"),
         "READ_FIRST": read_first,
         "TASK": task,
-        "WORKER_INSTRUCTION": "Read the repository constitution and family manifest first. Modify only the routed boundary. If repository evidence contradicts this route, stop and return ROUTING_CONFLICT instead of guessing.",
+        "WORKER_INSTRUCTION": "Read the repository constitution and family manifest first. Modify only the routed boundary and implementation location. If repository evidence contradicts this route, stop and return ROUTING_CONFLICT instead of guessing.",
     }
 
 

@@ -1,20 +1,20 @@
 {
-  "CONTROL_PLANE_VERSION": "v1.5.0",
-  "ROUTING_CONTRACT_VERSION": "1.0.0",
+  "CONTROL_PLANE_VERSION": "v1.6.0",
+  "ROUTING_CONTRACT_VERSION": "1.2.0",
   "PROJECTS": [
     {
       "PROJECT_ID": "AIMWWEB",
       "DISPLAY_NAME": "AIMWWeb",
       "REPOSITORY": "walidatiyaai2025-gif/AIMWWeb",
       "PROJECT_MODEL": "STANDALONE",
-      "ALIASES": [
-        "aimwweb",
-        "aimw web"
-      ],
+      "ALIASES": ["aimwweb", "aimw web"],
       "ROUTING_REQUIRED": true,
       "CONSTITUTION_PATH": "AGENTS.md",
       "CONSTITUTION_STATE": "LEGACY_PENDING",
+      "ONBOARDING_NORMALIZATION_STATE": "LEGACY_PENDING",
       "FAMILY_MANIFEST_PATH": null,
+      "VARIANT_GOVERNANCE_STATE": "NOT_APPLICABLE",
+      "CORE_ROUTING_STATE": "NOT_APPLICABLE",
       "DEFAULT_SCOPE": "PROJECT",
       "VARIANTS": []
     },
@@ -23,15 +23,16 @@
       "DISPLAY_NAME": "NotOnlyBook",
       "REPOSITORY": "walidatiyaai2025-gif/notonlybook",
       "PROJECT_MODEL": "PRODUCT_FAMILY",
-      "ALIASES": [
-        "notonlybook",
-        "not only book"
-      ],
+      "ALIASES": ["notonlybook", "not only book"],
       "ROUTING_REQUIRED": true,
       "CONSTITUTION_PATH": "AGENTS.md",
       "CONSTITUTION_STATE": "READY",
       "CONSTITUTION_SOURCE_SHA": "409bac608ecb4727d56efb7649be64934800e5cd",
+      "ONBOARDING_NORMALIZATION_STATE": "READY",
+      "NORMALIZATION_EVIDENCE_SHA": "409bac608ecb4727d56efb7649be64934800e5cd",
       "FAMILY_MANIFEST_PATH": ".pcc/project-family.json",
+      "VARIANT_GOVERNANCE_STATE": "PARTIAL",
+      "CORE_ROUTING_STATE": "BLOCKED_UNRESOLVED",
       "DEFAULT_SCOPE": null,
       "VARIANTS": [
         {
@@ -40,10 +41,11 @@
           "TYPE": "PRIMARY",
           "STATUS": "ACTIVE",
           "DERIVED_FROM": null,
-          "ALIASES": [
-            "notonlybook",
-            "not only book"
-          ]
+          "ALIASES": ["notonlybook", "not only book"],
+          "IMPLEMENTATION_LOCATION": ".",
+          "IMPLEMENTATION_LOCATION_STATE": "MAPPED",
+          "ROUTING_STATE": "READY",
+          "BOUNDARY_EVIDENCE_SHA": "409bac608ecb4727d56efb7649be64934800e5cd"
         },
         {
           "VARIANT_ID": "ARABIASWONDERS",
@@ -51,11 +53,11 @@
           "TYPE": "CLIENT_VARIANT",
           "STATUS": "ACTIVE",
           "DERIVED_FROM": "NOTONLYBOOK",
-          "ALIASES": [
-            "arabiaswonder",
-            "arabiaswonders",
-            "arabias wonders"
-          ]
+          "ALIASES": ["arabiaswonder", "arabiaswonders", "arabias wonders"],
+          "IMPLEMENTATION_LOCATION": null,
+          "IMPLEMENTATION_LOCATION_STATE": "UNRESOLVED",
+          "ROUTING_STATE": "BLOCKED_UNRESOLVED",
+          "BOUNDARY_EVIDENCE_SHA": "409bac608ecb4727d56efb7649be64934800e5cd"
         }
       ]
     }

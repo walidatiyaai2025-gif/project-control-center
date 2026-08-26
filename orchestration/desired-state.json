@@ -1,10 +1,10 @@
 {
-  "CONTROL_PLANE_VERSION": "v1.5.0",
+  "CONTROL_PLANE_VERSION": "v1.6.0",
   "PROJECTS": [
     {
       "PROJECT_ID": "AIMWWEB",
       "REPOSITORY": "walidatiyaai2025-gif/AIMWWeb",
-      "CONTROL_PLANE_VERSION": "v1.5.0",
+      "CONTROL_PLANE_VERSION": "v1.6.0",
       "DESIRED_POLICY_VERSION": "1.1.0",
       "POLICY_ENFORCEMENT_MODE": "OBSERVE",
       "ROLLOUT_WAVE": 0,
@@ -14,19 +14,15 @@
       "AUTH_PROVIDER": "github_actions_or_runtime",
       "VERSION_POLICY": "unknown-existing-project",
       "VERSION_SOURCE": "UNKNOWN",
-      "MANAGED_FILES": [
-        ".pcc/managed-repository-control.json"
-      ],
+      "MANAGED_FILES": [".pcc/managed-repository-control.json"],
       "REQUIRE_DEFAULT_BRANCH_PROTECTION": false,
-      "BREAK_GLASS": {
-        "ENABLED": false
-      },
+      "BREAK_GLASS": {"ENABLED": false},
       "POLICY_EXCEPTIONS": []
     },
     {
       "PROJECT_ID": "NOTONLYBOOK",
       "REPOSITORY": "walidatiyaai2025-gif/notonlybook",
-      "CONTROL_PLANE_VERSION": "v1.5.0",
+      "CONTROL_PLANE_VERSION": "v1.6.0",
       "DESIRED_POLICY_VERSION": "1.1.0",
       "POLICY_ENFORCEMENT_MODE": "OBSERVE",
       "ROLLOUT_WAVE": 1,
@@ -36,13 +32,9 @@
       "AUTH_PROVIDER": "github_actions_or_runtime",
       "VERSION_POLICY": "unknown-existing-project",
       "VERSION_SOURCE": "UNKNOWN",
-      "MANAGED_FILES": [
-        ".pcc/managed-repository-control.json"
-      ],
+      "MANAGED_FILES": [".pcc/managed-repository-control.json"],
       "REQUIRE_DEFAULT_BRANCH_PROTECTION": false,
-      "BREAK_GLASS": {
-        "ENABLED": false
-      },
+      "BREAK_GLASS": {"ENABLED": false},
       "POLICY_EXCEPTIONS": []
     }
   ]

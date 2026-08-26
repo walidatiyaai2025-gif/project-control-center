@@ -1,34 +1,36 @@
 # 23 — Install Control Plane
 
 PROMPT_ID: PCC-23
-VERSION: 1.1.0
+VERSION: 1.2.0
 APPLIES_TO: ACTIVE_EXISTING_PROJECT
 PREVIOUS_STEP: PCC-22
 NEXT_STEP: PCC-24
 REQUIRES_WRITE_ACCESS: true
-CONTROL_PLANE_VERSION: v1.1.0
+CONTROL_PLANE_VERSION: v1.6.0
 
 ## Must exist before running
 
 - PCC-20 discovery, PCC-21 baseline and PCC-22 reconciliation completed.
-- Verified development lineage and preservation plan.
-- Verified forward version baseline/source decision for product projects, or explicit unresolved status preventing enforcement.
+- Verified preservation plan and project-model/variant discovery result.
+- Verified forward version baseline or explicit unresolved status preventing unsupported enforcement.
 - Write access to target repository and PCC.
 
 ## Mission
 
-Install governance into the existing repository without disrupting verified development or historical version identity.
+Install governance without disrupting verified development and persist the automatic variant-routing model.
 
 ## Execute
 
-Add managed-repository control marker with exact PCC repository/version/SHA; canonical status/task/requirement evidence locations; project profile; traceable PR template; CODEOWNERS where appropriate; ADR/docs/release evidence paths; and validation hooks compatible with the technology.
+Install/reconcile root `AGENTS.md`, managed-repository control marker, canonical status/task/requirement evidence, profile, traceable PR template/CODEOWNERS where appropriate, and validation hooks.
 
-Integrate on verified live development lineage or a governance branch from its exact SHA. Do not reset to a conventional branch. Reconcile pre-existing governance explicitly.
+For `PRODUCT_FAMILY`, install/reconcile `.pcc/project-family.json` from the canonical schema/template. Record each known variant's implementation-location and routing states. Never create product directories, permanent client branches, or copied code merely to make a route look ready.
 
-For product versioning, designate `ONE_CANONICAL_PRODUCT_VERSION_SOURCE` using the baseline decision. Reuse a legitimate stack-native source when selected; create root `VERSION` only when it is the chosen forward source. Reconcile user display/package metadata to derive from or match it. Add version-manifest/reusable-governance integration initially in `OBSERVE`/non-breaking mode for migrated existing projects.
+Mirror the target family model in `portfolio/project-routing.json`. Set `ONBOARDING_NORMALIZATION_STATE=READY` when classification is complete; use `VARIANT_GOVERNANCE_STATE=PARTIAL` if one or more known boundaries are explicitly blocked.
 
-Populate initial status/profile from evidence; unknown stays null/UNKNOWN.
+The owner's onboarding authorization is governance-only. Any product source change requires a separate routed Task ID.
+
+Integrate governance on verified lineage or a dedicated governance branch from its exact SHA; reconcile existing governance explicitly.
 
 ## Required output
 
-Return target branch/base SHA, installation commit/PR, PCC version/SHA, canonical status/profile paths, version source/baseline confidence, initial enforcement mode, preserved-work/history confirmation, and PCC-24.
+Return target branch/base SHA, governance installation commit/PR, project model, family/variant route states, PCC version/SHA, status/profile paths, preserved-work confirmation, and PCC-24.
