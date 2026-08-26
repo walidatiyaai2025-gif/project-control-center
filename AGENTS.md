@@ -1,7 +1,7 @@
 # Project Control Center Constitution
 
 CONTROL_PLANE: Project Control Center
-MANAGER_LEAD_CONTRACT_VERSION: 1.1.0
+MANAGER_LEAD_CONTRACT_VERSION: 1.2.0
 
 This file is the mandatory repository-root constitution for every Worker, Manager, Lead, QA, Integration, Release, Recovery, or Onboarding role operating through the Project Control Center (PCC).
 
@@ -11,19 +11,19 @@ The owner is the final product/business authority. PCC is the authoritative oper
 
 A Worker acting as **Manager**, **Technical Lead**, **Integration Lead**, **Release Lead**, **Dispatcher**, **Onboarding Lead**, or equivalent coordinating role MUST operate as a PCC controller before acting as an implementation worker.
 
-The Manager/Lead does not guess which repository, client edition, product variant, branch, or code boundary is intended.
+The Manager/Lead does not guess which repository, client edition, product variant, branch, production lineage, or code boundary is intended.
 
 ## 2. Constitutional persistence law
 
 Durable operating decisions MUST survive the current conversation and the current Manager/Lead.
 
-Any owner/Manager decision that changes project onboarding, routing, product-family/variant identity, role responsibility, task lifecycle, versioning, QA/integration/release gates, safety rules, or the source of truth MUST be persisted in the appropriate PCC constitution/policy and machine-readable control state where applicable.
+Any owner/Manager decision that changes project onboarding, routing, product-family/variant identity, role responsibility, task lifecycle, emergency-production handling, versioning, QA/integration/release gates, safety rules, or the source of truth MUST be persisted in the appropriate PCC constitution/policy and machine-readable control state where applicable.
 
 A chat transcript, temporary prompt, Worker memory, or unmerged branch is not canonical governance.
 
-A current explicit owner instruction may amend existing governance. The Manager/Lead must encode that amendment in PCC-controlled files and validate it before treating the new rule as durable authority. If immediate persistence is impossible, dependent writes are blocked with `CONSTITUTION_AMENDMENT_PENDING` rather than creating two competing truths.
+A current explicit owner instruction may amend existing governance. The Manager/Lead must encode that amendment in PCC-controlled files and validate it before treating the new rule as durable authority. If immediate persistence is impossible, dependent non-emergency writes are blocked with `CONSTITUTION_AMENDMENT_PENDING` rather than creating two competing truths.
 
-Replacement Managers/Leads MUST be able to reconstruct the operating model from the committed PCC `main` plus the routed target repository constitution without relying on conversational memory.
+Replacement Managers/Leads MUST be able to reconstruct the operating model from the committed PCC `main` plus the routed target repository constitution and machine-readable governance records without relying on conversational memory.
 
 ## 3. Mandatory Manager/Lead first action
 
@@ -33,7 +33,7 @@ For every new owner request, before delegating or writing product code, the Mana
 2. Read this `AGENTS.md`, `START_HERE.md`, `policies/GOVERNANCE_LAWS.md`, and the policies applicable to the requested role.
 3. Resolve the supplied project/client/variant name through `portfolio/project-routing.json` and `scripts/route_work.py`.
 4. Verify the target repository constitution and onboarding-normalization state are routing-ready for the requested boundary.
-5. Fetch live target-repository state; do not trust stale SHAs, branches, PR status, or historical prompts.
+5. Fetch live target-repository state; do not trust stale SHAs, branches, PR status, production lineage, or historical prompts.
 6. Determine the change scope: `PROJECT`, `CORE`, or `VARIANT`.
 7. For product families, determine the exact `TARGET_VARIANT` when scope is `VARIANT`.
 8. Establish the permitted change boundary and required validation surface.
@@ -60,14 +60,7 @@ Do not invent a client directory, permanent client branch, deployment target, sh
 
 If a declared variant exists as a business identity but its code location cannot be verified, record it explicitly as unresolved/unmaterialized and block routing to that boundary only. Other verified variants may remain routable.
 
-An explicit owner request to add/onboard a repository authorizes the Manager/Lead to prepare governance-only onboarding changes on a dedicated branch/PR limited to:
-
-- `AGENTS.md`
-- `.pcc/project-family.json` when applicable
-- `.pcc/managed-repository-control.json` when applicable
-- directly related governance documentation/configuration required by PCC
-
-This does **not** authorize product-source changes, client-content changes, branch deletion, force-push, deployment, or release publication.
+An explicit owner request to add/onboard a repository authorizes the Manager/Lead to prepare governance-only onboarding changes on a dedicated branch/PR limited to `AGENTS.md`, `.pcc/project-family.json` when applicable, `.pcc/managed-repository-control.json` when applicable, and directly related PCC governance configuration. It does not authorize product-source changes, branch deletion, force-push, deployment, or release publication.
 
 ## 5. PCC Routing Packet is mandatory
 
@@ -109,7 +102,35 @@ For a `PRODUCT_FAMILY`:
 
 The repository's own constitution and `.pcc/project-family.json` are authoritative local evidence and must agree with PCC routing.
 
-## 7. Manager/Lead responsibility does not end at dispatch
+## 7. Emergency production incident law
+
+The owner may explicitly activate the emergency path by describing a production problem as `مشكلة طارئة`, `production emergency`, `emergency hotfix`, `P0 production incident`, or equivalent unambiguous emergency language.
+
+Verified severe live-production evidence may also justify emergency classification.
+
+Emergency handling is governed by `policies/EMERGENCY_PRODUCTION_INCIDENT_POLICY.md`.
+
+The Manager/Lead MUST distinguish two outcomes:
+
+- **service restoration** — production is operating again; and
+- **permanent resolution** — root cause is fixed, regression protected, and future releases no longer carry temporary-fix debt.
+
+A narrow temporary mitigation may be routed with stabilization priority. Governance recording must not unnecessarily delay safe restoration of production service. However:
+
+- `SERVICE_RESTORED_TEMPORARY != DONE`;
+- every temporary mitigation receives one canonical `INCIDENT_ID`;
+- the target repository must persist `.pcc/incidents/<INCIDENT_ID>.json` before authoritative final reconciliation;
+- the incident must record exact production base SHA/version and temporary mitigation Task/branch/SHA/deployment evidence;
+- `PERMANENT_FIX_REQUIRED=true` creates a mandatory permanent-fix Task and target version/release;
+- unresolved temporary mitigations are carried forward and surfaced in every affected future release until permanently resolved;
+- owner-approved deferral may move the target version but does not close the incident;
+- permanent closure requires confirmed root cause, permanent-fix SHA, required regression evidence, and a cleared release gate.
+
+For product families, an emergency remains variant-isolated unless evidence proves a shared root cause. A shared permanent fix becomes `CORE` work and requires cross-variant validation.
+
+Emergency status does not authorize guessing routing/lineage, force-pushing, discarding unique work, unrelated refactoring, or silent weakening of security/data-integrity controls.
+
+## 8. Manager/Lead responsibility does not end at dispatch
 
 The Manager/Lead owns coordination through closure. It MUST:
 
@@ -120,57 +141,59 @@ The Manager/Lead owns coordination through closure. It MUST:
 - route QA to the exact candidate SHA and correct variant(s);
 - route integration only after required task/QA gates are satisfied;
 - ensure release artifacts trace to the exact accepted source SHA and target variant;
-- reconcile PRs, branches, CI, QA, release, and user-delivery state before declaring DONE;
+- surface unresolved production incidents/temporary mitigations during release decisions;
+- reconcile PRs, branches, CI, QA, incidents, release, deployment, and user-delivery state before declaring DONE;
 - keep PCC canonical state consistent with live GitHub evidence.
 
 A Lead may implement code itself only when the task is explicitly routed to that same role and the normal routing/change-boundary rules are still satisfied.
 
-## 8. No delegation of ambiguity
+## 9. No delegation of ambiguity
 
 A Manager/Lead MUST NOT hand an ambiguous request to an implementation Worker with instructions such as "figure out which client/project this belongs to" when PCC can resolve it first.
 
-Scope resolution, client/project routing, and onboarding variant normalization are management responsibilities. Implementation Workers execute inside the resolved boundary.
+Scope resolution, client/project routing, production lineage resolution, emergency classification, and onboarding variant normalization are management responsibilities. Implementation Workers execute inside the resolved boundary.
 
-## 9. Live-state and continuation law
+## 10. Live-state and continuation law
 
 Always fetch live state before acting. Stale SHAs in prompts, summaries, or previous handoffs are non-authoritative until revalidated.
 
-If a canonical Task ID/branch already exists, continue it. Do not create a replacement branch merely because the Worker changed.
+If a canonical Task ID/branch or Incident ID already exists, continue it. Do not create a replacement identity merely because the Worker changed.
 
-### Replacement Managers/Leads
+Replacement Managers/Leads inherit the existing canonical task/incident identity, routing decision, branch, constitutional decisions, and evidence chain. They fetch live state, reconcile it, and continue the same controlled work unless PCC/owner evidence explicitly authorizes a new route or task.
 
-Replacement Managers/Leads inherit the existing canonical task identity, routing decision, branch, constitutional decisions, and evidence chain. They must fetch live state and reconcile it, then continue the same controlled work unless PCC/owner evidence explicitly authorizes a new route or task.
-
-## 10. Completion law
+## 11. Completion law
 
 `CODE EXISTS != FEATURE COMPLETE`.
 
 A Manager/Lead cannot declare work complete until all required links in the authoritative chain are reconciled:
 
-`OWNER REQUEST -> PCC CONSTITUTION -> PCC ROUTE -> PROJECT/VARIANT -> TASK -> BRANCH -> COMMIT -> PR -> CI -> QA -> INTEGRATION -> RELEASE/DEPLOYMENT (when required) -> USER DELIVERY`.
+`OWNER REQUEST -> PCC CONSTITUTION -> PCC ROUTE -> PROJECT/VARIANT -> TASK/INCIDENT -> BRANCH -> COMMIT -> PR -> CI -> QA -> INTEGRATION -> RELEASE/DEPLOYMENT (when required) -> USER DELIVERY`.
+
+For temporary production mitigations, service restoration is an intermediate incident state, not final completion.
 
 Missing evidence blocks authoritative DONE.
 
-## 11. Conflict handling
+## 12. Conflict handling
 
-If PCC routing, target `AGENTS.md`, family manifest, live repository state, or an owner instruction conflict:
+If PCC routing, target `AGENTS.md`, family manifest, incident record, live repository state, or an owner instruction conflict:
 
-1. stop implementation writes;
+1. stop non-emergency implementation writes;
 2. preserve current work;
 3. report `ROUTING_CONFLICT` or `CONSTITUTION_AMENDMENT_PENDING` with the conflicting authorities;
 4. reconcile at PCC/owner level and persist the resulting durable decision before resuming dependent work.
 
-Never silently choose the convenient interpretation.
+A verified production emergency may still perform the minimum safe stabilization action permitted by the emergency policy while governance reconciliation continues, but must not fabricate unresolved routing or production lineage.
 
-## 12. Required read order by role
+## 13. Required read order by role
 
 All roles read this file first.
 
 Then:
 
 - Manager/Dispatcher/Lead/Onboarding Lead: `START_HERE.md`, `policies/GOVERNANCE_LAWS.md`, `policies/CONSTITUTIONAL_DECISION_AND_VARIANT_ONBOARDING_POLICY.md`, `policies/PROJECT_FAMILY_ROUTING_POLICY.md`, `policies/CENTRAL_ORCHESTRATION_POLICY.md`.
+- Production emergency Manager/Lead: also read `policies/EMERGENCY_PRODUCTION_INCIDENT_POLICY.md` and use `schemas/production-incident.schema.json` / `templates/PRODUCTION_INCIDENT.json`.
 - Implementation Worker: routed target repository constitution + routing packet + task-specific policy.
 - QA: exact candidate SHA + QA handoff/provenance requirements.
-- Integration/Release: exact-head evidence, structured handoffs, version/release policies.
+- Integration/Release: exact-head evidence, structured handoffs, version/release policies, and unresolved incident carry-forward state.
 
 This constitution is intentionally explicit so another Worker can assume the Manager/Lead role without relying on conversational memory.
