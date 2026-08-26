@@ -1,11 +1,30 @@
 # Central Orchestration Policy
 
-CONTROL_PLANE_VERSION: v1.3.0
-POLICY_VERSION: 1.1.0
+CONTROL_PLANE_VERSION: v1.5.0
+POLICY_VERSION: 1.2.0
 
 ## Controllers
 
-PCC operates a Repository Enrollment Controller, authenticated GitHub Fleet Collector, Existing-Project Discovery Controller, Baseline Locker, Existing-Work Reconciler, Safe Migration Engine, Policy Version Manager, Drift Detector/Controlled Repair engine, stale-task recovery, orphan audit, Audit Ledger, Portfolio Aggregator, dashboard publisher, and PCC Self-Protection auditor.
+PCC operates a Repository Enrollment Controller, authenticated GitHub Fleet Collector, Existing-Project Discovery Controller, Baseline Locker, Existing-Work Reconciler, Safe Migration Engine, Policy Version Manager, Drift Detector/Controlled Repair engine, stale-task recovery, orphan audit, Audit Ledger, Portfolio Aggregator, project/client routing controller, dashboard publisher, and PCC Self-Protection auditor.
+
+## Manager / Lead controller contract
+
+A Worker assigned the role of Manager, Technical Lead, Integration Lead, Release Lead, Dispatcher, or equivalent coordinator acts as a PCC controller first.
+
+Before implementation is delegated or performed, that role must:
+
+1. fetch live PCC state and read root `AGENTS.md`;
+2. resolve the owner-supplied project/client/variant label through the PCC routing registry;
+3. verify the target repository constitution and family manifest where applicable;
+4. fetch live target repository state;
+5. determine the exact target scope (`PROJECT`, `CORE`, or `VARIANT`) and change boundary;
+6. reconcile/create the canonical Task ID and continuation branch;
+7. emit the PCC routing packet to implementation Workers;
+8. coordinate non-overlapping work, exact-SHA QA, integration, release/deployment evidence when required, and final reconciliation.
+
+The Manager/Lead owns ambiguity resolution. It must not delegate unresolved project/client/variant identity to an implementation Worker. If routing cannot be established, writes are blocked with `ROUTING_REQUIRED` or `ROUTING_CONFLICT`.
+
+Replacement Managers/Leads inherit the same contract and continue canonical tasks/branches; they do not create parallel management truth.
 
 ## Rollout modes
 
@@ -51,7 +70,7 @@ Expired non-terminal Worker leases are `RECLAIMABLE` using the same `TASK_ID`, s
 
 ## Audit ledger
 
-Every enrollment, collection, baseline, reconciliation, migration plan, policy sync, recovery, and exception/break-glass decision receives an operation key, project identity, mode/auth context, result, mutation flag, and timestamp. GitHub Actions runtime ledgers are uploaded as immutable run artifacts; canonical seed events remain in `orchestration/audit-ledger.json`.
+Every enrollment, collection, baseline, reconciliation, routing decision, migration plan, policy sync, recovery, and exception/break-glass decision receives an operation key, project identity, mode/auth context, result, mutation flag, and timestamp. GitHub Actions runtime ledgers are uploaded as immutable run artifacts; canonical seed events remain in `orchestration/audit-ledger.json`.
 
 ## Break-glass and policy exceptions
 
