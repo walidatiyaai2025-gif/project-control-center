@@ -1,20 +1,21 @@
 # START HERE — Project Control Center v1.6.0
 
-This is the operator entry point. Existing Feature/Screen/Action governance, fleet governance, execution-output discipline, fleet onboarding, Manager/Lead routing, and constitutional decision persistence remain authoritative.
+This is the operator entry point. Existing Feature/Screen/Action governance, fleet governance, execution-output discipline, fleet onboarding, Manager/Lead routing, constitutional decision persistence, and emergency production incident governance remain authoritative.
 
 ## Before any scenario
 1. **Read root `AGENTS.md` first.** It is the PCC constitution for every Manager/Lead/Worker role.
 2. Confirm this PCC repository at a known immutable SHA and read `VERSION`.
 3. Read `policies/GOVERNANCE_LAWS.md`.
 4. Read `policies/CONSTITUTIONAL_DECISION_AND_VARIANT_ONBOARDING_POLICY.md` for durable decisions and automatic project-family normalization.
-5. Read mandatory `policies/EXECUTION_OUTPUT_DISCIPLINE_POLICY.md`; operational roles use silent execution by default and report reconciled final state only.
-6. For product delivery, read `policies/IMMUTABLE_PRODUCT_VERSION_POLICY.md` and `policies/END_TO_END_FEATURE_DELIVERY_POLICY.md`.
-7. For fleet operations, read `policies/FLEET_CONTROL_POLICY.md`, `policies/CENTRAL_ORCHESTRATION_POLICY.md`, and `orchestration/README.md`.
-8. For worker dispatch, read `policies/PROJECT_FAMILY_ROUTING_POLICY.md` and resolve the project/client through `portfolio/project-routing.json`.
-9. Never invent branches, SHAs, task state, QA, release, lineage, version, connectivity, client identity, variant identity, implementation locations, or completion.
-10. Existing-project discovery/baseline/reconciliation are read-only until an explicit write gate is satisfied.
-11. Cross-repository product writes require the normal authorization gates. A direct owner instruction to add/onboard a project authorizes only governance-only onboarding changes defined in the constitution/policy.
-12. Before bulk enrollment, run `python scripts/fleet_readiness.py`; require `READINESS_PERCENT=100` and `ONBOARDING_READY=true`.
+5. If the request is a production emergency or the owner says `مشكلة طارئة`, read `policies/EMERGENCY_PRODUCTION_INCIDENT_POLICY.md` and use the production-incident schema/template.
+6. Read mandatory `policies/EXECUTION_OUTPUT_DISCIPLINE_POLICY.md`; operational roles use silent execution by default and report reconciled final state only.
+7. For product delivery, read `policies/IMMUTABLE_PRODUCT_VERSION_POLICY.md` and `policies/END_TO_END_FEATURE_DELIVERY_POLICY.md`.
+8. For fleet operations, read `policies/FLEET_CONTROL_POLICY.md`, `policies/CENTRAL_ORCHESTRATION_POLICY.md`, and `orchestration/README.md`.
+9. For worker dispatch, read `policies/PROJECT_FAMILY_ROUTING_POLICY.md` and resolve the project/client through `portfolio/project-routing.json`.
+10. Never invent branches, SHAs, task state, incident state, QA, release, lineage, version, connectivity, client identity, variant identity, implementation locations, or completion.
+11. Existing-project discovery/baseline/reconciliation are read-only until an explicit write gate is satisfied.
+12. Cross-repository product writes require the normal authorization gates. A direct owner instruction to add/onboard a project authorizes only governance-only onboarding changes defined in the constitution/policy.
+13. Before bulk enrollment, run `python scripts/fleet_readiness.py`; require `READINESS_PERCENT=100` and `ONBOARDING_READY=true`.
 
 ## Constitutional decision rule
 
@@ -31,6 +32,25 @@ Required sequence:
 `OWNER REQUEST -> FETCH LIVE PCC -> RESOLVE PROJECT/CLIENT -> FETCH LIVE TARGET -> CLASSIFY SCOPE -> RECONCILE TASK/BRANCH -> ISSUE ROUTING PACKET -> IMPLEMENT -> QA -> INTEGRATE/RELEASE WHEN REQUIRED -> RECONCILE FINAL EVIDENCE`
 
 A replacement Manager/Lead continues the same canonical task and branch where they exist.
+
+## Emergency production incident path
+
+The owner marker `مشكلة طارئة` (or equivalent explicit production-emergency wording) activates the emergency path.
+
+The Manager/Lead still resolves the exact project/variant and live production lineage first, then may prioritize the narrowest safe service-restoration action.
+
+Canonical sequence:
+
+`EMERGENCY -> LIVE PRODUCTION BASE -> ROUTED INCIDENT -> TEMPORARY MITIGATION WHEN NEEDED -> SERVICE_RESTORED_TEMPORARY -> INCIDENT RECORD -> PERMANENT FIX TASK -> TARGET VERSION/RELEASE -> REGRESSION EVIDENCE -> RELEASE GATE -> CLOSED`
+
+Rules:
+- `SERVICE_RESTORED_TEMPORARY != DONE`.
+- One incident keeps one `INCIDENT_ID`; Workers/Managers may change but identity does not.
+- Persist the project record at `.pcc/incidents/<INCIDENT_ID>.json` using `templates/PRODUCTION_INCIDENT.json` and validate with `scripts/incident_governance.py`.
+- If `PERMANENT_FIX_REQUIRED=true`, register a permanent-fix Task and target version or `NEXT_RELEASE` before claiming the incident is fully tracked.
+- Every later Release Lead must enumerate open incidents and carry-forward decisions in `OPEN_PRODUCTION_INCIDENTS` and `INCIDENT_CARRY_FORWARD`.
+- A deferral moves the target; it does not close the incident.
+- Permanent closure requires root-cause confirmation, permanent-fix SHA, required regression evidence, and cleared release gate.
 
 ## Worker routing — mandatory entrypoint
 
@@ -78,7 +98,7 @@ The central fleet collector may perform read-only discovery/baseline/reconciliat
 6. Every repair remains allow-listed and audited.
 
 ## Recovery
-Prompts `50`–`53` remain the operator workflow for stale/orphan/overlap/full reconciliation. Expired work is reclaimed with the same Task ID, branch and latest pushed SHA.
+Prompts `50`–`53` remain the operator workflow for stale/orphan/overlap/full reconciliation. Expired work is reclaimed with the same Task ID, branch and latest pushed SHA. Production incidents similarly continue with the same `INCIDENT_ID` and evidence chain.
 
 ## Dashboard
 `dashboard/` is built from canonical portfolio/observed state and live fleet state. The dashboard workflow also publishes `portfolio/status/readiness.json`. GitHub Pages enablement is an external repository-administration concern and is not allowed to falsify fleet onboarding readiness.
