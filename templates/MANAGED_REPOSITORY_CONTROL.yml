@@ -1,10 +1,13 @@
 {
   "CONTROL_PLANE_REPOSITORY": "walidatiyaai2025-gif/project-control-center",
-  "CONTROL_PLANE_VERSION": "v1.1.0",
+  "CONTROL_PLANE_VERSION": "v1.5.0",
   "CONTROL_PLANE_SHA": "<immutable-control-plane-sha>",
   "PROJECT_ID": "<project-id>",
-  "CANONICAL_STATUS_PATH": "<path-in-managed-repository-or-control-center>",
-  "PROJECT_PROFILE_PATH": "<project-profile-path>",
+  "DESIRED_POLICY_VERSION": "1.1.0",
   "POLICY_ENFORCEMENT_MODE": "OBSERVE",
+  "CANONICAL_STATUS_PATH": "portfolio/status/fleet-live.json",
+  "PROJECT_PROFILE_PATH": "portfolio/projects.yml",
+  "WRITE_AUTHORIZED": false,
+  "CANONICAL_DEVELOPMENT_LINEAGE": "UNRESOLVED",
   "LAST_CONTROL_PLANE_SYNC": "<ISO-8601>"
 }
