@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Production Incident",
+  "type": "object",
+  "required": [
+    "SCHEMA_VERSION",
+    "INCIDENT_ID",
+    "PROJECT_ID",
+    "REPOSITORY",
+    "TARGET_SCOPE",
+    "SEVERITY",
+    "STATE",
+    "PRODUCTION_BASE_SHA",
+    "DISCOVERED_AT",
+    "TEMPORARY_MITIGATION",
+    "ROOT_CAUSE_STATUS",
+    "PERMANENT_FIX_REQUIRED",
+    "REGRESSION_TEST_REQUIRED",
+    "CARRY_FORWARD_TO_FUTURE_RELEASES",
+    "RELEASE_GATE_STATE"
+  ],
+  "properties": {
+    "SCHEMA_VERSION": {"const": "1.0.0"},
+    "INCIDENT_ID": {"type": "string", "minLength": 1},
+    "PROJECT_ID": {"type": "string", "minLength": 1},
+    "REPOSITORY": {"type": "string", "minLength": 1},
+    "TARGET_SCOPE": {"enum": ["PROJECT", "CORE", "VARIANT"]},
+    "TARGET_VARIANT": {"type": ["string", "null"]},
+    "SEVERITY": {"enum": ["P0", "P1", "P2"]},
+    "STATE": {"enum": ["DETECTED", "MITIGATING", "SERVICE_RESTORED_TEMPORARY", "TRACKED_FOR_PERMANENT_FIX", "PERMANENT_FIX_IN_PROGRESS", "READY_FOR_QA", "RESOLVED_PERMANENT", "CLOSED"]},
+    "PRODUCTION_BASE_SHA": {"type": "string", "minLength": 7},
+    "AFFECTED_PRODUCTION_VERSION": {"type": ["string", "null"]},
+    "DISCOVERED_AT": {"type": "string", "minLength": 1},
+    "TEMPORARY_MITIGATION": {
+      "type": "object",
+      "required": ["APPLIED", "TASK_ID", "BRANCH", "SHA", "DEPLOYMENT_EVIDENCE", "ROLLBACK_PLAN"],
+      "properties": {
+        "APPLIED": {"type": "boolean"},
+        "TASK_ID": {"type": ["string", "null"]},
+        "BRANCH": {"type": ["string", "null"]},
+        "SHA": {"type": ["string", "null"]},
+        "DEPLOYMENT_EVIDENCE": {"type": "array"},
+        "ROLLBACK_PLAN": {"type": ["string", "null"]}
+      },
+      "additionalProperties": true
+    },
+    "ROOT_CAUSE_STATUS": {"enum": ["UNKNOWN", "IDENTIFIED", "CONFIRMED"]},
+    "ROOT_CAUSE_SUMMARY": {"type": ["string", "null"]},
+    "PERMANENT_FIX_REQUIRED": {"type": "boolean"},
+    "PERMANENT_FIX_TASK_ID": {"type": ["string", "null"]},
+    "PERMANENT_FIX_TARGET_VERSION": {"type": ["string", "null"]},
+    "PERMANENT_FIX_SHA": {"type": ["string", "null"]},
+    "REGRESSION_TEST_REQUIRED": {"type": "boolean"},
+    "REGRESSION_TEST_EVIDENCE": {"type": "array"},
+    "CARRY_FORWARD_TO_FUTURE_RELEASES": {"type": "boolean"},
+    "RELEASE_GATE_STATE": {"enum": ["OPEN", "CLEARED", "DEFERRAL_APPROVED", "NOT_APPLICABLE"]},
+    "NOTES": {"type": ["string", "null"]}
+  },
+  "additionalProperties": true
+}
