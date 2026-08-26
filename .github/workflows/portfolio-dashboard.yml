@@ -7,6 +7,7 @@ on:
       - 'orchestration/**'
       - 'dashboard/**'
       - 'scripts/fleet_control.py'
+      - 'scripts/fleet_readiness.py'
       - 'scripts/github_fleet_client.py'
       - '.github/workflows/portfolio-dashboard.yml'
   schedule:
@@ -36,6 +37,8 @@ jobs:
           python-version: '3.12'
       - name: Collect live fleet state for published projection
         run: python scripts/fleet_control.py --report-out /tmp/fleet-report.json --portfolio-out portfolio/status/fleet-live.json --ledger-out /tmp/pcc-audit-ledger-runtime.json
+      - name: Build fleet onboarding readiness projection
+        run: python scripts/fleet_readiness.py --live-report /tmp/fleet-report.json --out portfolio/status/readiness.json
       - name: Build portfolio projection
         run: python dashboard/build_portfolio.py
       - name: Stage static site

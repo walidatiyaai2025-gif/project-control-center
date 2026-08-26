@@ -1,10 +1,15 @@
 {
   "PROJECT_ID": "<project-id>",
+  "DISPLAY_NAME": "<display-name>",
   "REPOSITORY": "<owner/repo>",
+  "CRITICALITY": "MEDIUM",
+  "LIFECYCLE_STATE": "ACTIVE",
+  "CONTROL_PLANE_MATURITY": "DISCOVERY",
   "CONTROL_PLANE_REPOSITORY": "walidatiyaai2025-gif/project-control-center",
-  "CONTROL_PLANE_VERSION": "v1.3.0",
+  "CONTROL_PLANE_VERSION": "v1.5.0",
   "CONTROL_PLANE_SHA": "<immutable-pcc-sha>",
   "DESIRED_POLICY_VERSION": "1.1.0",
+  "OBSERVED_POLICY_VERSION": null,
   "ENROLLMENT_STATE": "REGISTERED",
   "DISCOVERY_STATE": "PENDING_DISCOVERY",
   "POLICY_ENFORCEMENT_MODE": "OBSERVE",
@@ -16,6 +21,7 @@
   "MANAGED_FILES": [
     ".pcc/managed-repository-control.json"
   ],
+  "REQUIRE_DEFAULT_BRANCH_PROTECTION": false,
   "BREAK_GLASS": {
     "ENABLED": false
   },
@@ -28,5 +34,14 @@
   "ARTIFACT_NAMING_PATTERN": "{project}-{version}",
   "CURRENT_RELEASE_VERSION": null,
   "TARGET_DEVELOPMENT_VERSION": null,
-  "VERSION_BASELINE_CONFIDENCE": "UNKNOWN"
+  "VERSION_BASELINE_CONFIDENCE": "UNKNOWN",
+  "HEALTH": "UNKNOWN",
+  "PROGRESS": null,
+  "REQUIREMENTS": [],
+  "FEATURES": [],
+  "SCREENS": [],
+  "INTEGRATION_GAP_DETAILS": [],
+  "CUSTOMER_READY_FEATURE_IDS": [],
+  "TASKS": [],
+  "LAST_SYNC": null
 }

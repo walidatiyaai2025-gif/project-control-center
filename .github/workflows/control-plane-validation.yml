@@ -14,32 +14,43 @@ jobs:
         with:
           python-version: '3.12'
       - run: python scripts/self_audit.py
-      - run: python -m unittest scripts/test_control_plane.py scripts/test_feature_delivery.py scripts/test_fleet_control.py scripts/test_output_discipline.py -v
+      - run: python scripts/fleet_readiness.py
+      - run: python -m unittest scripts/test_control_plane.py scripts/test_feature_delivery.py scripts/test_fleet_control.py scripts/test_fleet_readiness.py scripts/test_output_discipline.py -v
       - run: python scripts/orchestrator.py --report-out /tmp/orchestration-report.json
       - run: python dashboard/build_portfolio.py > /tmp/dashboard.json
       - name: Audit PCC main protection (non-blocking until admin credential is configured)
         continue-on-error: true
         run: python scripts/self_protection.py
-      - run: python -m json.tool portfolio/projects.yml > /dev/null
-      - run: python -m json.tool portfolio/priorities.yml > /dev/null
-      - run: python -m json.tool orchestration/desired-state.json > /dev/null
-      - run: python -m json.tool orchestration/observed-state.json > /dev/null
-      - run: python -m json.tool orchestration/audit-ledger.json > /dev/null
-      - run: python -m json.tool orchestration/baselines/AIMWWEB.json > /dev/null
-      - run: python -m json.tool orchestration/reconciliation/AIMWWEB.json > /dev/null
-      - run: python -m json.tool schemas/project.schema.json > /dev/null
-      - run: python -m json.tool schemas/task.schema.json > /dev/null
-      - run: python -m json.tool schemas/project-status.schema.json > /dev/null
-      - run: python -m json.tool schemas/project-profile.schema.json > /dev/null
-      - run: python -m json.tool schemas/version-manifest.schema.json > /dev/null
-      - run: python -m json.tool schemas/version-history.schema.json > /dev/null
-      - run: python -m json.tool schemas/orchestration-operation.schema.json > /dev/null
-      - run: python -m json.tool schemas/feature-delivery-matrix.schema.json > /dev/null
-      - run: python -m json.tool schemas/screen-inventory.schema.json > /dev/null
-      - run: python -m json.tool schemas/screen-action-matrix.schema.json > /dev/null
-      - run: python -m json.tool schemas/worker-handoff.schema.json > /dev/null
-      - run: python -m json.tool schemas/qa-handoff.schema.json > /dev/null
-      - run: python -m json.tool schemas/ci-handoff.schema.json > /dev/null
-      - run: python -m json.tool schemas/visual-qa-handoff.schema.json > /dev/null
-      - run: python -m json.tool schemas/integration-handoff.schema.json > /dev/null
-      - run: python -m json.tool schemas/release-handoff.schema.json > /dev/null
+      - name: Validate JSON-compatible control-plane documents
+        shell: bash
+        run: |
+          set -euo pipefail
+          files=(
+            portfolio/projects.yml
+            portfolio/priorities.yml
+            portfolio/status/index.json
+            orchestration/desired-state.json
+            orchestration/observed-state.json
+            orchestration/audit-ledger.json
+            orchestration/policy-catalog.json
+            templates/PROJECT_PROFILE.yml
+            templates/MANAGED_REPOSITORY_CONTROL.yml
+            schemas/project.schema.json
+            schemas/task.schema.json
+            schemas/project-status.schema.json
+            schemas/project-profile.schema.json
+            schemas/version-manifest.schema.json
+            schemas/version-history.schema.json
+            schemas/orchestration-operation.schema.json
+            schemas/feature-delivery-matrix.schema.json
+            schemas/screen-inventory.schema.json
+            schemas/screen-action-matrix.schema.json
+            schemas/worker-handoff.schema.json
+            schemas/qa-handoff.schema.json
+            schemas/ci-handoff.schema.json
+            schemas/visual-qa-handoff.schema.json
+            schemas/integration-handoff.schema.json
+            schemas/release-handoff.schema.json
+          )
+          while IFS= read -r f; do files+=("$f"); done < <(find orchestration/baselines orchestration/reconciliation -maxdepth 1 -type f -name '*.json' | sort)
+          for f in "${files[@]}"; do python -m json.tool "$f" > /dev/null; done

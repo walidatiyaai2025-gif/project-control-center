@@ -7,6 +7,7 @@ on:
       - 'orchestration/**'
       - 'scripts/github_fleet_client.py'
       - 'scripts/fleet_control.py'
+      - 'scripts/fleet_readiness.py'
       - 'scripts/self_protection.py'
       - 'policies/FLEET_CONTROL_POLICY.md'
       - '.github/workflows/fleet-control.yml'
@@ -57,6 +58,12 @@ jobs:
             if [ "${{ inputs.apply_policy_sync }}" = "true" ]; then args+=(--apply-policy-sync); fi
           fi
           python scripts/fleet_control.py "${args[@]}"
+      - name: Verify fleet onboarding readiness against live collection
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.project_id == '' }}
+        run: python scripts/fleet_readiness.py --live-report /tmp/fleet-report.json --out /tmp/fleet-readiness.json
+      - name: Record filtered-project run readiness scope
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.project_id != '' }}
+        run: python scripts/fleet_readiness.py --out /tmp/fleet-readiness.json
       - name: Audit PCC self-protection
         continue-on-error: true
         run: python scripts/self_protection.py
@@ -67,5 +74,6 @@ jobs:
           path: |
             /tmp/fleet-report.json
             /tmp/fleet-live.json
+            /tmp/fleet-readiness.json
             /tmp/pcc-audit-ledger-runtime.json
           retention-days: 30
