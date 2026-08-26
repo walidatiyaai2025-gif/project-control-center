@@ -21,22 +21,26 @@ class RouteWorkTests(unittest.TestCase):
         }))
         (root / "portfolio/project-routing.json").write_text(json.dumps({
             "CONTROL_PLANE_VERSION": "v1",
-            "ROUTING_CONTRACT_VERSION": "1.0.0",
+            "ROUTING_CONTRACT_VERSION": "1.2.0",
             "PROJECTS": [
                 {
                     "PROJECT_ID": "P1", "DISPLAY_NAME": "Project One", "REPOSITORY": "o/p1",
                     "PROJECT_MODEL": "STANDALONE", "ALIASES": ["client one"],
                     "CONSTITUTION_STATE": "READY", "CONSTITUTION_PATH": "AGENTS.md",
+                    "ONBOARDING_NORMALIZATION_STATE": "READY",
+                    "VARIANT_GOVERNANCE_STATE": "NOT_APPLICABLE", "CORE_ROUTING_STATE": "NOT_APPLICABLE",
                     "FAMILY_MANIFEST_PATH": None, "VARIANTS": []
                 },
                 {
                     "PROJECT_ID": "FAM", "DISPLAY_NAME": "Family", "REPOSITORY": "o/fam",
                     "PROJECT_MODEL": "PRODUCT_FAMILY", "ALIASES": ["family"],
                     "CONSTITUTION_STATE": "READY", "CONSTITUTION_PATH": "AGENTS.md",
+                    "ONBOARDING_NORMALIZATION_STATE": "READY",
+                    "VARIANT_GOVERNANCE_STATE": "READY", "CORE_ROUTING_STATE": "READY",
                     "FAMILY_MANIFEST_PATH": ".pcc/project-family.json",
                     "VARIANTS": [
-                        {"VARIANT_ID": "BASE", "DISPLAY_NAME": "Base", "STATUS": "ACTIVE", "ALIASES": ["base"]},
-                        {"VARIANT_ID": "CLIENTA", "DISPLAY_NAME": "Client A", "STATUS": "ACTIVE", "ALIASES": ["client a", "clienta"]}
+                        {"VARIANT_ID": "BASE", "DISPLAY_NAME": "Base", "STATUS": "ACTIVE", "ALIASES": ["base"], "IMPLEMENTATION_LOCATION": "variants/base", "IMPLEMENTATION_LOCATION_STATE": "MAPPED", "ROUTING_STATE": "READY"},
+                        {"VARIANT_ID": "CLIENTA", "DISPLAY_NAME": "Client A", "STATUS": "ACTIVE", "ALIASES": ["client a", "clienta"], "IMPLEMENTATION_LOCATION": "variants/clienta", "IMPLEMENTATION_LOCATION_STATE": "MAPPED", "ROUTING_STATE": "READY"}
                     ]
                 }
             ]
@@ -61,6 +65,7 @@ class RouteWorkTests(unittest.TestCase):
             self.assertEqual(r["PROJECT_ID"], "FAM")
             self.assertEqual(r["TARGET_VARIANT"], "CLIENTA")
             self.assertEqual(r["TARGET_SCOPE"], "VARIANT")
+            self.assertEqual(r["TARGET_IMPLEMENTATION_LOCATION"], "variants/clienta")
             self.assertEqual(r["CHANGE_BOUNDARY"], "CLIENTA_ONLY")
         finally:
             d.cleanup()
@@ -92,6 +97,48 @@ class RouteWorkTests(unittest.TestCase):
             r = route_work.route(root, "P1")
             self.assertEqual(r["ROUTING_STATUS"], "BLOCKED")
             self.assertEqual(r["REASON"], "REPOSITORY_CONSTITUTION_NOT_READY")
+        finally:
+            d.cleanup()
+
+    def test_pending_normalization_blocks_write_routing(self):
+        d, root = self.make_root()
+        try:
+            routing = json.loads((root / "portfolio/project-routing.json").read_text())
+            routing["PROJECTS"][0]["ONBOARDING_NORMALIZATION_STATE"] = "PENDING"
+            (root / "portfolio/project-routing.json").write_text(json.dumps(routing))
+            r = route_work.route(root, "P1")
+            self.assertEqual(r["REASON"], "PROJECT_ONBOARDING_NORMALIZATION_NOT_READY")
+        finally:
+            d.cleanup()
+
+    def test_unresolved_variant_blocks_only_variant(self):
+        d, root = self.make_root()
+        try:
+            routing = json.loads((root / "portfolio/project-routing.json").read_text())
+            v = routing["PROJECTS"][1]["VARIANTS"][1]
+            v["IMPLEMENTATION_LOCATION"] = None
+            v["IMPLEMENTATION_LOCATION_STATE"] = "UNRESOLVED"
+            v["ROUTING_STATE"] = "BLOCKED_UNRESOLVED"
+            routing["PROJECTS"][1]["VARIANT_GOVERNANCE_STATE"] = "PARTIAL"
+            (root / "portfolio/project-routing.json").write_text(json.dumps(routing))
+            blocked = route_work.route(root, "client a")
+            self.assertEqual(blocked["REASON"], "TARGET_VARIANT_BOUNDARY_NOT_READY")
+            base = route_work.route(root, "base")
+            self.assertEqual(base["ROUTING_STATUS"], "ROUTED")
+        finally:
+            d.cleanup()
+
+    def test_unresolved_core_blocks_core_only(self):
+        d, root = self.make_root()
+        try:
+            routing = json.loads((root / "portfolio/project-routing.json").read_text())
+            routing["PROJECTS"][1]["CORE_ROUTING_STATE"] = "BLOCKED_UNRESOLVED"
+            routing["PROJECTS"][1]["VARIANT_GOVERNANCE_STATE"] = "PARTIAL"
+            (root / "portfolio/project-routing.json").write_text(json.dumps(routing))
+            blocked = route_work.route(root, "family", scope="CORE")
+            self.assertEqual(blocked["REASON"], "SHARED_CORE_BOUNDARY_NOT_READY")
+            client = route_work.route(root, "client a")
+            self.assertEqual(client["ROUTING_STATUS"], "ROUTED")
         finally:
             d.cleanup()
 

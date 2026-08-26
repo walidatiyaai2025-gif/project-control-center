@@ -1,6 +1,6 @@
 {
   "CONTROL_PLANE_REPOSITORY": "walidatiyaai2025-gif/project-control-center",
-  "CONTROL_PLANE_VERSION": "v1.5.0",
+  "CONTROL_PLANE_VERSION": "v1.6.0",
   "CONTROL_PLANE_SHA": "<immutable-control-plane-sha>",
   "PROJECT_ID": "<project-id>",
   "DESIRED_POLICY_VERSION": "1.1.0",

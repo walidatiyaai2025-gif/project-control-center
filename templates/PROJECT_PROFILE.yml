@@ -6,7 +6,7 @@
   "LIFECYCLE_STATE": "ACTIVE",
   "CONTROL_PLANE_MATURITY": "DISCOVERY",
   "CONTROL_PLANE_REPOSITORY": "walidatiyaai2025-gif/project-control-center",
-  "CONTROL_PLANE_VERSION": "v1.5.0",
+  "CONTROL_PLANE_VERSION": "v1.6.0",
   "CONTROL_PLANE_SHA": "<immutable-pcc-sha>",
   "DESIRED_POLICY_VERSION": "1.1.0",
   "OBSERVED_POLICY_VERSION": null,
@@ -22,9 +22,7 @@
     ".pcc/managed-repository-control.json"
   ],
   "REQUIRE_DEFAULT_BRANCH_PROTECTION": false,
-  "BREAK_GLASS": {
-    "ENABLED": false
-  },
+  "BREAK_GLASS": {"ENABLED": false},
   "POLICY_EXCEPTIONS": [],
   "VERSION_POLICY": "semantic",
   "VERSION_SOURCE": "VERSION",

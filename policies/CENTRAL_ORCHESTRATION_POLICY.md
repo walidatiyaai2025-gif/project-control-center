@@ -1,21 +1,27 @@
 # Central Orchestration Policy
 
-CONTROL_PLANE_VERSION: v1.5.0
-POLICY_VERSION: 1.2.0
+CONTROL_PLANE_VERSION: v1.6.0
+POLICY_VERSION: 1.3.0
 
 ## Controllers
 
-PCC operates a Repository Enrollment Controller, authenticated GitHub Fleet Collector, Existing-Project Discovery Controller, Baseline Locker, Existing-Work Reconciler, Safe Migration Engine, Policy Version Manager, Drift Detector/Controlled Repair engine, stale-task recovery, orphan audit, Audit Ledger, Portfolio Aggregator, project/client routing controller, dashboard publisher, and PCC Self-Protection auditor.
+PCC operates a Repository Enrollment Controller, authenticated GitHub Fleet Collector, Existing-Project Discovery Controller, Baseline Locker, Existing-Work Reconciler, Safe Migration Engine, Policy Version Manager, Drift Detector/Controlled Repair engine, stale-task recovery, orphan audit, Audit Ledger, Portfolio Aggregator, project/client routing controller, onboarding variant-normalization controller, dashboard publisher, and PCC Self-Protection auditor.
+
+## Constitutional decision persistence
+
+Durable operating decisions must be represented in committed PCC constitution/policy and machine-readable state where applicable. Conversation, temporary prompts, and Worker memory are non-canonical inputs.
+
+A current explicit owner instruction may change governance, but the Manager/Lead must persist and validate the amendment before dependent work treats it as durable truth. If that cannot be completed safely, dependent writes stop with `CONSTITUTION_AMENDMENT_PENDING`.
 
 ## Manager / Lead controller contract
 
-A Worker assigned the role of Manager, Technical Lead, Integration Lead, Release Lead, Dispatcher, or equivalent coordinator acts as a PCC controller first.
+A Worker assigned the role of Manager, Technical Lead, Integration Lead, Release Lead, Dispatcher, Onboarding Lead, or equivalent coordinator acts as a PCC controller first.
 
 Before implementation is delegated or performed, that role must:
 
 1. fetch live PCC state and read root `AGENTS.md`;
 2. resolve the owner-supplied project/client/variant label through the PCC routing registry;
-3. verify the target repository constitution and family manifest where applicable;
+3. verify the target repository constitution, onboarding-normalization state, and family manifest where applicable;
 4. fetch live target repository state;
 5. determine the exact target scope (`PROJECT`, `CORE`, or `VARIANT`) and change boundary;
 6. reconcile/create the canonical Task ID and continuation branch;
@@ -26,14 +32,26 @@ The Manager/Lead owns ambiguity resolution. It must not delegate unresolved proj
 
 Replacement Managers/Leads inherit the same contract and continue canonical tasks/branches; they do not create parallel management truth.
 
+## Automatic onboarding classification and variant normalization
+
+An owner request to add/register/onboard a repository triggers Manager-owned classification automatically.
+
+The Manager/Lead performs live repository discovery and determines `STANDALONE` versus `PRODUCT_FAMILY`. For families it records each known client/product variant, aliases, relationship, implementation-location state, routing state, and shared-core routing state in both PCC routing state and the target repository family manifest.
+
+Missing physical variant boundaries are preserved explicitly as unresolved/unmaterialized. They are never invented from branch names or convenience. The unresolved boundary is write-blocked while verified siblings may remain routable.
+
+A direct owner onboarding request permits a dedicated governance-only onboarding branch/PR limited to target constitution/control files defined in root `AGENTS.md`. This is distinct from autonomous fleet repair and does not authorize product source, deployment, release publication, force-push, or branch deletion.
+
 ## Rollout modes
 
 `OBSERVE -> WARN -> CANARY -> ENFORCE`.
 
-- **OBSERVE**: live read/compare only. Target repository writes are forbidden.
-- **WARN**: live read/compare plus actionable warnings. Target repository writes are forbidden.
-- **CANARY**: writes are possible only for an explicitly enrolled canary, after discovery + baseline + reconciliation, with `WRITE_AUTHORIZED=true`, a resolved canonical lineage, a write-capable runtime credential, no active break-glass, and only allow-listed managed paths.
+- **OBSERVE**: autonomous fleet collection is live read/compare only. Fleet-managed target repair writes are forbidden.
+- **WARN**: live read/compare plus actionable warnings. Fleet-managed target repair writes are forbidden.
+- **CANARY**: autonomous fleet writes are possible only for an explicitly enrolled canary, after discovery + baseline + reconciliation, with `WRITE_AUTHORIZED=true`, a resolved canonical lineage, a write-capable runtime credential, no active break-glass, and only allow-listed managed paths.
 - **ENFORCE**: the same write gates as CANARY plus project-level enforcement authorization. Product source, branches, tags, releases, databases, and customer artifacts are never rewritten by the fleet controller.
+
+The explicit governance-only onboarding PR authority above does not convert OBSERVE/WARN into autonomous repair modes.
 
 Rollout uses `ROLLOUT_WAVE`; one project failure is isolated and does not abort state collection for the rest of the fleet.
 
@@ -43,16 +61,7 @@ Credentials are runtime-only. Supported providers are `github_app`, `token_runti
 
 ## Read-before-write gates
 
-Existing repositories must complete all of the following before any fleet-managed target mutation:
-
-1. live GitHub discovery;
-2. immutable read-only baseline lock;
-3. existing-work reconciliation preserving unique work;
-4. resolved canonical development/integration lineage when a write mode requires it;
-5. explicit project write authorization;
-6. rollout-mode eligibility;
-7. allow-listed migration path;
-8. no active break-glass freeze.
+Existing repositories must complete all applicable gates before fleet-managed target mutation: live discovery; immutable baseline lock; existing-work reconciliation preserving unique work; resolved canonical lineage where required; explicit write authorization; rollout-mode eligibility; allow-listed path; and no active break-glass freeze.
 
 Unknown state is non-compliant, never silently inferred as compliant.
 
@@ -62,7 +71,7 @@ Operations use deterministic idempotency keys. A completed identical operation i
 
 ## Drift and controlled repair
 
-Drift is the deterministic difference between desired and observed state. OBSERVE/WARN never repair target repositories. CANARY/ENFORCE may repair only allow-listed PCC-managed policy/control files and only after all write gates pass. Automatic branch deletion, force-push, tag movement, product-source rewrite, database mutation, and customer-build publishing are forbidden.
+Drift is the deterministic difference between desired and observed state. OBSERVE/WARN never repair target repositories autonomously. CANARY/ENFORCE may repair only allow-listed PCC-managed policy/control files and only after all write gates pass. Automatic branch deletion, force-push, tag movement, product-source rewrite, database mutation, and customer-build publishing are forbidden.
 
 ## Recovery and orphan law
 
@@ -70,7 +79,7 @@ Expired non-terminal Worker leases are `RECLAIMABLE` using the same `TASK_ID`, s
 
 ## Audit ledger
 
-Every enrollment, collection, baseline, reconciliation, routing decision, migration plan, policy sync, recovery, and exception/break-glass decision receives an operation key, project identity, mode/auth context, result, mutation flag, and timestamp. GitHub Actions runtime ledgers are uploaded as immutable run artifacts; canonical seed events remain in `orchestration/audit-ledger.json`.
+Every enrollment, classification/variant-normalization decision, collection, baseline, reconciliation, routing decision, migration plan, policy sync, recovery, constitutional amendment, and exception/break-glass decision receives an operation key, project identity, mode/auth context, result, mutation flag, and timestamp where the applicable controller supports it.
 
 ## Break-glass and policy exceptions
 

@@ -1,5 +1,5 @@
 {
-  "CONTROL_PLANE_VERSION": "v1.5.0",
+  "CONTROL_PLANE_VERSION": "v1.6.0",
   "PROJECTS": [
     {
       "PROJECT_ID": "AIMWWEB",
@@ -8,7 +8,7 @@
       "CRITICALITY": "HIGH",
       "LIFECYCLE_STATE": "ACTIVE",
       "CONTROL_PLANE_MATURITY": "DISCOVERY",
-      "CONTROL_PLANE_VERSION": "v1.5.0",
+      "CONTROL_PLANE_VERSION": "v1.6.0",
       "ENROLLMENT_STATE": "REGISTERED",
       "DISCOVERY_STATE": "DISCOVERED",
       "POLICY_ENFORCEMENT_MODE": "OBSERVE",
@@ -18,9 +18,7 @@
       "AUTH_PROVIDER": "github_actions_or_runtime",
       "DESIRED_POLICY_VERSION": "1.1.0",
       "OBSERVED_POLICY_VERSION": null,
-      "MANAGED_FILES": [
-        ".pcc/managed-repository-control.json"
-      ],
+      "MANAGED_FILES": [".pcc/managed-repository-control.json"],
       "REQUIRE_DEFAULT_BRANCH_PROTECTION": false,
       "CANONICAL_DEVELOPMENT_LINEAGE": "UNRESOLVED",
       "PRODUCTION_BRANCH": "main",
@@ -71,9 +69,7 @@
       "CUSTOMER_READY_FEATURE_IDS": [],
       "TASKS": [],
       "POLICY_EXCEPTIONS": [],
-      "BREAK_GLASS": {
-        "ENABLED": false
-      },
+      "BREAK_GLASS": {"ENABLED": false},
       "LAST_SYNC": "2026-08-26T20:03:43Z"
     },
     {
@@ -84,7 +80,7 @@
       "LIFECYCLE_STATE": "ACTIVE",
       "CONTROL_PLANE_MATURITY": "DISCOVERY",
       "CONTROL_PLANE_REPOSITORY": "walidatiyaai2025-gif/project-control-center",
-      "CONTROL_PLANE_VERSION": "v1.5.0",
+      "CONTROL_PLANE_VERSION": "v1.6.0",
       "CONTROL_PLANE_SHA": "46e88b35971d13c04bb950d9f87e194d7c09efb8",
       "DESIRED_POLICY_VERSION": "1.1.0",
       "OBSERVED_POLICY_VERSION": null,
@@ -96,13 +92,9 @@
       "AUTH_PROVIDER": "github_actions_or_runtime",
       "WRITE_AUTHORIZED": false,
       "CANONICAL_DEVELOPMENT_LINEAGE": "UNRESOLVED",
-      "MANAGED_FILES": [
-        ".pcc/managed-repository-control.json"
-      ],
+      "MANAGED_FILES": [".pcc/managed-repository-control.json"],
       "REQUIRE_DEFAULT_BRANCH_PROTECTION": false,
-      "BREAK_GLASS": {
-        "ENABLED": false
-      },
+      "BREAK_GLASS": {"ENABLED": false},
       "POLICY_EXCEPTIONS": [],
       "VERSION_POLICY": "unknown-existing-project",
       "VERSION_SOURCE": "UNKNOWN",

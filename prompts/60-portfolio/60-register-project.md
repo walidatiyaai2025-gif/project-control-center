@@ -1,31 +1,36 @@
 # 60 — Register Project
 
 PROMPT_ID: PCC-60
-VERSION: 1.1.0
+VERSION: 1.2.0
 APPLIES_TO: PORTFOLIO_REGISTRATION
 PREVIOUS_STEP: PCC-11_OR_PCC-25_OR_PCC-31
 NEXT_STEP: PCC-61
 REQUIRES_WRITE_ACCESS: true
-CONTROL_PLANE_VERSION: v1.1.0
+CONTROL_PLANE_VERSION: v1.6.0
 
 ## Must exist before running
 
 - Stable PROJECT_ID/repository URL.
 - Lifecycle/control-plane maturity determined by evidence.
+- Project classification and onboarding-normalization result.
 - Canonical project status/profile defined or explicitly pending discovery.
 
 ## Mission
 
-Create/update exactly one portfolio record and central desired-state enrollment without inventing state.
+Create/update exactly one portfolio record, one aligned routing record, and central desired-state enrollment without inventing state.
 
 ## Execute
 
-Populate required fields plus version/orchestration fields: PROJECT_ID, DISPLAY_NAME, REPOSITORY, CRITICALITY, LIFECYCLE_STATE, CONTROL_PLANE_MATURITY, CONTROL_PLANE_VERSION, production/integration branches+SHAs, LATEST_RELEASE, CURRENT_PRODUCTION_VERSION, CURRENT_DEVELOPMENT_VERSION, TARGET_DEVELOPMENT_VERSION, NEXT_RELEASE_CANDIDATE, LATEST_USER_REVIEW_CANDIDATE, VERSION_POLICY, VERSION_SOURCE, VERSION_BASELINE_CONFIDENCE, POLICY_ENFORCEMENT_MODE, desired/observed policy versions, DRIFT, HEALTH, PROGRESS, P0/P1/BLOCKED/QA/STALE/WAITING/LAST_SYNC.
+Populate portfolio/version/orchestration fields from evidence. Unknown values remain null/UNKNOWN and Worker estimates are not progress.
 
-Unknown values remain null/UNKNOWN. No Worker estimates as PROGRESS. Reject duplicate project/repo records unless explicit update.
+Create/update `portfolio/project-routing.json` in the same registration operation.
 
-Use verified project profile to plan/enroll desired state. Existing projects normally enter OBSERVE first. Regenerate dashboard projection.
+For `STANDALONE`, set family states to `NOT_APPLICABLE`.
+
+For `PRODUCT_FAMILY`, persist active variants/aliases, implementation-location states, routing states, `VARIANT_GOVERNANCE_STATE`, and `CORE_ROUTING_STATE`. `READY` routes require verified locations. Explicit unresolved variants remain visible and blocked rather than fabricated.
+
+Reject duplicate project/repo identities and alias collisions. Existing projects normally enter `OBSERVE` first. Regenerate dashboard projection.
 
 ## Required output
 
-Return registry entry, desired-state enrollment/operation key, exact PCC SHA, unknown fields and dashboard visibility.
+Return registry entry, routing/family summary, routable/blocked variants, desired-state operation key, exact PCC SHA, unknown fields, and dashboard visibility.
