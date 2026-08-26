@@ -12,7 +12,7 @@ The governing invariant is:
 
 `PRODUCTION INCIDENT -> SERVICE RESTORATION -> INCIDENT RECORD -> PERMANENT FIX TASK -> REGRESSION PROTECTION -> FUTURE RELEASE ACCOUNTING -> PERMANENT CLOSURE`
 
-`SERVICE RESTORED != INCIDENT DONE` when the deployed correction is temporary.
+`SERVICE_RESTORED != INCIDENT DONE` when the deployed correction is temporary.
 
 ## 2. Emergency activation
 
