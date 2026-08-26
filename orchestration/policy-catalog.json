@@ -1,10 +1,11 @@
 {
   "CONTROL_PLANE_VERSION": "v1.6.0",
   "POLICIES": {
-    "core-governance": {"CURRENT":"1.1.0","PREVIOUS":"1.0.0"},
+    "core-governance": {"CURRENT":"1.2.0","PREVIOUS":"1.1.0"},
     "central-orchestration": {"CURRENT":"1.3.0","PREVIOUS":"1.2.0"},
     "project-family-routing": {"CURRENT":"1.2.0","PREVIOUS":"1.1.0"},
     "constitutional-decision-and-variant-onboarding": {"CURRENT":"1.0.0","PREVIOUS":null},
+    "emergency-production-incident": {"CURRENT":"1.0.0","PREVIOUS":null},
     "immutable-product-version": {"CURRENT":"1.0.0","PREVIOUS":null},
     "end-to-end-feature-delivery": {"CURRENT":"1.0.0","PREVIOUS":null},
     "autonomous-fleet-control": {"CURRENT":"1.1.0","PREVIOUS":null},

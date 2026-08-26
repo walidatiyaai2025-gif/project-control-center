@@ -10,7 +10,7 @@ REQUIRED={
 "ci":["HANDOFF_TYPE","RESULT_CONFIDENCE","EXACT_HEAD","WORKFLOW","JOB","STEP","TEST","ROOT_CAUSE","CLASSIFICATION","OWNER","BLOCKER","NEXT_ACTION"],
 "visual_qa":["HANDOFF_TYPE","RESULT_CONFIDENCE","EXACT_HEAD","REFERENCE_SOURCE","REFERENCE_VERSION","REFERENCE_SHA","CANDIDATE_SOURCE_SHA","CANDIDATE_ARTIFACT","ARTIFACT_GENERATED_AT","PROVENANCE_VERIFIED","AUTHORITATIVE","DELTA","CLASSIFICATION","QA_RESULT","BLOCKER","NEXT_ACTION"],
 "integration":["HANDOFF_TYPE","RESULT_CONFIDENCE","INTEGRATION_HEAD","CANDIDATE","MERGE_STATE","CI","QA","BLOCKERS","RESULT","NEXT_ACTION"],
-"release":["HANDOFF_TYPE","RESULT_CONFIDENCE","VERSION","SOURCE_SHA","BUILD_ID","QA","RELEASE_STATE","PRODUCTION_STATE","ROLLBACK","BLOCKER","NEXT_ACTION"]}
+"release":["HANDOFF_TYPE","RESULT_CONFIDENCE","VERSION","SOURCE_SHA","BUILD_ID","QA","RELEASE_STATE","PRODUCTION_STATE","OPEN_PRODUCTION_INCIDENTS","INCIDENT_CARRY_FORWARD","ROLLBACK","BLOCKER","NEXT_ACTION"]}
 TYPE_EXPECTED={"worker":"WORKER_HANDOFF","qa":"QA_HANDOFF","ci":"CI_HANDOFF","visual_qa":"VISUAL_QA_HANDOFF","integration":"INTEGRATION_HANDOFF","release":"RELEASE_HANDOFF"}
 HEAD_KEY={"worker":"HEAD","qa":"EXACT_HEAD","ci":"EXACT_HEAD","visual_qa":"EXACT_HEAD","integration":"INTEGRATION_HEAD","release":"SOURCE_SHA"}
 PROHIBITED=("i will check","i am reviewing","i found the first","next i will","i will now compare","next i will inspect","it seems","probably","maybe","i suspect")
@@ -55,8 +55,7 @@ def validate_handoff(kind:str,data:dict)->list[str]:
     if "qa pass" in text and "qa fail" in text: errors.append("contradictory QA states")
     if "mergeable" in text and "not_mergeable" in text: errors.append("contradictory merge states")
     if kind=="qa":
-        authoritative=bool(data.get("AUTHORITATIVE"))
-        result=data.get("QA_RESULT")
+        authoritative=bool(data.get("AUTHORITATIVE")); result=data.get("QA_RESULT")
         if authoritative and result in {"PASS","FAIL"}:
             if not data.get("PROVENANCE_VERIFIED"): errors.append("authoritative QA requires verified provenance")
             if not _nonempty(data.get("EVIDENCE")): errors.append("authoritative QA requires evidence")
@@ -72,8 +71,12 @@ def validate_handoff(kind:str,data:dict)->list[str]:
                 if not _nonempty(data.get(f)): errors.append(f"authoritative visual QA missing {f}")
     if kind=="integration" and str(data.get("RESULT")).upper() in {"PASS","READY","MERGED"} and _nonempty(data.get("BLOCKERS")):
         errors.append("successful integration result has blockers")
-    if kind=="release" and str(data.get("RELEASE_STATE")).upper()=="RELEASED" and str(data.get("QA")).upper() in {"FAIL","FAILED"}:
-        errors.append("released state contradicts QA failure")
+    if kind=="release":
+        if str(data.get("RELEASE_STATE")).upper()=="RELEASED" and str(data.get("QA")).upper() in {"FAIL","FAILED"}:
+            errors.append("released state contradicts QA failure")
+        incidents=data.get("OPEN_PRODUCTION_INCIDENTS")
+        if isinstance(incidents,list) and incidents and not _nonempty(data.get("INCIDENT_CARRY_FORWARD")):
+            errors.append("open production incidents require incident carry-forward accounting")
     return errors
 
 def main():

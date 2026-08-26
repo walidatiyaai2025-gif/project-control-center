@@ -11,6 +11,9 @@ def qa(**kw):
 def visual(**kw):
     d={"HANDOFF_TYPE":"VISUAL_QA_HANDOFF","RESULT_CONFIDENCE":"VERIFIED","EXACT_HEAD":SHA,"REFERENCE_SOURCE":"REF01","REFERENCE_VERSION":"1","REFERENCE_SHA":SHA,"CANDIDATE_SOURCE_SHA":SHA,"CANDIDATE_ARTIFACT":"artifact-1","ARTIFACT_GENERATED_AT":"2026-08-25T00:00:00Z","PROVENANCE_VERIFIED":True,"AUTHORITATIVE":True,"DELTA":[],"CLASSIFICATION":"MATCH","QA_RESULT":"PASS","BLOCKER":None,"NEXT_ACTION":"integration"}; d.update(kw); return d
 
+def release(**kw):
+    d={"HANDOFF_TYPE":"RELEASE_HANDOFF","RESULT_CONFIDENCE":"VERIFIED","VERSION":"1.0.1","SOURCE_SHA":SHA,"BUILD_ID":"build-1","QA":"PASS","RELEASE_STATE":"RELEASED","PRODUCTION_STATE":"DEPLOYED","OPEN_PRODUCTION_INCIDENTS":[],"INCIDENT_CARRY_FORWARD":[],"ROLLBACK":"revert release","BLOCKER":None,"NEXT_ACTION":"monitor"}; d.update(kw); return d
+
 class OutputDisciplineTests(unittest.TestCase):
     def test_final_structured_handoff_accepted(self): self.assertEqual(validate_handoff("worker",worker()),[])
     def test_narration_heavy_output_rejected(self): self.assertTrue(any("narration" in e for e in validate_handoff("worker",worker(NARRATIVE="I will check this, next I will inspect logs"))))
@@ -24,5 +27,11 @@ class OutputDisciplineTests(unittest.TestCase):
         self.assertEqual(validate_handoff("worker",d),[])
     def test_missing_head_rejected_for_exact_head_workflow(self): self.assertTrue(validate_handoff("qa",qa(EXACT_HEAD=None)))
     def test_unsupported_done_rejected(self): self.assertTrue(any("unsupported DONE"==e for e in validate_handoff("worker",worker(STATUS="DONE"))))
+    def test_release_without_open_incidents_is_valid(self): self.assertEqual(validate_handoff("release",release()),[])
+    def test_release_with_open_incident_requires_carry_forward(self):
+        errors=validate_handoff("release",release(OPEN_PRODUCTION_INCIDENTS=["INC-QR-2026-0001"],INCIDENT_CARRY_FORWARD=[]))
+        self.assertIn("open production incidents require incident carry-forward accounting",errors)
+    def test_release_with_open_incident_and_carry_forward_is_valid(self):
+        self.assertEqual(validate_handoff("release",release(OPEN_PRODUCTION_INCIDENTS=["INC-QR-2026-0001"],INCIDENT_CARRY_FORWARD=[{"INCIDENT_ID":"INC-QR-2026-0001","TARGET_VERSION":"1.0.2"}])),[])
 
 if __name__=="__main__": unittest.main()
