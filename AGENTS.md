@@ -94,6 +94,10 @@ Always fetch live state before acting. Stale SHAs in prompts, summaries, or prev
 
 If a canonical Task ID/branch already exists, continue it. Do not create a replacement branch merely because the Worker changed.
 
+### Replacement Managers/Leads
+
+Replacement Managers/Leads inherit the existing canonical task identity, routing decision, branch, and evidence chain. They must fetch live state and reconcile it, then continue the same controlled work unless PCC/owner evidence explicitly authorizes a new route or task.
+
 ## 8. Completion law
 
 `CODE EXISTS != FEATURE COMPLETE`.
