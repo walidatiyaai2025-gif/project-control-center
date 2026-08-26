@@ -1,0 +1,63 @@
+{
+  "CONTROL_PLANE_VERSION": "v1.5.0",
+  "ROUTING_CONTRACT_VERSION": "1.0.0",
+  "PROJECTS": [
+    {
+      "PROJECT_ID": "AIMWWEB",
+      "DISPLAY_NAME": "AIMWWeb",
+      "REPOSITORY": "walidatiyaai2025-gif/AIMWWeb",
+      "PROJECT_MODEL": "STANDALONE",
+      "ALIASES": [
+        "aimwweb",
+        "aimw web"
+      ],
+      "ROUTING_REQUIRED": true,
+      "CONSTITUTION_PATH": "AGENTS.md",
+      "CONSTITUTION_STATE": "LEGACY_PENDING",
+      "FAMILY_MANIFEST_PATH": null,
+      "DEFAULT_SCOPE": "PROJECT",
+      "VARIANTS": []
+    },
+    {
+      "PROJECT_ID": "NOTONLYBOOK",
+      "DISPLAY_NAME": "NotOnlyBook",
+      "REPOSITORY": "walidatiyaai2025-gif/notonlybook",
+      "PROJECT_MODEL": "PRODUCT_FAMILY",
+      "ALIASES": [
+        "notonlybook",
+        "not only book"
+      ],
+      "ROUTING_REQUIRED": true,
+      "CONSTITUTION_PATH": "AGENTS.md",
+      "CONSTITUTION_STATE": "READY",
+      "CONSTITUTION_SOURCE_SHA": "409bac608ecb4727d56efb7649be64934800e5cd",
+      "FAMILY_MANIFEST_PATH": ".pcc/project-family.json",
+      "DEFAULT_SCOPE": null,
+      "VARIANTS": [
+        {
+          "VARIANT_ID": "NOTONLYBOOK",
+          "DISPLAY_NAME": "NotOnlyBook",
+          "TYPE": "PRIMARY",
+          "STATUS": "ACTIVE",
+          "DERIVED_FROM": null,
+          "ALIASES": [
+            "notonlybook",
+            "not only book"
+          ]
+        },
+        {
+          "VARIANT_ID": "ARABIASWONDERS",
+          "DISPLAY_NAME": "ArabiasWonders",
+          "TYPE": "CLIENT_VARIANT",
+          "STATUS": "ACTIVE",
+          "DERIVED_FROM": "NOTONLYBOOK",
+          "ALIASES": [
+            "arabiaswonder",
+            "arabiaswonders",
+            "arabias wonders"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "project-family.schema.json",
+  "title": "PCC Project Family Manifest",
+  "type": "object",
+  "required": [
+    "SCHEMA_VERSION",
+    "FAMILY_ID",
+    "PROJECT_MODEL",
+    "REPOSITORY",
+    "ROUTING_AUTHORITY",
+    "WORKER_ENTRYPOINT",
+    "CONSTITUTION_PATH",
+    "FAMILY_MANIFEST_PATH",
+    "VARIANTS",
+    "ROUTING_RULES"
+  ],
+  "properties": {
+    "SCHEMA_VERSION": {"type": "string"},
+    "FAMILY_ID": {"type": "string", "minLength": 1},
+    "PROJECT_MODEL": {"const": "PRODUCT_FAMILY"},
+    "REPOSITORY": {"type": "string", "minLength": 3},
+    "ROUTING_AUTHORITY": {"type": "string", "minLength": 3},
+    "WORKER_ENTRYPOINT": {"const": "PCC_ROUTING_PACKET"},
+    "CONSTITUTION_PATH": {"type": "string", "minLength": 1},
+    "FAMILY_MANIFEST_PATH": {"type": "string", "minLength": 1},
+    "VARIANTS": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["VARIANT_ID", "DISPLAY_NAME", "TYPE", "STATUS", "ALIASES"],
+        "properties": {
+          "VARIANT_ID": {"type": "string", "minLength": 1},
+          "DISPLAY_NAME": {"type": "string", "minLength": 1},
+          "TYPE": {"enum": ["PRIMARY", "CLIENT_VARIANT", "PRODUCT_VARIANT"]},
+          "STATUS": {"enum": ["ACTIVE", "MAINTENANCE", "ARCHIVED"]},
+          "DERIVED_FROM": {"type": ["string", "null"]},
+          "ALIASES": {"type": "array", "items": {"type": "string"}},
+          "IMPLEMENTATION_LOCATION": {"type": ["string", "null"]},
+          "PRODUCTION_TARGET": {"type": ["string", "null"]},
+          "CHANGE_BOUNDARY_STATE": {"type": ["string", "null"]}
+        },
+        "additionalProperties": true
+      }
+    },
+    "ROUTING_RULES": {"type": "object"}
+  },
+  "additionalProperties": true
+}

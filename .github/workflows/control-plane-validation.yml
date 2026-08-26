@@ -15,7 +15,7 @@ jobs:
           python-version: '3.12'
       - run: python scripts/self_audit.py
       - run: python scripts/fleet_readiness.py
-      - run: python -m unittest scripts/test_control_plane.py scripts/test_feature_delivery.py scripts/test_fleet_control.py scripts/test_fleet_readiness.py scripts/test_output_discipline.py -v
+      - run: python -m unittest scripts/test_control_plane.py scripts/test_feature_delivery.py scripts/test_fleet_control.py scripts/test_fleet_readiness.py scripts/test_route_work.py scripts/test_output_discipline.py -v
       - run: python scripts/orchestrator.py --report-out /tmp/orchestration-report.json
       - run: python dashboard/build_portfolio.py > /tmp/dashboard.json
       - name: Audit PCC main protection (non-blocking until admin credential is configured)
@@ -27,6 +27,7 @@ jobs:
           set -euo pipefail
           files=(
             portfolio/projects.yml
+            portfolio/project-routing.json
             portfolio/priorities.yml
             portfolio/status/index.json
             orchestration/desired-state.json
@@ -34,8 +35,10 @@ jobs:
             orchestration/audit-ledger.json
             orchestration/policy-catalog.json
             templates/PROJECT_PROFILE.yml
+            templates/PROJECT_ROUTING.json
             templates/MANAGED_REPOSITORY_CONTROL.yml
             schemas/project.schema.json
+            schemas/project-family.schema.json
             schemas/task.schema.json
             schemas/project-status.schema.json
             schemas/project-profile.schema.json

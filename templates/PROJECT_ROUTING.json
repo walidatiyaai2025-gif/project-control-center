@@ -1,0 +1,15 @@
+{
+  "PROJECT_ID": "<project-id>",
+  "DISPLAY_NAME": "<display-name>",
+  "REPOSITORY": "<owner/repo>",
+  "PROJECT_MODEL": "STANDALONE|PRODUCT_FAMILY",
+  "ALIASES": [
+    "<project-alias>"
+  ],
+  "ROUTING_REQUIRED": true,
+  "CONSTITUTION_PATH": "AGENTS.md",
+  "CONSTITUTION_STATE": "PENDING",
+  "FAMILY_MANIFEST_PATH": null,
+  "DEFAULT_SCOPE": "PROJECT",
+  "VARIANTS": []
+}

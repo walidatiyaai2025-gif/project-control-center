@@ -9,7 +9,7 @@ import fleet_readiness as fr
 
 
 class ReadinessTests(unittest.TestCase):
-    def make_root(self, projects=None):
+    def make_root(self, projects=None, constitution_state="READY"):
         d = tempfile.TemporaryDirectory()
         root = Path(d.name)
         for rel in [
@@ -23,14 +23,26 @@ class ReadinessTests(unittest.TestCase):
         for p in projects:
             desired.append({k:p.get(k) for k in fr.DESIRED_PARITY_KEYS})
         (root / "orchestration/desired-state.json").write_text(json.dumps({"CONTROL_PLANE_VERSION":"v1.5.0","PROJECTS":desired}))
+        routing = []
+        for p in projects:
+            routing.append({
+                "PROJECT_ID": p["PROJECT_ID"], "DISPLAY_NAME": p["DISPLAY_NAME"], "REPOSITORY": p["REPOSITORY"],
+                "PROJECT_MODEL": "STANDALONE", "ALIASES": [p["PROJECT_ID"].lower()], "ROUTING_REQUIRED": True,
+                "CONSTITUTION_PATH": "AGENTS.md", "CONSTITUTION_STATE": constitution_state,
+                "FAMILY_MANIFEST_PATH": None, "DEFAULT_SCOPE": "PROJECT", "VARIANTS": []
+            })
+        (root / "portfolio/project-routing.json").write_text(json.dumps({"CONTROL_PLANE_VERSION":"v1.5.0","ROUTING_CONTRACT_VERSION":"1.0.0","PROJECTS":routing}))
         (root / "templates/PROJECT_PROFILE.yml").write_text('{"CONTROL_PLANE_VERSION":"v1.5.0"}')
         (root / "templates/MANAGED_REPOSITORY_CONTROL.yml").write_text('{"CONTROL_PLANE_VERSION":"v1.5.0"}')
+        (root / "templates/PROJECT_ROUTING.json").write_text('{"CONSTITUTION_STATE":"PENDING"}')
         (root / "scripts/enrollment_controller.py").write_text("PCC-local idempotent fleet enrollment TARGET_MUTATED")
         (root / "scripts/fleet_control.py").write_text("OBSERVE CANARY ENFORCE apply_policy_sync PATH_NOT_ALLOWLISTED BREAK_GLASS_ACTIVE WRITE_AUTH_PROVIDER_REQUIRED")
+        (root / "scripts/route_work.py").write_text("PCC worker routing packet REPOSITORY_CONSTITUTION_NOT_READY TARGET_SCOPE_REQUIRED_FOR_PRODUCT_FAMILY")
         (root / "scripts/self_protection.py").write_text("MAIN_PROTECTION_NOT_CONFIGURED REPOSITORY_ADMIN_WRITE_CREDENTIAL_REQUIRED")
         (root / "policies/FLEET_CONTROL_POLICY.md").write_text("read before write OBSERVE -> WARN -> CANARY -> ENFORCE Automatic deletion is forbidden")
+        (root / "policies/PROJECT_FAMILY_ROUTING_POLICY.md").write_text("Every implementation worker MUST receive CONSTITUTION_STATE=PENDING Alias collisions are governance blockers")
         (root / ".github/workflows/fleet-control.yml").write_text("workflow_dispatch apply_policy_sync fleet_readiness.py")
-        (root / ".github/workflows/control-plane-validation.yml").write_text("fleet_readiness.py test_fleet_readiness.py")
+        (root / ".github/workflows/control-plane-validation.yml").write_text("fleet_readiness.py test_fleet_readiness.py test_route_work.py")
         return d, root
 
     def project(self, pid, repo, **kw):
@@ -53,6 +65,7 @@ class ReadinessTests(unittest.TestCase):
             self.assertTrue(r["ONBOARDING_READY"])
             self.assertEqual(r["READINESS_PERCENT"], 100)
             self.assertEqual(r["REGISTERED_PROJECTS"], 2)
+            self.assertEqual(r["ROUTABLE_PROJECTS"], 2)
         finally:
             d.cleanup()
 
@@ -83,6 +96,25 @@ class ReadinessTests(unittest.TestCase):
         try:
             r = fr.validate_static(root)
             self.assertTrue(any(x.startswith("P1:NON_ALLOWLISTED_MANAGED_FILES") for x in r["BLOCKERS"]))
+        finally:
+            d.cleanup()
+
+    def test_new_project_pending_constitution_blocks_onboarding(self):
+        d, root = self.make_root(constitution_state="PENDING")
+        try:
+            r = fr.validate_static(root)
+            self.assertFalse(r["ONBOARDING_READY"])
+            self.assertTrue(any("CONSTITUTION_NOT_READY_FOR_ONBOARDING" in x for x in r["BLOCKERS"]))
+        finally:
+            d.cleanup()
+
+    def test_legacy_pending_is_visible_but_not_routable(self):
+        d, root = self.make_root(constitution_state="LEGACY_PENDING")
+        try:
+            r = fr.validate_static(root)
+            self.assertTrue(r["ONBOARDING_READY"])
+            self.assertEqual(r["ROUTABLE_PROJECTS"], 0)
+            self.assertTrue(any("LEGACY_CONSTITUTION_PENDING_WORKER_ROUTING" in x for x in r["WARNINGS"]))
         finally:
             d.cleanup()
 
