@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -39,6 +40,8 @@ DESIRED_PARITY_KEYS = {
     "CANONICAL_DEVELOPMENT_LINEAGE",
     "MANAGED_FILES",
 }
+ROUTING_MODELS = {"STANDALONE", "PRODUCT_FAMILY"}
+ROUTING_ACCEPTED_CONSTITUTION_STATES = {"READY", "LEGACY_PENDING"}
 
 
 def load(path: Path) -> Any:
@@ -49,10 +52,103 @@ def by_id(doc: dict[str, Any]) -> dict[str, dict[str, Any]]:
     return {p["PROJECT_ID"]: p for p in doc.get("PROJECTS", []) if p.get("PROJECT_ID")}
 
 
+def norm(value: str | None) -> str:
+    return re.sub(r"[^a-z0-9]+", "", (value or "").lower())
+
+
 def add_check(checks: dict[str, bool], name: str, ok: bool, blockers: list[str], reason: str) -> None:
     checks[name] = bool(ok)
     if not ok:
         blockers.append(reason)
+
+
+def validate_routing(root: Path, registry: dict[str, Any], version: str, blockers: list[str], warnings: list[str]) -> tuple[bool, int]:
+    path = root / "portfolio/project-routing.json"
+    if not path.exists():
+        blockers.append("PROJECT_ROUTING_REGISTRY_MISSING")
+        return False, 0
+    try:
+        routing = load(path)
+    except Exception as exc:
+        blockers.append(f"PROJECT_ROUTING_REGISTRY_PARSE_FAILED:{exc}")
+        return False, 0
+    if routing.get("CONTROL_PLANE_VERSION") != version:
+        blockers.append("PROJECT_ROUTING_CONTROL_PLANE_VERSION_MISMATCH")
+        return False, 0
+
+    projects = registry.get("PROJECTS", [])
+    registered = by_id(registry)
+    rows = by_id(routing)
+    ok = set(rows) == set(registered)
+    if not ok:
+        blockers.append("PROJECT_ROUTING_REGISTRY_PROJECT_SET_MISMATCH")
+
+    global_alias_owner: dict[str, str] = {}
+    routable = 0
+    for pid, project in registered.items():
+        row = rows.get(pid)
+        if not row:
+            continue
+        if row.get("REPOSITORY") != project.get("REPOSITORY"):
+            blockers.append(f"{pid}:PROJECT_ROUTING_REPOSITORY_MISMATCH")
+            ok = False
+        if row.get("PROJECT_MODEL") not in ROUTING_MODELS:
+            blockers.append(f"{pid}:INVALID_PROJECT_MODEL")
+            ok = False
+        if row.get("ROUTING_REQUIRED") is not True:
+            blockers.append(f"{pid}:ROUTING_MUST_BE_REQUIRED")
+            ok = False
+        if not row.get("CONSTITUTION_PATH"):
+            blockers.append(f"{pid}:CONSTITUTION_PATH_REQUIRED")
+            ok = False
+        state = row.get("CONSTITUTION_STATE")
+        if state not in ROUTING_ACCEPTED_CONSTITUTION_STATES:
+            blockers.append(f"{pid}:CONSTITUTION_NOT_READY_FOR_ONBOARDING:{state}")
+            ok = False
+        elif state == "LEGACY_PENDING":
+            warnings.append(f"{pid}:LEGACY_CONSTITUTION_PENDING_WORKER_ROUTING")
+        elif state == "READY":
+            routable += 1
+
+        alias_values = [pid, row.get("DISPLAY_NAME"), row.get("REPOSITORY")]
+        alias_values.extend(row.get("ALIASES") or [])
+        repo = row.get("REPOSITORY") or ""
+        if "/" in repo:
+            alias_values.append(repo.split("/", 1)[1])
+
+        variants = row.get("VARIANTS") or []
+        if row.get("PROJECT_MODEL") == "STANDALONE":
+            if variants:
+                blockers.append(f"{pid}:STANDALONE_PROJECT_MUST_NOT_DECLARE_VARIANTS")
+                ok = False
+            if row.get("FAMILY_MANIFEST_PATH") is not None:
+                blockers.append(f"{pid}:STANDALONE_PROJECT_FAMILY_MANIFEST_MUST_BE_NULL")
+                ok = False
+        elif row.get("PROJECT_MODEL") == "PRODUCT_FAMILY":
+            if not row.get("FAMILY_MANIFEST_PATH"):
+                blockers.append(f"{pid}:PRODUCT_FAMILY_MANIFEST_REQUIRED")
+                ok = False
+            active = [v for v in variants if v.get("STATUS") == "ACTIVE"]
+            ids = [v.get("VARIANT_ID") for v in variants]
+            if len(active) < 2 or len(ids) != len(set(ids)) or any(not x for x in ids):
+                blockers.append(f"{pid}:PRODUCT_FAMILY_VARIANTS_INVALID")
+                ok = False
+            for v in variants:
+                alias_values.extend([v.get("VARIANT_ID"), v.get("DISPLAY_NAME")])
+                alias_values.extend(v.get("ALIASES") or [])
+
+        for value in alias_values:
+            key = norm(value)
+            if not key:
+                continue
+            owner = global_alias_owner.get(key)
+            if owner and owner != pid:
+                blockers.append(f"ROUTING_ALIAS_COLLISION:{value}:{owner}:{pid}")
+                ok = False
+            else:
+                global_alias_owner[key] = pid
+
+    return ok, routable
 
 
 def validate_static(root: Path) -> dict[str, Any]:
@@ -144,24 +240,31 @@ def validate_static(root: Path) -> dict[str, Any]:
         profile_ok = False
     checks["REGISTRY_AND_DESIRED_STATE_PARITY"] = profile_ok
 
+    routing_ok, routable_projects = validate_routing(root, registry, version, blockers, warnings)
+    checks["PROJECT_AND_VARIANT_ROUTING"] = routing_ok
+
     template_ok = True
-    for rel in ("templates/PROJECT_PROFILE.yml", "templates/MANAGED_REPOSITORY_CONTROL.yml"):
+    for rel in ("templates/PROJECT_PROFILE.yml", "templates/MANAGED_REPOSITORY_CONTROL.yml", "templates/PROJECT_ROUTING.json"):
         path = root / rel
         if not path.exists():
             blockers.append(f"MISSING_TEMPLATE:{rel}")
             template_ok = False
             continue
         text = path.read_text(encoding="utf-8")
-        if version not in text:
+        if rel != "templates/PROJECT_ROUTING.json" and version not in text:
             blockers.append(f"STALE_TEMPLATE_VERSION:{rel}")
+            template_ok = False
+        if rel == "templates/PROJECT_ROUTING.json" and "CONSTITUTION_STATE" not in text:
+            blockers.append(f"ROUTING_TEMPLATE_INCOMPLETE:{rel}")
             template_ok = False
     checks["ONBOARDING_TEMPLATES_CURRENT"] = template_ok
 
     automation_requirements = {
         "scripts/enrollment_controller.py": ["PCC-local idempotent fleet enrollment", "TARGET_MUTATED"],
         "scripts/fleet_control.py": ["OBSERVE", "CANARY", "ENFORCE", "apply_policy_sync"],
+        "scripts/route_work.py": ["PCC worker routing packet", "REPOSITORY_CONSTITUTION_NOT_READY", "TARGET_SCOPE_REQUIRED_FOR_PRODUCT_FAMILY"],
         ".github/workflows/fleet-control.yml": ["workflow_dispatch", "apply_policy_sync", "fleet_readiness.py"],
-        ".github/workflows/control-plane-validation.yml": ["fleet_readiness.py", "test_fleet_readiness.py"],
+        ".github/workflows/control-plane-validation.yml": ["fleet_readiness.py", "test_fleet_readiness.py", "test_route_work.py"],
     }
     automation_ok = True
     for rel, needles in automation_requirements.items():
@@ -174,6 +277,7 @@ def validate_static(root: Path) -> dict[str, Any]:
 
     safety_requirements = {
         "policies/FLEET_CONTROL_POLICY.md": ["read before write", "OBSERVE -> WARN -> CANARY -> ENFORCE", "Automatic deletion is forbidden"],
+        "policies/PROJECT_FAMILY_ROUTING_POLICY.md": ["Every implementation worker MUST receive", "CONSTITUTION_STATE=PENDING", "Alias collisions are governance blockers"],
         "scripts/fleet_control.py": ["PATH_NOT_ALLOWLISTED", "BREAK_GLASS_ACTIVE", "WRITE_AUTH_PROVIDER_REQUIRED"],
         "scripts/self_protection.py": ["MAIN_PROTECTION_NOT_CONFIGURED", "REPOSITORY_ADMIN_WRITE_CREDENTIAL_REQUIRED"],
     }
@@ -186,9 +290,6 @@ def validate_static(root: Path) -> dict[str, Any]:
             safety_ok = False
     checks["SAFETY_GATES"] = safety_ok
 
-    # The PCC can be 100% ready to enroll more repositories while enrolled
-    # repositories remain in OBSERVE with expected policy drift. Enforcement is
-    # a separate, per-project promotion decision.
     if any(p.get("POLICY_ENFORCEMENT_MODE") in {"OBSERVE", "WARN"} for p in projects):
         warnings.append("OBSERVE_OR_WARN_PROJECTS_MAY_HAVE_EXPECTED_POLICY_DRIFT_BEFORE_PROMOTION")
 
@@ -204,6 +305,7 @@ def validate_static(root: Path) -> dict[str, Any]:
         "READINESS_PERCENT": percent,
         "ONBOARDING_READY": percent == 100 and not blockers,
         "REGISTERED_PROJECTS": len(projects),
+        "ROUTABLE_PROJECTS": routable_projects,
     }
 
 
