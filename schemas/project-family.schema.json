@@ -12,6 +12,10 @@
     "WORKER_ENTRYPOINT",
     "CONSTITUTION_PATH",
     "FAMILY_MANIFEST_PATH",
+    "ONBOARDING_NORMALIZATION_STATE",
+    "VARIANT_GOVERNANCE_STATE",
+    "SHARED_CORE_STATE",
+    "CORE_ROUTING_STATE",
     "VARIANTS",
     "ROUTING_RULES"
   ],
@@ -24,12 +28,16 @@
     "WORKER_ENTRYPOINT": {"const": "PCC_ROUTING_PACKET"},
     "CONSTITUTION_PATH": {"type": "string", "minLength": 1},
     "FAMILY_MANIFEST_PATH": {"type": "string", "minLength": 1},
+    "ONBOARDING_NORMALIZATION_STATE": {"const": "READY"},
+    "VARIANT_GOVERNANCE_STATE": {"enum": ["READY", "PARTIAL"]},
+    "SHARED_CORE_STATE": {"enum": ["MAPPED", "UNRESOLVED", "NOT_APPLICABLE"]},
+    "CORE_ROUTING_STATE": {"enum": ["READY", "BLOCKED_UNRESOLVED"]},
     "VARIANTS": {
       "type": "array",
       "minItems": 2,
       "items": {
         "type": "object",
-        "required": ["VARIANT_ID", "DISPLAY_NAME", "TYPE", "STATUS", "ALIASES"],
+        "required": ["VARIANT_ID", "DISPLAY_NAME", "TYPE", "STATUS", "ALIASES", "IMPLEMENTATION_LOCATION_STATE", "ROUTING_STATE"],
         "properties": {
           "VARIANT_ID": {"type": "string", "minLength": 1},
           "DISPLAY_NAME": {"type": "string", "minLength": 1},
@@ -38,8 +46,10 @@
           "DERIVED_FROM": {"type": ["string", "null"]},
           "ALIASES": {"type": "array", "items": {"type": "string"}},
           "IMPLEMENTATION_LOCATION": {"type": ["string", "null"]},
-          "PRODUCTION_TARGET": {"type": ["string", "null"]},
-          "CHANGE_BOUNDARY_STATE": {"type": ["string", "null"]}
+          "IMPLEMENTATION_LOCATION_STATE": {"enum": ["MAPPED", "EXTERNAL_REPOSITORY", "UNRESOLVED", "UNMATERIALIZED"]},
+          "ROUTING_STATE": {"enum": ["READY", "BLOCKED_UNRESOLVED", "BLOCKED_UNMATERIALIZED", "ARCHIVED"]},
+          "BOUNDARY_EVIDENCE_SHA": {"type": ["string", "null"]},
+          "PRODUCTION_TARGET": {"type": ["string", "null"]}
         },
         "additionalProperties": true
       }
