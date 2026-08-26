@@ -1,18 +1,29 @@
 # START HERE — Project Control Center v1.5.0
 
-This is the operator entry point. Existing v1.2 Feature/Screen/Action governance, v1.3 fleet governance and v1.4 execution-output discipline remain authoritative.
+This is the operator entry point. Existing v1.2 Feature/Screen/Action governance, v1.3 fleet governance, v1.4 execution-output discipline, v1.5 fleet onboarding, and current project/client routing governance remain authoritative.
 
 ## Before any scenario
-1. Confirm this PCC repository at a known immutable SHA and read `VERSION`.
-2. Read `policies/GOVERNANCE_LAWS.md`.
-3. Read mandatory `policies/EXECUTION_OUTPUT_DISCIPLINE_POLICY.md`; operational roles use silent execution by default and report reconciled final state only.
-4. For product delivery, read `policies/IMMUTABLE_PRODUCT_VERSION_POLICY.md` and `policies/END_TO_END_FEATURE_DELIVERY_POLICY.md`.
-5. For fleet operations, read `policies/FLEET_CONTROL_POLICY.md`, `policies/CENTRAL_ORCHESTRATION_POLICY.md`, and `orchestration/README.md`.
-6. For worker dispatch, read `policies/PROJECT_FAMILY_ROUTING_POLICY.md` and resolve the project/client through `portfolio/project-routing.json`.
-7. Never invent branches, SHAs, task state, QA, release, lineage, version, connectivity, client identity, variant identity, or completion.
-8. Existing-project discovery/baseline/reconciliation are read-only until an explicit write gate is satisfied.
-9. Cross-repository writes require CANARY/ENFORCE + explicit write authorization + write-capable runtime auth + resolved target lineage.
-10. Before bulk enrollment, run `python scripts/fleet_readiness.py`; require `READINESS_PERCENT=100` and `ONBOARDING_READY=true`.
+1. **Read root `AGENTS.md` first.** It is the PCC constitution for every Manager/Lead/Worker role.
+2. Confirm this PCC repository at a known immutable SHA and read `VERSION`.
+3. Read `policies/GOVERNANCE_LAWS.md`.
+4. Read mandatory `policies/EXECUTION_OUTPUT_DISCIPLINE_POLICY.md`; operational roles use silent execution by default and report reconciled final state only.
+5. For product delivery, read `policies/IMMUTABLE_PRODUCT_VERSION_POLICY.md` and `policies/END_TO_END_FEATURE_DELIVERY_POLICY.md`.
+6. For fleet operations, read `policies/FLEET_CONTROL_POLICY.md`, `policies/CENTRAL_ORCHESTRATION_POLICY.md`, and `orchestration/README.md`.
+7. For worker dispatch, read `policies/PROJECT_FAMILY_ROUTING_POLICY.md` and resolve the project/client through `portfolio/project-routing.json`.
+8. Never invent branches, SHAs, task state, QA, release, lineage, version, connectivity, client identity, variant identity, or completion.
+9. Existing-project discovery/baseline/reconciliation are read-only until an explicit write gate is satisfied.
+10. Cross-repository writes require CANARY/ENFORCE + explicit write authorization + write-capable runtime auth + resolved target lineage where those fleet-managed write gates apply.
+11. Before bulk enrollment, run `python scripts/fleet_readiness.py`; require `READINESS_PERCENT=100` and `ONBOARDING_READY=true`.
+
+## Manager / Lead mandatory entrypoint
+
+When the owner names a project, client, or variant and asks for work, a Manager/Lead must resolve and package the work before implementation starts. The Manager/Lead owns routing ambiguity and cannot delegate it to the implementation Worker.
+
+Required sequence:
+
+`OWNER REQUEST -> FETCH LIVE PCC -> RESOLVE PROJECT/CLIENT -> FETCH LIVE TARGET -> CLASSIFY SCOPE -> RECONCILE TASK/BRANCH -> ISSUE ROUTING PACKET -> IMPLEMENT -> QA -> INTEGRATE/RELEASE WHEN REQUIRED -> RECONCILE FINAL EVIDENCE`
+
+A replacement Manager/Lead continues the same canonical task and branch where they exist.
 
 ## Worker routing — mandatory entrypoint
 
@@ -23,7 +34,7 @@ The owner may name only the project/client/variant. Resolve it before assigning 
 A worker must receive `ROUTING_STATUS=ROUTED` before implementation writes. It must read the routed repository constitution first. If routing is blocked or repository evidence conflicts with the packet, the worker stops rather than guessing.
 
 For a `PRODUCT_FAMILY`:
-- `CORE` means shared behavior and requires validation across all active variants.
+- `CORE` means shared behavior and requires validation across all affected active variants.
 - `VARIANT` means exactly one routed client/product variant.
 - branch names do not define long-lived client identity.
 

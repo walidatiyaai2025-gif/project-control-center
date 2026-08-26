@@ -22,14 +22,14 @@ def has(path,*values):
     return all(v in text for v in values)
 
 required=[
-"README.md","START_HERE.md","VERSION","portfolio/projects.yml","portfolio/priorities.yml","portfolio/status/index.json","portfolio/version-history/README.md",
+"AGENTS.md","README.md","START_HERE.md","VERSION","portfolio/projects.yml","portfolio/project-routing.json","portfolio/priorities.yml","portfolio/status/index.json","portfolio/version-history/README.md",
 "dashboard/index.html","dashboard/app.js","dashboard/build_portfolio.py",
-"policies/GOVERNANCE_LAWS.md","policies/TASK_LIFECYCLE_AND_LEASE.md","policies/CENTRAL_ORCHESTRATION_POLICY.md","policies/IMMUTABLE_PRODUCT_VERSION_POLICY.md","policies/END_TO_END_FEATURE_DELIVERY_POLICY.md","policies/FLEET_CONTROL_POLICY.md","policies/EXECUTION_OUTPUT_DISCIPLINE_POLICY.md",
+"policies/GOVERNANCE_LAWS.md","policies/TASK_LIFECYCLE_AND_LEASE.md","policies/CENTRAL_ORCHESTRATION_POLICY.md","policies/PROJECT_FAMILY_ROUTING_POLICY.md","policies/IMMUTABLE_PRODUCT_VERSION_POLICY.md","policies/END_TO_END_FEATURE_DELIVERY_POLICY.md","policies/FLEET_CONTROL_POLICY.md","policies/EXECUTION_OUTPUT_DISCIPLINE_POLICY.md",
 "orchestration/desired-state.json","orchestration/observed-state.json","orchestration/audit-ledger.json","orchestration/policy-catalog.json",
-"scripts/version_governance.py","scripts/orchestrator.py","scripts/enrollment_controller.py","scripts/feature_delivery_audit.py","scripts/github_fleet_client.py","scripts/fleet_control.py","scripts/fleet_readiness.py","scripts/self_protection.py","scripts/output_discipline.py",
-"scripts/test_control_plane.py","scripts/test_feature_delivery.py","scripts/test_fleet_control.py","scripts/test_fleet_readiness.py","scripts/test_output_discipline.py",
-"schemas/worker-handoff.schema.json","schemas/qa-handoff.schema.json","schemas/ci-handoff.schema.json","schemas/visual-qa-handoff.schema.json","schemas/integration-handoff.schema.json","schemas/release-handoff.schema.json",
-"templates/PROJECT_PROFILE.yml","templates/MANAGED_REPOSITORY_CONTROL.yml",
+"scripts/version_governance.py","scripts/orchestrator.py","scripts/enrollment_controller.py","scripts/route_work.py","scripts/feature_delivery_audit.py","scripts/github_fleet_client.py","scripts/fleet_control.py","scripts/fleet_readiness.py","scripts/self_protection.py","scripts/output_discipline.py",
+"scripts/test_control_plane.py","scripts/test_feature_delivery.py","scripts/test_fleet_control.py","scripts/test_fleet_readiness.py","scripts/test_route_work.py","scripts/test_output_discipline.py",
+"schemas/project-family.schema.json","schemas/worker-handoff.schema.json","schemas/qa-handoff.schema.json","schemas/ci-handoff.schema.json","schemas/visual-qa-handoff.schema.json","schemas/integration-handoff.schema.json","schemas/release-handoff.schema.json",
+"templates/PROJECT_PROFILE.yml","templates/PROJECT_ROUTING.json","templates/MANAGED_REPOSITORY_CONTROL.yml",
 ".github/CODEOWNERS",".github/pull_request_template.md",".github/workflows/control-plane-validation.yml",".github/workflows/portfolio-dashboard.yml",".github/workflows/central-orchestrator.yml",".github/workflows/fleet-control.yml",".github/workflows/reusable-version-governance.yml",".github/workflows/reusable-feature-delivery-governance.yml",
 "docs/FLEET_CONTROL_CLOSURE_v1.3.0.md","docs/EXECUTION_OUTPUT_DISCIPLINE_ADDON_v1.4.0.md","docs/FLEET_ONBOARDING_CLOSURE_v1.5.0.md"]
 for p in required: need(p)
@@ -50,6 +50,11 @@ managed_output_prompts=['00-control-center/01-self-audit.md','40-daily-operation
 for rel in managed_output_prompts:
     contain('prompts/'+rel,["OUTPUT MODE: SILENT EXECUTION","Do not narrate investigation.","Do not send intermediate hypotheses."])
 
+contain("AGENTS.md",["MANAGER_LEAD_CONTRACT_VERSION: 1.0.0","Mandatory Manager/Lead first action","PCC ROUTING PACKET","No delegation of ambiguity","Replacement Managers/Leads"])
+contain("START_HERE.md",["Read root `AGENTS.md` first","Manager / Lead mandatory entrypoint","ISSUE ROUTING PACKET"])
+contain("policies/GOVERNANCE_LAWS.md",["NO IMPLEMENTATION DISPATCH WITHOUT AN AUTHORITATIVE PCC ROUTING PACKET","AMBIGUOUS OR CONFLICTING ROUTING IS A WRITE BLOCKER","MANAGER/LEAD RESPONSIBILITY CONTINUES"])
+contain("policies/CENTRAL_ORCHESTRATION_POLICY.md",["Manager / Lead controller contract","The Manager/Lead owns ambiguity resolution","Replacement Managers/Leads"])
+contain("policies/PROJECT_FAMILY_ROUTING_POLICY.md",["Manager/Lead routing responsibility","PCC_SOURCE_SHA","coordinate QA/integration/release"])
 contain("policies/END_TO_END_FEATURE_DELIVERY_POLICY.md",["CODE EXISTS != FEATURE COMPLETE","IMPLEMENTED_NOT_CONNECTED","FALSE_DONE_FEATURES = 0"])
 contain("policies/FLEET_CONTROL_POLICY.md",["OBSERVE -> WARN -> CANARY -> ENFORCE","read before write","ORPHAN_CANDIDATES","break-glass","write-capable"])
 contain("policies/EXECUTION_OUTPUT_DISCIPLINE_POLICY.md",["SILENT_EXECUTION_BY_DEFAULT: TRUE","Exact-head evidence gate","Artifact provenance gate","No-premature-finding law","Contradiction gate","WORKER_HANDOFF","VISUAL_QA_HANDOFF"])
@@ -57,11 +62,12 @@ contain("scripts/output_discipline.py",["validate_handoff","unsupported DONE","a
 contain("scripts/github_fleet_client.py",["paginate","X-RateLimit-Remaining","Retry-After","write_capable","protect_branch"])
 contain("scripts/self_protection.py",["MAIN_PROTECTION_NOT_CONFIGURED","REPOSITORY_ADMIN_WRITE_CREDENTIAL_REQUIRED","Control Plane Validation / self-audit"])
 contain("scripts/fleet_control.py",["collect_project","lock_baseline","reconcile_existing_work","migration_plan","apply_policy_sync","stale_task_recovery","orphan_audit","append_ledger","acquire_lock"])
-contain("scripts/fleet_readiness.py",["FLEET_ONBOARDING","REGISTRY_AND_DESIRED_STATE_PARITY","LIVE_FLEET_COLLECTION","ONBOARDING_READY"])
+contain("scripts/fleet_readiness.py",["FLEET_ONBOARDING","REGISTRY_AND_DESIRED_STATE_PARITY","PROJECT_AND_VARIANT_ROUTING","LIVE_FLEET_COLLECTION","ONBOARDING_READY"])
+contain("scripts/route_work.py",["ROUTING_STATUS","TARGET_SCOPE","TARGET_VARIANT","CHANGE_BOUNDARY"])
 contain(".github/workflows/fleet-control.yml",["Live GitHub fleet collection","concurrency:","PCC_GITHUB_TOKEN","fleet_readiness.py"])
 contain(".github/workflows/portfolio-dashboard.yml",["Detect Pages site","pcc-dashboard-static-","actions/configure-pages@v5","steps.pages_preflight.outputs.enabled == 'true'","actions/deploy-pages@v4","PAGES=EXTERNAL_BLOCKER","fleet_readiness.py"])
 
-json_files=["portfolio/projects.yml","portfolio/priorities.yml","portfolio/status/index.json","orchestration/desired-state.json","orchestration/observed-state.json","orchestration/audit-ledger.json","orchestration/policy-catalog.json","templates/PROJECT_PROFILE.yml","templates/MANAGED_REPOSITORY_CONTROL.yml"]
+json_files=["portfolio/projects.yml","portfolio/project-routing.json","portfolio/priorities.yml","portfolio/status/index.json","orchestration/desired-state.json","orchestration/observed-state.json","orchestration/audit-ledger.json","orchestration/policy-catalog.json","templates/PROJECT_PROFILE.yml","templates/PROJECT_ROUTING.json","templates/MANAGED_REPOSITORY_CONTROL.yml"]
 json_files += [str(p.relative_to(root)) for p in sorted((root/'orchestration/baselines').glob('*.json'))]
 json_files += [str(p.relative_to(root)) for p in sorted((root/'orchestration/reconciliation').glob('*.json'))]
 for p in json_files:
@@ -69,6 +75,8 @@ for p in json_files:
     except Exception as e: errors.append(f"{p} invalid JSON-compatible YAML/JSON: {e}")
 
 status_checks={
+"MANAGER_LEAD_CONSTITUTION":has("AGENTS.md","MANAGER_LEAD_CONTRACT_VERSION: 1.0.0","PCC ROUTING PACKET","No delegation of ambiguity") and has("policies/CENTRAL_ORCHESTRATION_POLICY.md","Manager / Lead controller contract"),
+"PROJECT_VARIANT_ROUTING":has("policies/PROJECT_FAMILY_ROUTING_POLICY.md","Manager/Lead routing responsibility","TARGET_VARIANT") and has("portfolio/project-routing.json","NOTONLYBOOK","ARABIASWONDERS"),
 "OUTPUT_DISCIPLINE_POLICY":has("policies/EXECUTION_OUTPUT_DISCIPLINE_POLICY.md","POLICY_ID: EXECUTION_OUTPUT_DISCIPLINE_POLICY","SILENT_EXECUTION_BY_DEFAULT: TRUE"),
 "STRUCTURED_HANDOFF_ENFORCEMENT":all((root/p).exists() for p in ["schemas/worker-handoff.schema.json","schemas/qa-handoff.schema.json","schemas/ci-handoff.schema.json","schemas/visual-qa-handoff.schema.json","schemas/integration-handoff.schema.json","schemas/release-handoff.schema.json","scripts/output_discipline.py"]),
 "ARTIFACT_PROVENANCE_GATE":has("policies/EXECUTION_OUTPUT_DISCIPLINE_POLICY.md","Artifact provenance gate","STALE_OR_UNVERIFIED_ARTIFACT") and has("schemas/visual-qa-handoff.schema.json","PROVENANCE_VERIFIED","CANDIDATE_SOURCE_SHA"),
