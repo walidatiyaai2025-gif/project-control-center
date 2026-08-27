@@ -20,7 +20,7 @@
       "OBSERVED_POLICY_VERSION": null,
       "MANAGED_FILES": [".pcc/managed-repository-control.json"],
       "REQUIRE_DEFAULT_BRANCH_PROTECTION": false,
-      "CANONICAL_DEVELOPMENT_LINEAGE": "main",
+      "CANONICAL_DEVELOPMENT_LINEAGE": "UNRESOLVED",
       "PRODUCTION_BRANCH": "main",
       "PRODUCTION_SHA": "431bb9e320867b43307a674486c40b63b2cf9df6",
       "CANONICAL_INTEGRATION_BRANCH": null,
@@ -112,7 +112,7 @@
             "AIMWWeb normalized main 5fb40b5045dcbff058700ab60d532703b11031c0",
             "PCC routing READY at b26da4e918f032663f26ad00d9feaff9cef12af6"
           ],
-          "UPDATED_AT": "2026-08-27T00:12:00Z"
+          "UPDATED_AT": "2026-08-27T00:15:00Z"
         }
       ],
       "POLICY_EXCEPTIONS": [],
