@@ -6,19 +6,44 @@
       "PROJECT_ID": "AIMWWEB",
       "DISPLAY_NAME": "AIMWWeb",
       "REPOSITORY": "walidatiyaai2025-gif/AIMWWeb",
-      "PROJECT_MODEL": "STANDALONE",
+      "PROJECT_MODEL": "PRODUCT_FAMILY",
       "ALIASES": ["aimwweb", "aimw web"],
       "ROUTING_REQUIRED": true,
       "CONSTITUTION_PATH": "AGENTS.md",
-      "CONSTITUTION_STATE": "READY",
-      "CONSTITUTION_SOURCE_SHA": "5fb40b5045dcbff058700ab60d532703b11031c0",
+      "CONSTITUTION_STATE": "PENDING",
+      "CONSTITUTION_SOURCE_SHA": "02efdf27f3dcf79030c578059aaee67fa3676679",
       "ONBOARDING_NORMALIZATION_STATE": "READY",
-      "NORMALIZATION_EVIDENCE_SHA": "5fb40b5045dcbff058700ab60d532703b11031c0",
-      "FAMILY_MANIFEST_PATH": null,
-      "VARIANT_GOVERNANCE_STATE": "NOT_APPLICABLE",
-      "CORE_ROUTING_STATE": "NOT_APPLICABLE",
-      "DEFAULT_SCOPE": "PROJECT",
-      "VARIANTS": []
+      "NORMALIZATION_EVIDENCE_SHA": "02efdf27f3dcf79030c578059aaee67fa3676679",
+      "FAMILY_MANIFEST_PATH": ".pcc/project-family.json",
+      "VARIANT_GOVERNANCE_STATE": "PARTIAL",
+      "CORE_ROUTING_STATE": "BLOCKED_UNRESOLVED",
+      "DEFAULT_SCOPE": null,
+      "VARIANTS": [
+        {
+          "VARIANT_ID": "AIMWWEB_CURRENT",
+          "DISPLAY_NAME": "AIMWWeb Current",
+          "TYPE": "PRIMARY",
+          "STATUS": "ACTIVE",
+          "DERIVED_FROM": null,
+          "ALIASES": ["aimwweb", "aimw web", "current aimwweb", "aspnet aimwweb"],
+          "IMPLEMENTATION_LOCATION": ".",
+          "IMPLEMENTATION_LOCATION_STATE": "MAPPED",
+          "ROUTING_STATE": "READY",
+          "BOUNDARY_EVIDENCE_SHA": "02efdf27f3dcf79030c578059aaee67fa3676679"
+        },
+        {
+          "VARIANT_ID": "LARAVEL_AIWMWEB",
+          "DISPLAY_NAME": "Laravel AIWMWeb",
+          "TYPE": "PRODUCT_VARIANT",
+          "STATUS": "ACTIVE",
+          "DERIVED_FROM": "AIMWWEB_CURRENT",
+          "ALIASES": ["laravel aiwmweb", "laravel aimw web", "aiwmweb laravel", "laravel edition"],
+          "IMPLEMENTATION_LOCATION": null,
+          "IMPLEMENTATION_LOCATION_STATE": "UNMATERIALIZED",
+          "ROUTING_STATE": "BLOCKED_UNMATERIALIZED",
+          "BOUNDARY_EVIDENCE_SHA": null
+        }
+      ]
     },
     {
       "PROJECT_ID": "NOTONLYBOOK",
