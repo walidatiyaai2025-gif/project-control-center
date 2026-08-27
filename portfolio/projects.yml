@@ -37,7 +37,7 @@
       "QA": 0,
       "STALE": 0,
       "WAITING_FOR_USER": 0,
-      "ACTIVE_TASKS": 0,
+      "ACTIVE_TASKS": 1,
       "UNTRACKED_REQUESTS": 0,
       "TOTAL_REQUIREMENTS": 0,
       "FEATURES_PLANNED": 0,
@@ -67,7 +67,54 @@
       "SCREENS": [],
       "INTEGRATION_GAP_DETAILS": [],
       "CUSTOMER_READY_FEATURE_IDS": [],
-      "TASKS": [],
+      "TASKS": [
+        {
+          "TASK_ID": "AIMWWEB-T0183",
+          "PROJECT_ID": "AIMWWEB",
+          "REQUIREMENT_ID": "ISSUE-183",
+          "FEATURE_IDS": [],
+          "SCREENS_AFFECTED": ["ALL_VISIBLE_SURFACES"],
+          "ACTIONS_AFFECTED": ["ALL_VISIBLE_ACTIONS"],
+          "TASK_TYPE": "STANDARD",
+          "TITLE": "100% UI / Runtime / Browser Closure",
+          "STATE": "IN_PROGRESS",
+          "PRIORITY": "P0",
+          "CANONICAL_BRANCH": "task/aimwweb-t0183-100-closure",
+          "BASE_BRANCH": "main",
+          "BASE_SHA": "5fb40b5045dcbff058700ab60d532703b11031c0",
+          "LATEST_PUSHED_SHA": null,
+          "WORKER_LEASE": null,
+          "TARGET_VERSION": null,
+          "RELEASED_IN_VERSION": null,
+          "SCOPE": [
+            "complete visible capability census",
+            "UI truthfulness and honest unavailable states",
+            "runtime/service/persistence closure",
+            "independent browser acceptance and failure states",
+            "REL-003 consumption and Backup/Restore reinspection",
+            "final exact-head integration and closure ledger"
+          ],
+          "NON_SCOPE": ["unrelated features", "production deployment"],
+          "ACCEPTANCE_CRITERIA": [
+            "terminal visible inventory equals 100.00%",
+            "UNKNOWN equals 0",
+            "IN_REVIEW equals 0",
+            "BLOCKED equals 0",
+            "browser-required CONTRACT_VERIFIED equals 0",
+            "final exact-main required CI is green",
+            "Issue #183 ledger matches final main"
+          ],
+          "DUPLICATE_CHECK": ["AIMWWeb Issue #183", "AIMWWeb Issue #3", "AIMWWeb PR #247"],
+          "DEPENDENCIES": ["REL-003 / AIMWWeb PR #247"],
+          "FEATURE_DELIVERY_EVIDENCE": [],
+          "EVIDENCE": [
+            "owner 100% closure mandate 2026-08-27",
+            "AIMWWeb normalized main 5fb40b5045dcbff058700ab60d532703b11031c0",
+            "PCC routing READY at b26da4e918f032663f26ad00d9feaff9cef12af6"
+          ],
+          "UPDATED_AT": "2026-08-27T00:15:00Z"
+        }
+      ],
       "POLICY_EXCEPTIONS": [],
       "BREAK_GLASS": {"ENABLED": false},
       "LAST_SYNC": "2026-08-26T20:03:43Z"
