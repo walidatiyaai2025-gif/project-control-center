@@ -59,7 +59,7 @@
       "VERSION_POLICY": "unknown-existing-project",
       "VERSION_SOURCE": "UNKNOWN",
       "MANAGED_FILES": [".pcc/managed-repository-control.json"],
-      "REQUIRE_DEFAULT_BRANCH_PROTECTION": true,
+      "REQUIRE_DEFAULT_BRANCH_PROTECTION": false,
       "BREAK_GLASS": {"ENABLED": false},
       "POLICY_EXCEPTIONS": []
     }
