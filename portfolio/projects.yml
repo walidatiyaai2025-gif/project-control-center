@@ -233,7 +233,7 @@
       "CONTROL_PLANE_MATURITY": "DISCOVERY",
       "CONTROL_PLANE_REPOSITORY": "walidatiyaai2025-gif/project-control-center",
       "CONTROL_PLANE_VERSION": "v1.6.0",
-      "CONTROL_PLANE_SHA": "e38d944e59cfd37012abced49ab0a5d9685d7549",
+      "CONTROL_PLANE_SHA": "4cc70db1dd7e038aece2c2eb1678384caca770e5",
       "DESIRED_POLICY_VERSION": "1.1.0",
       "OBSERVED_POLICY_VERSION": null,
       "ENROLLMENT_STATE": "REGISTERED",
@@ -249,7 +249,7 @@
       "BREAK_GLASS": {"ENABLED": false},
       "POLICY_EXCEPTIONS": [],
       "PRODUCTION_BRANCH": "main",
-      "PRODUCTION_SHA": "4f43f49795c4713f992d37501324ffb49a32d64a",
+      "PRODUCTION_SHA": "521493077e2599a617f077c7060f95199af3e140",
       "CANONICAL_INTEGRATION_BRANCH": null,
       "CANONICAL_INTEGRATION_SHA": null,
       "LATEST_RELEASE": null,
@@ -332,7 +332,7 @@
           "PRIORITY": "P0",
           "CANONICAL_BRANCH": "task/pcc-executive-t0001-v1",
           "BASE_BRANCH": "main",
-          "BASE_SHA": "4f43f49795c4713f992d37501324ffb49a32d64a",
+          "BASE_SHA": "521493077e2599a617f077c7060f95199af3e140",
           "LATEST_PUSHED_SHA": null,
           "WORKER_LEASE": null,
           "TARGET_VERSION": "0.1.0",
@@ -372,13 +372,13 @@
           "FEATURE_DELIVERY_EVIDENCE": [],
           "EVIDENCE": [
             "PCC Executive Issue #1",
-            "walid main foundation 4f43f49795c4713f992d37501324ffb49a32d64a",
+            "walid main post-onboarding sync 521493077e2599a617f077c7060f95199af3e140",
             "owner-approved premium UI authority and master plan"
           ],
-          "UPDATED_AT": "2026-08-27T23:20:00Z"
+          "UPDATED_AT": "2026-08-27T23:23:00Z"
         }
       ],
-      "LAST_SYNC": null
+      "LAST_SYNC": "2026-08-27T23:23:00Z"
     }
   ]
 }
