@@ -110,6 +110,24 @@
       "CORE_ROUTING_STATE": "NOT_APPLICABLE",
       "DEFAULT_SCOPE": "PROJECT",
       "VARIANTS": []
+    },
+    {
+      "PROJECT_ID": "PCCEXECUTIVE",
+      "DISPLAY_NAME": "PCC Executive",
+      "REPOSITORY": "walidatiyaai2025-gif/walid",
+      "PROJECT_MODEL": "STANDALONE",
+      "ALIASES": ["pcc executive", "pcc executive desktop", "project commander", "ai project commander", "walid"],
+      "ROUTING_REQUIRED": true,
+      "CONSTITUTION_PATH": "AGENTS.md",
+      "CONSTITUTION_STATE": "READY",
+      "CONSTITUTION_SOURCE_SHA": "b20ac9c8feed736822678cab8aa2ff207f9207cb",
+      "ONBOARDING_NORMALIZATION_STATE": "READY",
+      "NORMALIZATION_EVIDENCE_SHA": "a12c8b822fe412c9f281d6e6d2f9f10faee4e0fc",
+      "FAMILY_MANIFEST_PATH": null,
+      "VARIANT_GOVERNANCE_STATE": "NOT_APPLICABLE",
+      "CORE_ROUTING_STATE": "NOT_APPLICABLE",
+      "DEFAULT_SCOPE": "PROJECT",
+      "VARIANTS": []
     }
   ]
 }
