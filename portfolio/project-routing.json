@@ -10,10 +10,10 @@
       "ALIASES": ["aimwweb", "aimw web"],
       "ROUTING_REQUIRED": true,
       "CONSTITUTION_PATH": "AGENTS.md",
-      "CONSTITUTION_STATE": "PENDING",
-      "CONSTITUTION_SOURCE_SHA": "02efdf27f3dcf79030c578059aaee67fa3676679",
+      "CONSTITUTION_STATE": "READY",
+      "CONSTITUTION_SOURCE_SHA": "2f5c4c24cb01dd0ffafdce3f394e6d4f5bdae38e",
       "ONBOARDING_NORMALIZATION_STATE": "READY",
-      "NORMALIZATION_EVIDENCE_SHA": "02efdf27f3dcf79030c578059aaee67fa3676679",
+      "NORMALIZATION_EVIDENCE_SHA": "2f5c4c24cb01dd0ffafdce3f394e6d4f5bdae38e",
       "FAMILY_MANIFEST_PATH": ".pcc/project-family.json",
       "VARIANT_GOVERNANCE_STATE": "PARTIAL",
       "CORE_ROUTING_STATE": "BLOCKED_UNRESOLVED",
@@ -38,10 +38,10 @@
           "STATUS": "ACTIVE",
           "DERIVED_FROM": "AIMWWEB_CURRENT",
           "ALIASES": ["laravel aiwmweb", "laravel aimw web", "aiwmweb laravel", "laravel edition"],
-          "IMPLEMENTATION_LOCATION": null,
-          "IMPLEMENTATION_LOCATION_STATE": "UNMATERIALIZED",
-          "ROUTING_STATE": "BLOCKED_UNMATERIALIZED",
-          "BOUNDARY_EVIDENCE_SHA": null
+          "IMPLEMENTATION_LOCATION": "variants/laravel-aiwmweb",
+          "IMPLEMENTATION_LOCATION_STATE": "MAPPED",
+          "ROUTING_STATE": "READY",
+          "BOUNDARY_EVIDENCE_SHA": "2f5c4c24cb01dd0ffafdce3f394e6d4f5bdae38e"
         }
       ]
     },
