@@ -67,6 +67,24 @@
           "VARIANT_ISOLATION_REQUIRED": true
         }
       ]
+    },
+    {
+      "PROJECT_ID": "MODRIK",
+      "DISPLAY_NAME": "MODRIK",
+      "REPOSITORY": "walidatiyaai2025-gif/Modrik",
+      "PROJECT_MODEL": "STANDALONE",
+      "ALIASES": ["modrik", "مدرك", "مُدرك"],
+      "ROUTING_REQUIRED": true,
+      "CONSTITUTION_PATH": "AGENTS.md",
+      "CONSTITUTION_STATE": "READY",
+      "CONSTITUTION_SOURCE_SHA": "7469f3a0879152fbda0a63ac74ae137777d95c5c",
+      "ONBOARDING_NORMALIZATION_STATE": "READY",
+      "NORMALIZATION_EVIDENCE_SHA": "88d3df1f443e76bf22e420fb647ba18990c07cf2",
+      "FAMILY_MANIFEST_PATH": null,
+      "VARIANT_GOVERNANCE_STATE": "NOT_APPLICABLE",
+      "CORE_ROUTING_STATE": "NOT_APPLICABLE",
+      "DEFAULT_SCOPE": "PROJECT",
+      "VARIANTS": []
     }
   ]
 }
