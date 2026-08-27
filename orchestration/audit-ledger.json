@@ -41,6 +41,21 @@
       "RESULT": "RECONCILED_READ_ONLY",
       "TARGET_MUTATED": false,
       "TIMESTAMP": "2026-08-25T10:20:00Z"
+    },
+    {
+      "PROJECT_ID": "NOTONLYBOOK",
+      "OPERATION_KEY": "owner-monitor-target-arabiaswonders-20260827",
+      "TYPE": "MONITOR_TARGET_CHANGE",
+      "ACTOR": "OWNER",
+      "AUTH_PROVIDER": "connector/write",
+      "RESULT": "ARABIASWONDERS_SELECTED",
+      "TARGET_MUTATED": false,
+      "OLD_MONITOR_TARGET": "NOTONLYBOOK",
+      "NEW_MONITOR_TARGET": "ARABIASWONDERS",
+      "TARGET_SCOPE": "VARIANT",
+      "TARGET_REPOSITORY": "walidatiyaai2025-gif/notonlybook",
+      "TARGET_ROUTING_STATE": "BLOCKED_UNRESOLVED",
+      "TIMESTAMP": "2026-08-27T00:20:00Z"
     }
   ]
 }
