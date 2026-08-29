@@ -1,7 +1,7 @@
 {
   "CONTROL_PLANE_VERSION": "v1.6.0",
   "ROUTING_CONTRACT_VERSION": "1.2.0",
-  "PCC_SOURCE_SHA": "b936d7b0813535cc6083610730f108f0e340d777",
+  "PCC_SOURCE_SHA": "06ec65f11beab84e3c100bc914bb4dd59bd00895",
   "PROJECT_ID": "GPTDESKTOP",
   "REPOSITORY": "walidatiyaai2025-gif/GPTDeskTop",
   "PROJECT_MODEL": "STANDALONE",
@@ -9,99 +9,218 @@
   "CANONICAL_DEVELOPMENT_LINEAGE": "ui/premium-real-runtime-v1",
   "CANONICAL_DEVELOPMENT_HEAD": "2a7246e6d5da498a9c35abf2c20ce971df7bc7cc",
   "CONSTITUTION_PATH": "AGENTS.md",
-  "READ_FIRST_COMMON": [
-    "AGENTS.md",
-    "docs/PREMIUM_UI_DESIGN_CONTRACT.md",
-    "docs/PREMIUM_UI_MASTER_PLAN.md",
-    "docs/PREMIUM_UI_PROGRESS.json"
-  ],
   "WRITE_GATE": {
-    "POLICY_ENFORCEMENT_MODE": "CANARY",
-    "WRITE_AUTHORIZED": true,
-    "BREAK_GLASS": false
+    "POLICY_ENFORCEMENT_MODE": "OBSERVE",
+    "CANARY": false,
+    "WRITE_AUTHORIZED": false,
+    "BREAK_GLASS": false,
+    "SEMANTICS": "WRITE_AUTHORIZED is the autonomous fleet-mutation gate. Owner-routed implementation authority is carried by the canonical PCC task, resolved lineage, routing packet, and change boundary."
   },
   "PRESERVED_UNMERGED_WORK": [
     {
       "PR": 323,
       "BRANCH": "agent/handoff-continuity-checkpoint",
       "HEAD": "25c5371a39e690ab0ebf9a0068b771d7be796d71",
-      "RELATION_TO_PREMIUM_LINEAGE": "DIVERGED",
-      "REQUIREMENT": "Do not discard. Runtime closure worker must inspect and reconcile any still-required handoff-continuity behavior before final handoff."
+      "RELATION_TO_PREMIUM_LINEAGE": "DIVERGED_13_UNIQUE_COMMITS",
+      "REQUIREMENT": "Do not discard. Task 1 must inspect and reconcile still-required fresh-chat handoff continuity before completion."
     }
   ],
   "PACKETS": [
     {
-      "TASK_ID": "GPTDESKTOP-FINAL-RUNTIME-CLOSURE",
+      "PCC_SOURCE_SHA": "06ec65f11beab84e3c100bc914bb4dd59bd00895",
+      "PROJECT_ID": "GPTDESKTOP",
+      "REPOSITORY": "walidatiyaai2025-gif/GPTDeskTop",
+      "PROJECT_MODEL": "STANDALONE",
+      "TASK_ID": "GPTDESKTOP-T0001-RUNTIME-CLOSURE",
+      "TARGET_SCOPE": "PROJECT",
       "ROUTING_STATUS": "READY",
+      "CONSTITUTION_PATH": "AGENTS.md",
       "CANONICAL_TASK_BRANCH": "worker/gptdesktop-final-runtime-closure",
-      "CANONICAL_IMPLEMENTATION_BASE": "ui/premium-real-runtime-v1",
-      "CANONICAL_IMPLEMENTATION_BASE_SHA": "2a7246e6d5da498a9c35abf2c20ce971df7bc7cc",
-      "CHANGE_BOUNDARY": "PROJECT_RUNTIME_CLOSURE_ONLY",
-      "OWNERSHIP": ["QA-RL-001", "QA-SEND-001", "runtime half QA-E2E-001"],
+      "BASE_BRANCH": "ui/premium-real-runtime-v1",
+      "BASE_SHA": "2a7246e6d5da498a9c35abf2c20ce971df7bc7cc",
+      "CHANGE_BOUNDARY": [
+        "QA-RL-001",
+        "QA-SEND-001",
+        "runtime half QA-E2E-001",
+        "global serialized send",
+        "durable global rate-limit state",
+        "restart cooldown recovery",
+        "real >=5 second send-gap evidence",
+        "exactly-once preservation",
+        "autonomous-task runtime",
+        "conversation rollover/runtime recovery",
+        "PR #323 / MON-015 continuity reconciliation"
+      ],
       "READ_FIRST": [
         "AGENTS.md",
+        ".pcc/managed-repository-control.json",
         "docs/PREMIUM_UI_MASTER_PLAN.md",
         "docs/PREMIUM_UI_PROGRESS.json",
-        "GPTDeskTop PR #323 and its six changed files"
+        "GPTDeskTop PR #325 @ 121c3a2efcecd0e5ca5d4936836d8d4ea9114ff7",
+        "GPTDeskTop PR #323 @ 25c5371a39e690ab0ebf9a0068b771d7be796d71"
       ],
-      "DO_NOT_TOUCH": ["premium UI redesign", "installer lifecycle ownership"],
+      "DO_NOT_TOUCH": [
+        "premium UI design",
+        "Projects UI",
+        "Development Messages UI",
+        "GitHub/Git UI",
+        "installer lifecycle"
+      ],
       "REQUIRED_VALIDATION": [
         "exact-head runtime regression suite",
-        "serialized-send and five-second-gap evidence",
-        "rate-limit restart/backoff evidence",
-        "autonomous task / exactly-once / rollover / wrong-chat evidence",
-        "explicit PR #323 reconciliation decision with no unique required work discarded"
+        "QA-RL-001 durable restart/backoff evidence",
+        "QA-SEND-001 real wall-clock >=5000ms serialized send-gap evidence",
+        "exactly-once and uncertain-send reconciliation evidence",
+        "autonomous task and conversation rollover/runtime recovery evidence",
+        "explicit PR #323 / MON-015 reconciliation with no unique required work discarded"
       ],
-      "REQUIRED_HANDOFF": ["exact HEAD", "PR number", "validation evidence", "PR #323 reconciliation result"]
+      "REQUIRED_HANDOFF": [
+        "exact HEAD SHA",
+        "PR number",
+        "tests passed/total",
+        "QA-RL-001 result",
+        "QA-SEND-001 result",
+        "runtime QA-E2E-001 result",
+        "PR #323 reconciliation result",
+        "integration notes for Task 3"
+      ],
+      "LIVE_WORK": {
+        "PR": 325,
+        "HEAD": "121c3a2efcecd0e5ca5d4936836d8d4ea9114ff7"
+      }
     },
     {
-      "TASK_ID": "GPTDESKTOP-FINAL-UI-PRODUCT-CLOSURE",
+      "PCC_SOURCE_SHA": "06ec65f11beab84e3c100bc914bb4dd59bd00895",
+      "PROJECT_ID": "GPTDESKTOP",
+      "REPOSITORY": "walidatiyaai2025-gif/GPTDeskTop",
+      "PROJECT_MODEL": "STANDALONE",
+      "TASK_ID": "GPTDESKTOP-T0002-UI-PRODUCT-CLOSURE",
+      "TARGET_SCOPE": "PROJECT",
       "ROUTING_STATUS": "READY",
+      "CONSTITUTION_PATH": "AGENTS.md",
       "CANONICAL_TASK_BRANCH": "worker/gptdesktop-final-ui-product-closure",
-      "CANONICAL_IMPLEMENTATION_BASE": "ui/premium-real-runtime-v1",
-      "CANONICAL_IMPLEMENTATION_BASE_SHA": "2a7246e6d5da498a9c35abf2c20ce971df7bc7cc",
-      "CHANGE_BOUNDARY": "PROJECT_UI_PRODUCT_CLOSURE_ONLY",
-      "OWNERSHIP": ["QA-UI-001", "Section 06 Projects", "Section 07 Development Messages", "Section 08 GitHub / Git Settings", "Section 11 Visual Parity / Responsiveness"],
+      "BASE_BRANCH": "ui/premium-real-runtime-v1",
+      "BASE_SHA": "2a7246e6d5da498a9c35abf2c20ce971df7bc7cc",
+      "CHANGE_BOUNDARY": [
+        "QA-UI-001",
+        "Section 06 Projects",
+        "Section 07 Development Messages",
+        "Section 08 GitHub / Git Settings",
+        "Section 11 Visual Parity / Responsiveness",
+        "single embedded content destination",
+        "actual rendered UI acceptance evidence",
+        "1366x768 100%",
+        "1600x900 100%",
+        "1920x1080 100%",
+        "1920x1080 125% DPI equivalent",
+        "multiline interaction",
+        "Projects acceptance",
+        "Development Messages acceptance",
+        "GitHub/Git acceptance",
+        "approved design parity"
+      ],
       "READ_FIRST": [
         "AGENTS.md",
-        "docs/PREMIUM_UI_DESIGN_CONTRACT.md",
-        "docs/PREMIUM_UI_MASTER_PLAN.md",
-        "docs/PREMIUM_UI_PROGRESS.json"
-      ],
-      "DO_NOT_TOUCH": ["global send architecture", "runtime send redesign", "installer lifecycle ownership"],
-      "REQUIRED_VALIDATION": [
-        "exact-head UI regression tests",
-        "Sections 06/07/08 functional truth evidence",
-        "Section 11 visual/responsive evidence",
-        "no unapproved design deviation"
-      ],
-      "REQUIRED_HANDOFF": ["exact HEAD", "PR number", "QA-UI-001 evidence", "section-by-section closure evidence"]
-    },
-    {
-      "TASK_ID": "GPTDESKTOP-FINAL-INTEGRATION-CLOSURE",
-      "ROUTING_STATUS": "BLOCKED_PENDING_HANDOFF",
-      "CANONICAL_TASK_BRANCH": "integration/gptdesktop-final-100-closure",
-      "CANONICAL_IMPLEMENTATION_BASE": "ui/premium-real-runtime-v1",
-      "CANONICAL_IMPLEMENTATION_BASE_SHA": "2a7246e6d5da498a9c35abf2c20ce971df7bc7cc",
-      "ACTIVATION_CONDITION": "ONLY AFTER GPTDESKTOP-FINAL-RUNTIME-CLOSURE and GPTDESKTOP-FINAL-UI-PRODUCT-CLOSURE each publish exact HEAD + PR",
-      "CHANGE_BOUNDARY": "FINAL_COMPOSITION_RELEASE_ACCEPTANCE_ONLY",
-      "OWNERSHIP": ["QA-REL-001", "composition half QA-E2E-001", "final exact-head release acceptance"],
-      "READ_FIRST": [
-        "AGENTS.md",
+        ".pcc/managed-repository-control.json",
         "docs/PREMIUM_UI_DESIGN_CONTRACT.md",
         "docs/PREMIUM_UI_MASTER_PLAN.md",
         "docs/PREMIUM_UI_PROGRESS.json",
-        "Worker 1 exact HEAD + PR handoff",
-        "Worker 2 exact HEAD + PR handoff"
+        "docs/ui-reference/APPROVED_PREMIUM_DASHBOARD_REFERENCE.jpg"
       ],
-      "DO_NOT_TOUCH": ["do not start before activation condition", "do not discard unique unmerged work", "do not bypass exact-head QA/release gates"],
+      "DO_NOT_TOUCH": [
+        "global send architecture",
+        "rate-limit engine",
+        "serial send coordinator",
+        "installer lifecycle"
+      ],
       "REQUIRED_VALIDATION": [
-        "QA-REL-001 installer lifecycle",
-        "composed QA-E2E-001",
-        "exact-head Windows build and setup provenance",
-        "clean install / installed EXE / uninstall / reinstall / data preservation evidence"
+        "UI regression tests",
+        "single-surface tests",
+        "navigation tests",
+        "responsive tests",
+        "DPI tests",
+        "Monitor Settings multiline interaction tests",
+        "Projects acceptance",
+        "Development Messages acceptance",
+        "GitHub/Git acceptance",
+        "Release x64 build",
+        "machine-readable real rendered UI evidence manifest"
       ],
-      "REQUIRED_HANDOFF": ["final exact source SHA", "integration PR", "release evidence", "installer lifecycle receipt"]
+      "REQUIRED_HANDOFF": [
+        "exact HEAD SHA",
+        "PR number",
+        "QA-UI-001 result",
+        "all four resolution/DPI results",
+        "single-surface result",
+        "multiline result",
+        "Projects result",
+        "Development Messages result",
+        "GitHub/Git result",
+        "design parity result",
+        "UI evidence artifact location",
+        "tests passed/total",
+        "integration notes for Task 3"
+      ]
+    },
+    {
+      "PCC_SOURCE_SHA": "06ec65f11beab84e3c100bc914bb4dd59bd00895",
+      "PROJECT_ID": "GPTDESKTOP",
+      "REPOSITORY": "walidatiyaai2025-gif/GPTDeskTop",
+      "PROJECT_MODEL": "STANDALONE",
+      "TASK_ID": "GPTDESKTOP-T0003-FINAL-INTEGRATION",
+      "TARGET_SCOPE": "PROJECT",
+      "ROUTING_STATUS": "BLOCKED_PENDING_DEPENDENCIES",
+      "CONSTITUTION_PATH": "AGENTS.md",
+      "CANONICAL_TASK_BRANCH": "integration/gptdesktop-final-100-closure",
+      "BASE_BRANCH": "ui/premium-real-runtime-v1",
+      "BASE_SHA": "2a7246e6d5da498a9c35abf2c20ce971df7bc7cc",
+      "DEPENDENCIES": [
+        "GPTDESKTOP-T0001-RUNTIME-CLOSURE",
+        "GPTDESKTOP-T0002-UI-PRODUCT-CLOSURE"
+      ],
+      "ACTIVATION_CONDITION": "Both dependencies must provide exact HEAD + PR before this task becomes READY.",
+      "CHANGE_BOUNDARY": [
+        "QA-REL-001",
+        "composition side QA-E2E-001",
+        "full installer lifecycle",
+        "exact-head release acceptance",
+        "final master-plan reconciliation"
+      ],
+      "READ_FIRST": [
+        "AGENTS.md",
+        ".pcc/managed-repository-control.json",
+        "docs/PREMIUM_UI_DESIGN_CONTRACT.md",
+        "docs/PREMIUM_UI_MASTER_PLAN.md",
+        "docs/PREMIUM_UI_PROGRESS.json",
+        "Task 1 exact HEAD + PR handoff",
+        "Task 2 exact HEAD + PR handoff"
+      ],
+      "DO_NOT_TOUCH": [
+        "do not start before dependency activation",
+        "do not discard unique unmerged work",
+        "do not bypass exact-head QA/release gates",
+        "do not merge product implementation PRs without integration authority"
+      ],
+      "REQUIRED_VALIDATION": [
+        "QA-REL-001 full installer lifecycle",
+        "composed QA-E2E-001",
+        "exact-head Windows x64 build",
+        "clean install",
+        "reinstall/upgrade",
+        "uninstall",
+        "data-preservation evidence",
+        "exact source SHA / package provenance",
+        "final PREMIUM_UI_MASTER_PLAN reconciliation"
+      ],
+      "REQUIRED_HANDOFF": [
+        "final exact source SHA",
+        "integration PR",
+        "QA-REL-001 result",
+        "composed QA-E2E-001 result",
+        "installer lifecycle receipt",
+        "release provenance",
+        "final master-plan 100% reconciliation or exact blockers"
+      ]
     }
   ]
 }

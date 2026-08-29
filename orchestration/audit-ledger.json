@@ -140,6 +140,33 @@
       ],
       "INTEGRATION_ACTIVATION_CONDITION": "ONLY_AFTER_WORKER_1_AND_WORKER_2_PUBLISH_EXACT_HEAD_AND_PR",
       "TIMESTAMP": "2026-08-29T19:27:00Z"
+    },
+    {
+      "PROJECT_ID": "GPTDESKTOP",
+      "OPERATION_KEY": "owner-correct-gptdesktop-final-routing-20260829",
+      "TYPE": "GOVERNANCE_CORRECTION",
+      "ACTOR": "OWNER",
+      "AUTH_PROVIDER": "connector/write",
+      "RESULT": "OBSERVE_OWNER_ROUTED_IMPLEMENTATION_AUTHORITY",
+      "TARGET_MUTATED": false,
+      "SUPERSEDES_OPERATION_KEYS": [
+        "owner-promote-gptdesktop-canary-write-20260829",
+        "owner-route-gptdesktop-final-closure-20260829"
+      ],
+      "POLICY_ENFORCEMENT_MODE": "OBSERVE",
+      "CANARY": false,
+      "WRITE_AUTHORIZED": false,
+      "WRITE_AUTHORIZED_SEMANTICS": "fleet autonomous mutation gate, not owner-routed task permission",
+      "CANONICAL_DEVELOPMENT_LINEAGE": "ui/premium-real-runtime-v1",
+      "CANONICAL_BASE_SHA": "2a7246e6d5da498a9c35abf2c20ce971df7bc7cc",
+      "TASKS": [
+        "GPTDESKTOP-T0001-RUNTIME-CLOSURE",
+        "GPTDESKTOP-T0002-UI-PRODUCT-CLOSURE",
+        "GPTDESKTOP-T0003-FINAL-INTEGRATION"
+      ],
+      "BLOCKED_TASKS": ["GPTDESKTOP-T0003-FINAL-INTEGRATION"],
+      "UNIQUE_WORK_PRESERVED": ["GPTDeskTop PR #323 / agent/handoff-continuity-checkpoint / 25c5371a39e690ab0ebf9a0068b771d7be796d71"],
+      "TIMESTAMP": "2026-08-29T19:33:30Z"
     }
   ]
 }
