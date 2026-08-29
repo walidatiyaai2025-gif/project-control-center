@@ -1,0 +1,107 @@
+{
+  "CONTROL_PLANE_VERSION": "v1.6.0",
+  "ROUTING_CONTRACT_VERSION": "1.2.0",
+  "PCC_SOURCE_SHA": "b936d7b0813535cc6083610730f108f0e340d777",
+  "PROJECT_ID": "GPTDESKTOP",
+  "REPOSITORY": "walidatiyaai2025-gif/GPTDeskTop",
+  "PROJECT_MODEL": "STANDALONE",
+  "TARGET_SCOPE": "PROJECT",
+  "CANONICAL_DEVELOPMENT_LINEAGE": "ui/premium-real-runtime-v1",
+  "CANONICAL_DEVELOPMENT_HEAD": "2a7246e6d5da498a9c35abf2c20ce971df7bc7cc",
+  "CONSTITUTION_PATH": "AGENTS.md",
+  "READ_FIRST_COMMON": [
+    "AGENTS.md",
+    "docs/PREMIUM_UI_DESIGN_CONTRACT.md",
+    "docs/PREMIUM_UI_MASTER_PLAN.md",
+    "docs/PREMIUM_UI_PROGRESS.json"
+  ],
+  "WRITE_GATE": {
+    "POLICY_ENFORCEMENT_MODE": "CANARY",
+    "WRITE_AUTHORIZED": true,
+    "BREAK_GLASS": false
+  },
+  "PRESERVED_UNMERGED_WORK": [
+    {
+      "PR": 323,
+      "BRANCH": "agent/handoff-continuity-checkpoint",
+      "HEAD": "25c5371a39e690ab0ebf9a0068b771d7be796d71",
+      "RELATION_TO_PREMIUM_LINEAGE": "DIVERGED",
+      "REQUIREMENT": "Do not discard. Runtime closure worker must inspect and reconcile any still-required handoff-continuity behavior before final handoff."
+    }
+  ],
+  "PACKETS": [
+    {
+      "TASK_ID": "GPTDESKTOP-FINAL-RUNTIME-CLOSURE",
+      "ROUTING_STATUS": "READY",
+      "CANONICAL_TASK_BRANCH": "worker/gptdesktop-final-runtime-closure",
+      "CANONICAL_IMPLEMENTATION_BASE": "ui/premium-real-runtime-v1",
+      "CANONICAL_IMPLEMENTATION_BASE_SHA": "2a7246e6d5da498a9c35abf2c20ce971df7bc7cc",
+      "CHANGE_BOUNDARY": "PROJECT_RUNTIME_CLOSURE_ONLY",
+      "OWNERSHIP": ["QA-RL-001", "QA-SEND-001", "runtime half QA-E2E-001"],
+      "READ_FIRST": [
+        "AGENTS.md",
+        "docs/PREMIUM_UI_MASTER_PLAN.md",
+        "docs/PREMIUM_UI_PROGRESS.json",
+        "GPTDeskTop PR #323 and its six changed files"
+      ],
+      "DO_NOT_TOUCH": ["premium UI redesign", "installer lifecycle ownership"],
+      "REQUIRED_VALIDATION": [
+        "exact-head runtime regression suite",
+        "serialized-send and five-second-gap evidence",
+        "rate-limit restart/backoff evidence",
+        "autonomous task / exactly-once / rollover / wrong-chat evidence",
+        "explicit PR #323 reconciliation decision with no unique required work discarded"
+      ],
+      "REQUIRED_HANDOFF": ["exact HEAD", "PR number", "validation evidence", "PR #323 reconciliation result"]
+    },
+    {
+      "TASK_ID": "GPTDESKTOP-FINAL-UI-PRODUCT-CLOSURE",
+      "ROUTING_STATUS": "READY",
+      "CANONICAL_TASK_BRANCH": "worker/gptdesktop-final-ui-product-closure",
+      "CANONICAL_IMPLEMENTATION_BASE": "ui/premium-real-runtime-v1",
+      "CANONICAL_IMPLEMENTATION_BASE_SHA": "2a7246e6d5da498a9c35abf2c20ce971df7bc7cc",
+      "CHANGE_BOUNDARY": "PROJECT_UI_PRODUCT_CLOSURE_ONLY",
+      "OWNERSHIP": ["QA-UI-001", "Section 06 Projects", "Section 07 Development Messages", "Section 08 GitHub / Git Settings", "Section 11 Visual Parity / Responsiveness"],
+      "READ_FIRST": [
+        "AGENTS.md",
+        "docs/PREMIUM_UI_DESIGN_CONTRACT.md",
+        "docs/PREMIUM_UI_MASTER_PLAN.md",
+        "docs/PREMIUM_UI_PROGRESS.json"
+      ],
+      "DO_NOT_TOUCH": ["global send architecture", "runtime send redesign", "installer lifecycle ownership"],
+      "REQUIRED_VALIDATION": [
+        "exact-head UI regression tests",
+        "Sections 06/07/08 functional truth evidence",
+        "Section 11 visual/responsive evidence",
+        "no unapproved design deviation"
+      ],
+      "REQUIRED_HANDOFF": ["exact HEAD", "PR number", "QA-UI-001 evidence", "section-by-section closure evidence"]
+    },
+    {
+      "TASK_ID": "GPTDESKTOP-FINAL-INTEGRATION-CLOSURE",
+      "ROUTING_STATUS": "BLOCKED_PENDING_HANDOFF",
+      "CANONICAL_TASK_BRANCH": "integration/gptdesktop-final-100-closure",
+      "CANONICAL_IMPLEMENTATION_BASE": "ui/premium-real-runtime-v1",
+      "CANONICAL_IMPLEMENTATION_BASE_SHA": "2a7246e6d5da498a9c35abf2c20ce971df7bc7cc",
+      "ACTIVATION_CONDITION": "ONLY AFTER GPTDESKTOP-FINAL-RUNTIME-CLOSURE and GPTDESKTOP-FINAL-UI-PRODUCT-CLOSURE each publish exact HEAD + PR",
+      "CHANGE_BOUNDARY": "FINAL_COMPOSITION_RELEASE_ACCEPTANCE_ONLY",
+      "OWNERSHIP": ["QA-REL-001", "composition half QA-E2E-001", "final exact-head release acceptance"],
+      "READ_FIRST": [
+        "AGENTS.md",
+        "docs/PREMIUM_UI_DESIGN_CONTRACT.md",
+        "docs/PREMIUM_UI_MASTER_PLAN.md",
+        "docs/PREMIUM_UI_PROGRESS.json",
+        "Worker 1 exact HEAD + PR handoff",
+        "Worker 2 exact HEAD + PR handoff"
+      ],
+      "DO_NOT_TOUCH": ["do not start before activation condition", "do not discard unique unmerged work", "do not bypass exact-head QA/release gates"],
+      "REQUIRED_VALIDATION": [
+        "QA-REL-001 installer lifecycle",
+        "composed QA-E2E-001",
+        "exact-head Windows build and setup provenance",
+        "clean install / installed EXE / uninstall / reinstall / data preservation evidence"
+      ],
+      "REQUIRED_HANDOFF": ["final exact source SHA", "integration PR", "release evidence", "installer lifecycle receipt"]
+    }
+  ]
+}
