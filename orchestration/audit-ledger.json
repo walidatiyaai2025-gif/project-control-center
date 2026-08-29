@@ -88,6 +88,23 @@
       "POLICY_ENFORCEMENT_MODE": "OBSERVE",
       "NORMALIZATION_EVIDENCE_SHA": "88d3df1f443e76bf22e420fb647ba18990c07cf2",
       "TIMESTAMP": "2026-08-27T01:20:00Z"
+    },
+    {
+      "PROJECT_ID": "GPTDESKTOP",
+      "OPERATION_KEY": "owner-onboard-gptdesktop-20260829",
+      "TYPE": "ENROLLMENT",
+      "ACTOR": "OWNER",
+      "AUTH_PROVIDER": "connector/write",
+      "RESULT": "REGISTERED_STANDALONE",
+      "TARGET_MUTATED": true,
+      "TARGET_REPOSITORY": "walidatiyaai2025-gif/GPTDeskTop",
+      "PROJECT_MODEL": "STANDALONE",
+      "TARGET_SCOPE": "PROJECT",
+      "POLICY_ENFORCEMENT_MODE": "OBSERVE",
+      "MONITOR_ENROLLED": true,
+      "CONSTITUTION_SOURCE_SHA": "61b7ef91f53a7f4e1312da770fbbe88f7d21068f",
+      "NORMALIZATION_EVIDENCE_SHA": "61b7ef91f53a7f4e1312da770fbbe88f7d21068f",
+      "TIMESTAMP": "2026-08-29T17:42:32Z"
     }
   ]
 }
