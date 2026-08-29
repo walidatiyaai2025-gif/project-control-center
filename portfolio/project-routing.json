@@ -128,6 +128,24 @@
       "CORE_ROUTING_STATE": "NOT_APPLICABLE",
       "DEFAULT_SCOPE": "PROJECT",
       "VARIANTS": []
+    },
+    {
+      "PROJECT_ID": "GPTDESKTOP",
+      "DISPLAY_NAME": "GPTDeskTop",
+      "REPOSITORY": "walidatiyaai2025-gif/GPTDeskTop",
+      "PROJECT_MODEL": "STANDALONE",
+      "ALIASES": ["gptdesktop", "gpt desktop", "gpt desk top"],
+      "ROUTING_REQUIRED": true,
+      "CONSTITUTION_PATH": "AGENTS.md",
+      "CONSTITUTION_STATE": "READY",
+      "CONSTITUTION_SOURCE_SHA": "61b7ef91f53a7f4e1312da770fbbe88f7d21068f",
+      "ONBOARDING_NORMALIZATION_STATE": "READY",
+      "NORMALIZATION_EVIDENCE_SHA": "61b7ef91f53a7f4e1312da770fbbe88f7d21068f",
+      "FAMILY_MANIFEST_PATH": null,
+      "VARIANT_GOVERNANCE_STATE": "NOT_APPLICABLE",
+      "CORE_ROUTING_STATE": "NOT_APPLICABLE",
+      "DEFAULT_SCOPE": "PROJECT",
+      "VARIANTS": []
     }
   ]
 }
