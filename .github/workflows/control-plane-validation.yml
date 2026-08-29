@@ -59,4 +59,5 @@ jobs:
             schemas/release-handoff.schema.json
           )
           while IFS= read -r f; do files+=("$f"); done < <(find orchestration/baselines orchestration/reconciliation -maxdepth 1 -type f -name '*.json' | sort)
+          while IFS= read -r f; do files+=("$f"); done < <(find orchestration/routing-packets -maxdepth 1 -type f -name '*.json' | sort)
           for f in "${files[@]}"; do python -m json.tool "$f" > /dev/null; done

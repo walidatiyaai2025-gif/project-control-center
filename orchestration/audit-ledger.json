@@ -105,6 +105,41 @@
       "CONSTITUTION_SOURCE_SHA": "61b7ef91f53a7f4e1312da770fbbe88f7d21068f",
       "NORMALIZATION_EVIDENCE_SHA": "61b7ef91f53a7f4e1312da770fbbe88f7d21068f",
       "TIMESTAMP": "2026-08-29T17:42:32Z"
+    },
+    {
+      "PROJECT_ID": "GPTDESKTOP",
+      "OPERATION_KEY": "owner-promote-gptdesktop-canary-write-20260829",
+      "TYPE": "WRITE_GATE_PROMOTION",
+      "ACTOR": "OWNER",
+      "AUTH_PROVIDER": "connector/write",
+      "RESULT": "CANARY_WRITE_AUTHORIZED",
+      "TARGET_MUTATED": false,
+      "OLD_POLICY_ENFORCEMENT_MODE": "OBSERVE",
+      "NEW_POLICY_ENFORCEMENT_MODE": "CANARY",
+      "WRITE_AUTHORIZED": true,
+      "CANONICAL_DEVELOPMENT_LINEAGE": "ui/premium-real-runtime-v1",
+      "CANONICAL_LINEAGE_HEAD": "2a7246e6d5da498a9c35abf2c20ce971df7bc7cc",
+      "UNIQUE_WORK_PRESERVED": ["GPTDeskTop PR #323 / agent/handoff-continuity-checkpoint / 25c5371a39e690ab0ebf9a0068b771d7be796d71"],
+      "BREAK_GLASS_USED": false,
+      "TIMESTAMP": "2026-08-29T19:27:00Z"
+    },
+    {
+      "PROJECT_ID": "GPTDESKTOP",
+      "OPERATION_KEY": "owner-route-gptdesktop-final-closure-20260829",
+      "TYPE": "ROUTING_AUTHORITY",
+      "ACTOR": "OWNER",
+      "AUTH_PROVIDER": "connector/write",
+      "RESULT": "FINAL_CLOSURE_TASKS_RECORDED",
+      "TARGET_MUTATED": false,
+      "TARGET_SCOPE": "PROJECT",
+      "CANONICAL_DEVELOPMENT_LINEAGE": "ui/premium-real-runtime-v1",
+      "TASKS": [
+        "GPTDESKTOP-FINAL-RUNTIME-CLOSURE",
+        "GPTDESKTOP-FINAL-UI-PRODUCT-CLOSURE",
+        "GPTDESKTOP-FINAL-INTEGRATION-CLOSURE"
+      ],
+      "INTEGRATION_ACTIVATION_CONDITION": "ONLY_AFTER_WORKER_1_AND_WORKER_2_PUBLISH_EXACT_HEAD_AND_PR",
+      "TIMESTAMP": "2026-08-29T19:27:00Z"
     }
   ]
 }
