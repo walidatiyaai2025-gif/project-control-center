@@ -1,0 +1,78 @@
+{
+  "CONTROL_PLANE_VERSION": "v1.6.0",
+  "ROUTING_CONTRACT_VERSION": "1.2.0",
+  "PCC_SOURCE_SHA": "c94243cd44b364661208a0f1d80c7f008b1fb720",
+  "PROJECT_ID": "GPTDESKTOP",
+  "REPOSITORY": "walidatiyaai2025-gif/GPTDeskTop",
+  "PROJECT_MODEL": "STANDALONE",
+  "TASK_ID": "GPTDESKTOP-T0004-DEVELOPMENT-PLAN-AUTONOMY",
+  "ISSUE": 330,
+  "TARGET_SCOPE": "PROJECT",
+  "ROUTING_STATUS": "READY",
+  "CONSTITUTION_PATH": "AGENTS.md",
+  "CANONICAL_TASK_BRANCH": "feature/gptdesktop-development-plan-autonomy",
+  "BASE_BRANCH": "integration/gptdesktop-final-100-closure",
+  "BASE_SHA": "8f66e07a8f20fcf3e4d5ec2646e3bad9e0fd4799",
+  "OWNER_AMENDMENT": "Development Messages becomes an optional monitor auto-reply plan source. A per-monitor Settings checkbox explicitly opts a monitor into the DevelopmentTaskEngine plan; when opted in, the monitor's legacy single AutoReply is suppressed so there is one canonical delivery owner.",
+  "CHANGE_BOUNDARY": [
+    "Development Messages plan import/export/paste",
+    "DevelopmentTaskEngine start/progress/response-gated advancement",
+    "per-monitor Development Messages opt-in checkbox and persistence",
+    "monitor auto-reply suppression while opted into Development Messages",
+    "explicit recipient binding and actionable delivery failure state",
+    "extended-thinking safe wait behavior",
+    "restart/recovery and exactly-once plan position",
+    "required tests and release acceptance for this feature"
+  ],
+  "READ_FIRST": [
+    "AGENTS.md",
+    ".pcc/managed-repository-control.json",
+    "Issue #330",
+    "src/GPTDeskTop/Services/DevelopmentTaskEngine/**",
+    "src/GPTDeskTop/Services/ChatGptMonitorService.cs",
+    "src/GPTDeskTop/Data/LocalDatabase.cs",
+    "src/GPTDeskTop/Models/Models.cs",
+    "src/GPTDeskTop/UI/DevelopmentMessagesWorkspaceControl.cs",
+    "src/GPTDeskTop/UI/DevelopmentMessageCatalogControl.cs",
+    "monitor settings/editor UI"
+  ],
+  "DO_NOT_TOUCH": [
+    "do not create a second outbound sender",
+    "do not bypass OutboundDeliveryCoordinator serialized/exactly-once boundary",
+    "do not weaken global rate-limit handling",
+    "do not break existing AutoReply behavior when the checkbox is OFF",
+    "do not auto-target arbitrary open ChatGPT tabs that are not saved/opted-in monitors",
+    "do not merge unrelated historical PRs"
+  ],
+  "REQUIRED_VALIDATION": [
+    "checkbox persistence and migration",
+    "OFF keeps legacy AutoReply behavior",
+    "ON suppresses legacy AutoReply and enables Development Messages recipient",
+    "Start sends first plan prompt immediately when an eligible recipient is idle",
+    "zero-recipient Start/delivery surfaces actionable evidence",
+    "next plan prompt waits for verified completed assistant response",
+    "extended thinking does not advance the plan",
+    "restart resumes exact plan position without duplicate send",
+    "JSON and delimiter-based text/Markdown import",
+    "full runtime/UI regression tests",
+    "Windows x64 build",
+    "installer lifecycle and exact-head CI"
+  ],
+  "REQUIRED_HANDOFF": [
+    "exact HEAD SHA",
+    "PR number",
+    "tests passed/total",
+    "monitor opt-in evidence",
+    "plan import evidence",
+    "response-gated advancement evidence",
+    "no-duplicate-send evidence",
+    "exact-head CI run",
+    "installer/release artifact and SHA-256"
+  ],
+  "WRITE_AUTHORITY": {
+    "POLICY_ENFORCEMENT_MODE": "OBSERVE",
+    "FLEET_WRITE_AUTHORIZED": false,
+    "OWNER_ROUTED_IMPLEMENTATION": true,
+    "BASIS": "Explicit owner request on 2026-08-30 plus this canonical PCC task/routing packet; owner-routed implementation authority is distinct from autonomous fleet mutation authority."
+  }
+}
