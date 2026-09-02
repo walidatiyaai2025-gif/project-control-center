@@ -1,0 +1,62 @@
+{
+  "CONTROL_PLANE_VERSION": "v1.6.0",
+  "ROUTING_CONTRACT_VERSION": "1.2.0",
+  "PROJECT_ID": "GPTDESKTOP",
+  "REPOSITORY": "walidatiyaai2025-gif/GPTDeskTop",
+  "PROJECT_MODEL": "STANDALONE",
+  "TASK_ID": "GPTDESKTOP-T0006-JSON-MESSAGE-PLAN-V2018",
+  "TARGET_SCOPE": "PROJECT",
+  "ROUTING_STATUS": "READY",
+  "OWNER_DIRECTIVE_DATE": "2026-09-02",
+  "OWNER_DIRECTIVE": "Extend the standalone Monitor Only — Same Chat surface with an executable JSON message-plan workflow: load a JSON file containing an ordered message sequence and send behavior, validate/preview it before activation, and provide a downloadable sample JSON that can be given to ChatGPT so it returns a compatible message-plan file for upload. Preserve same-chat-only safety and the minimum 15-second post-response delay.",
+  "CONSTITUTION_PATH": "AGENTS.md",
+  "CANONICAL_TASK_BRANCH": "worker/gptdesktop-json-message-plan-v2018",
+  "BASE_BRANCH": "main",
+  "BASE_SHA": "39a24c54f7b708f75af49aa2ccec681ef1450313",
+  "SOURCE_RELEASE": "v2.0.17-build.273",
+  "SOURCE_RELEASE_COMMIT": "c319375296ee4b69e8466548438af01e2cb064cd",
+  "TARGET_RELEASE_VERSION": "2.0.18",
+  "READ_FIRST": [
+    "AGENTS.md",
+    "Directory.Build.props",
+    "src/GPTDeskTop/UI/SimpleMonitorForm.cs",
+    "Simple Monitor runtime/service implementation",
+    "Simple Monitor focused regression tests"
+  ],
+  "CHANGE_BOUNDARY": [
+    "Monitor Only JSON plan load/import UI",
+    "downloadable sample JSON generator",
+    "schema version 1 parsing and validation",
+    "ordered enabled message steps",
+    "per-message >=15 second post-response waits with a plan default fallback",
+    "single-pass versus loop plan behavior",
+    "preview/status after successful import",
+    "backward-compatible manual message workflow",
+    "version bump to 2.0.18",
+    "focused JSON-plan and same-chat safety regression coverage"
+  ],
+  "DO_NOT_TOUCH": [
+    "classic monitor behavior",
+    "classic new-chat/rotation semantics",
+    "Projects UI",
+    "Development Messages UI",
+    "GitHub/Git UI",
+    "installer lifecycle implementation"
+  ],
+  "REQUIRED_VALIDATION": [
+    "dotnet build GPTDeskTop.sln --configuration Release -p:Platform=x64",
+    "runtime regression suite",
+    "JSON message-plan parse/validation/sample round-trip tests",
+    "same-chat/no-rotation regression tests",
+    "release-artifact workflow on PR",
+    "verified Windows x64 release from merged exact head"
+  ],
+  "REQUIRED_HANDOFF": [
+    "exact source SHA",
+    "PR number",
+    "CI result",
+    "release tag",
+    "installer asset",
+    "SHA-256"
+  ]
+}
