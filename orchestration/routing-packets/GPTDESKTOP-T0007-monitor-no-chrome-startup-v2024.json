@@ -1,0 +1,41 @@
+{
+  "CONTROL_PLANE_VERSION": "v1.6.0",
+  "ROUTING_CONTRACT_VERSION": "1.2.0",
+  "PROJECT_ID": "GPTDESKTOP",
+  "repository": "walidatiyaai2025-gif/GPTDeskTop",
+  "TASK_ID": "GPTDESKTOP-T0007-MONITOR-NO-CHROME-STARTUP-V2024",
+  "OWNER_DIRECTIVE_DATE": "2026-09-03",
+  "OWNER_DIRECTIVE": "Make Monitor Only startup browser-passive. Starting GPTDeskTop, loading saved state, discovering profiles, rendering Runtime Inspector, or running Live Chat footer must not launch or attach Chrome. Chrome may be launched or attached only after an explicit Connect Profile or Start Monitor action. Preserve all v2.0.23 rate-limit, same-chat, send-gate, durable checkpoint, and no-blind-resend behavior.",
+  "CANONICAL_TASK_BRANCH": "worker/monitor-no-chrome-startup-v2024",
+  "BASE_BRANCH": "main",
+  "BASE_SHA": "81dcaa53ccde64e72609337bd7d7806c676e1d88",
+  "SOURCE_RELEASE": "v2.0.23-build.288",
+  "SOURCE_RELEASE_COMMIT": "9336f2fe0016ba37cd257deeebb965b851b02170",
+  "TARGET_RELEASE_VERSION": "2.0.24",
+  "CHANGE_BOUNDARY": [
+    "Monitor Only startup must have zero Chrome process launch or attach side effects",
+    "Saved-state and profile discovery must be disk/database only",
+    "Explicit Connect Profile or Start Monitor may establish the Chrome session",
+    "Live Chat footer and Runtime Inspector must remain no-launch until an explicit browser session exists",
+    "Bump product version to 2.0.24",
+    "Add focused startup no-browser regression coverage"
+  ],
+  "DO_NOT_TOUCH": [
+    "v2.0.23 persistent send timing and minimum 15 second gate",
+    "v2.0.23 Too many requests detection and 5/10/15/30 minute backoff",
+    "v2.0.23 uncertain-send fail-closed behavior",
+    "Same Chat only, New Chat OFF, Rotation OFF, Fallback OFF",
+    "Legacy Current GPTDeskTop runtime except where required to preserve lazy switch semantics",
+    "Installer lifecycle except version/release metadata"
+  ],
+  "REQUIRED_VALIDATION": [
+    "Startup no-browser regression tests",
+    "Full runtime automation suite",
+    "Release x64 Windows build and managed-startup probe",
+    "Same-chat and rate-limit safety regression suite",
+    "Hidden Chrome CDP and Passive Chat Wait gates",
+    "Crash Recovery gate",
+    "Installer artifact and wizard verification",
+    "Official exact-main v2.0.24 release with Setup EXE and SHA-256"
+  ]
+}
