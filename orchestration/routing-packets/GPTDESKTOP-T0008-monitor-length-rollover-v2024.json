@@ -1,0 +1,43 @@
+{
+  "CONTROL_PLANE_VERSION": "v1.6.0",
+  "ROUTING_CONTRACT_VERSION": "1.2.0",
+  "PROJECT_ID": "GPTDESKTOP",
+  "repository": "walidatiyaai2025-gif/GPTDeskTop",
+  "TASK_ID": "GPTDESKTOP-T0008-MONITOR-LENGTH-ROLLOVER-V2024",
+  "OWNER_DIRECTIVE_DATE": "2026-09-03",
+  "SUPERSEDES_TASK": "GPTDESKTOP-T0007-MONITOR-NO-CHROME-STARTUP-V2024",
+  "OWNER_DIRECTIVE": "Release one working GPTDeskTop build that makes Monitor Only browser-passive at application startup and handles ChatGPT maximum-conversation-length as a narrowly scoped automatic rollover. On a current/latest-turn maximum-length blocker, stop targeting the exhausted conversation, establish a new ChatGPT conversation in the same authenticated profile, update and persist the active conversation in the Monitor UI, reconnect to that new conversation, and continue only the remaining confirmed-unsent message-plan steps from the durable queue position. Never blindly resend an uncertain send. Preserve the global one-physical-send rule, post-response minimum 15-second gate, rate-limit freeze/backoff, and durable checkpoint semantics.",
+  "CANONICAL_TASK_BRANCH": "worker/monitor-length-rollover-v2024",
+  "BASE_BRANCH": "main",
+  "BASE_SHA": "81dcaa53ccde64e72609337bd7d7806c676e1d88",
+  "SOURCE_RELEASE": "v2.0.23-build.288",
+  "SOURCE_RELEASE_COMMIT": "9336f2fe0016ba37cd257deeebb965b851b02170",
+  "TARGET_RELEASE_VERSION": "2.0.24",
+  "CHANGE_BOUNDARY": [
+    "No Chrome launch or attach on GPTDeskTop/Monitor Only startup, saved-state load, disk profile discovery, footer render, or inspector render",
+    "Explicit Connect Profile or Start Monitor may establish the Chrome session",
+    "Detect ChatGPT maximum conversation length from current/latest relevant conversation state rather than stale page-wide text",
+    "Automatically roll over only for maximum-conversation-length exhaustion",
+    "Establish and persist the new conversation, update the UI selector/connection state, and continue the remaining queue from the durable confirmed-unsent position",
+    "Keep manual and JSON message-plan sequencing and per-step delays intact across rollover",
+    "Fail closed on uncertain send disposition; do not duplicate a possibly sent message",
+    "Bump product version to 2.0.24 and ship an official Windows x64 installer"
+  ],
+  "DO_NOT_TOUCH": [
+    "Ordinary automatic New Chat, rotation, or fallback remains OFF; the only automatic rollover is the explicit maximum-conversation-length condition",
+    "v2.0.23 minimum 15-second send gate and one-physical-send serialization",
+    "v2.0.23 Too many requests detection and 5/10/15/30 minute global backoff",
+    "v2.0.23 uncertain-send and idempotency protections",
+    "Unrelated Projects, Development Messages, GitHub/Git, and legacy runtime functionality"
+  ],
+  "REQUIRED_VALIDATION": [
+    "Focused current-turn maximum-length detector tests including stale-text negative coverage",
+    "Confirmed-send rollover resumes at next remaining message without duplicate",
+    "Uncertain-send rollover path fails closed",
+    "New-conversation target is reflected and persisted in Monitor UI",
+    "Ordinary operation does not rotate conversations",
+    "Startup no-browser regression coverage",
+    "Existing same-chat normal-path, rate-limit, crash-recovery, hidden-CDP, passive-wait, and send-gate regression suites",
+    "Release x64 Windows build, installer smoke/wizard verification, official exact-main v2.0.24 release, and installer SHA-256"
+  ]
+}
