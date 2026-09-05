@@ -1,0 +1,48 @@
+{
+  "CONTROL_PLANE_VERSION": "v1.6.0",
+  "ROUTING_CONTRACT_VERSION": "1.2.0",
+  "PROJECT_ID": "GPTDESKTOP",
+  "repository": "walidatiyaai2025-gif/GPTDeskTop",
+  "TASK_ID": "GPTDESKTOP-T0009-FRESH-CHAT-STABLE-SENDER-V2031",
+  "OWNER_DIRECTIVE_DATE": "2026-09-05",
+  "SUPERSEDES_TASK": "GPTDESKTOP-T0008-MONITOR-LENGTH-ROLLOVER-V2024",
+  "OWNER_DIRECTIVE": "Restore the field-proven Monitor Only send behavior based on the v2.0.20 SendChatMessageVerifiedAsync path, keep the newer global 429/rate-limit backoff and durable checkpoint safety, and change lifecycle behavior so every Start Monitor creates a fresh ChatGPT conversation in the selected authenticated profile. Continue remaining messages in that fresh conversation. If a recoverable conversation-level problem occurs before a physical submit or after a confirmed checkpoint, establish another fresh conversation and continue from the durable next pending message. Never create a new conversation to evade profile/account rate limits. Never blindly resend a post-submit uncertain message.",
+  "CANONICAL_TASK_BRANCH": "worker/monitor-fresh-chat-stable-sender-v2031",
+  "BASE_BRANCH": "main",
+  "BASE_SHA": "a0d9353458d74f0fb8cf66b3fc02f352bfab1a1a",
+  "SOURCE_RELEASE": "v2.0.30-build.312",
+  "SOURCE_RELEASE_COMMIT": "a0d9353458d74f0fb8cf66b3fc02f352bfab1a1a",
+  "BEHAVIOR_REFERENCE_RELEASE": "v2.0.20-build.280",
+  "BEHAVIOR_REFERENCE_COMMIT": "5bd843a5e973a2e48a80222c21c7290047a51baf",
+  "TARGET_RELEASE_VERSION": "2.0.31",
+  "CHANGE_BOUNDARY": [
+    "Every explicit Start Monitor creates a fresh ChatGPT tab/conversation in the selected authenticated Chrome profile",
+    "Use the field-proven ChromeDevToolsService.SendChatMessageVerifiedAsync path for Monitor Only instead of SimpleMonitorVerifiedSender",
+    "After first confirmed send in a fresh tab, wait for and persist the stable /c/{conversation-id} URL and reflect it in the Monitor UI",
+    "Continue subsequent plan steps in the same fresh conversation until a recoverable conversation-level failure requires rollover",
+    "On pre-submit recoverable conversation failure, create another fresh conversation and retry the same still-unsent plan step",
+    "On confirmed-send/post-checkpoint conversation failure, create another fresh conversation and continue from the next durable pending step",
+    "On post-submit uncertain disposition, fail closed and do not rotate/resend",
+    "Rate-limit/429 remains a profile-level freeze/backoff and must not trigger New Chat",
+    "Preserve RUN ONCE checkpoints, loop semantics, per-step delay, one-physical-send serialization and minimum 15-second safety gate",
+    "Update Monitor UI policy text to match fresh-start and governed rollover behavior",
+    "Bump product version to 2.0.31 and ship an official Windows x64 installer"
+  ],
+  "DO_NOT_TOUCH": [
+    "Do not weaken 429 detection/backoff or use New Chat as a rate-limit bypass",
+    "Do not resend a message whose physical submit outcome is uncertain",
+    "Do not reset RUN ONCE sent checkpoints when a conversation changes",
+    "Do not modify unrelated Development Messages, Projects, GitHub/Git or non-Monitor runtime behavior"
+  ],
+  "REQUIRED_VALIDATION": [
+    "Start always creates a fresh ChatGPT target before any message send",
+    "Stable /c URL is discovered, persisted and reflected in the UI after the first confirmed send",
+    "Monitor Only calls ChromeDevToolsService.SendChatMessageVerifiedAsync and does not call SimpleMonitorVerifiedSender",
+    "Pre-submit conversation failure rolls to a fresh chat without consuming/checkpointing the pending message",
+    "Confirmed checkpoint followed by conversation failure rolls to a fresh chat and advances to the next pending message",
+    "Post-submit uncertain failure remains blocked and never rotates/resends",
+    "429/rate-limit detection freezes sends and does not create a fresh chat",
+    "RUN ONCE resume and checkpoint tests remain green",
+    "Windows x64 build, setup version identity, installer smoke/wizard, managed startup and official exact-main release with SHA-256"
+  ]
+}
