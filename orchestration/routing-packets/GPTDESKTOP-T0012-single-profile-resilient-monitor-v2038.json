@@ -1,0 +1,67 @@
+{
+  "CONTROL_PLANE_VERSION": "2.0.0",
+  "ROUTING_CONTRACT_VERSION": "1.2.0",
+  "PCC_SOURCE_SHA": "7bba85b151f046ad459689aa851932d398e6c28f",
+  "PROJECT_ID": "GPTDESKTOP",
+  "repository": "walidatiyaai2025-gif/GPTDeskTop",
+  "PROJECT_MODEL": "STANDALONE",
+  "TASK_ID": "GPTDESKTOP-T0012-SINGLE-PROFILE-RESILIENT-MONITOR-V2038",
+  "OWNER_DIRECTIVE_DATE": "2026-09-07",
+  "OWNER_DIRECTIVE": "Use one selected Chrome automation profile/session for Connect Profile and Start Monitor so Start Monitor does not open a second unrelated profile/session. For clean pre-send Chrome/fresh-chat failures, do not permanently stop the monitor after three attempts: wait 15 minutes, close automation-owned ChatGPT tabs for the selected managed profile, re-establish the same automation session and continue retrying without losing pending message state. Preserve duplicate-send and rate-limit safety; uncertain physical-send outcomes remain blocked rather than auto-resending.",
+  "CANONICAL_TASK_BRANCH": "fix/v2038-single-profile-resilient-monitor",
+  "BASE_BRANCH": "main",
+  "BASE_SHA": "18f1ddd541f704e3880230c604e61db609ffeb15",
+  "SOURCE_RELEASE": "2.0.37",
+  "SOURCE_RELEASE_COMMIT": "a390a2c1dbaec3307f90f69654eb854abb1b3595",
+  "TARGET_RELEASE_VERSION": "2.0.38",
+  "TARGET_SCOPE": "PROJECT",
+  "CHANGE_BOUNDARY": [
+    "Connect Profile and Start Monitor must share the exact selected SimpleMonitorProfileSession and stable debugging endpoint",
+    "Start Monitor must not create an additional Chrome process when the selected managed automation session is already reachable",
+    "Fresh-chat/session failures occurring before any physical submit must recover indefinitely in bounded cycles instead of transitioning to permanent BLOCKED after three attempts",
+    "After each exhausted clean pre-send recovery cycle wait 15 minutes before a clean retry",
+    "The clean retry may close only ChatGPT tabs owned by the selected GPTDeskTop managed automation profile/session; it must not close the user's normal Chrome profile or unrelated browser windows",
+    "Re-establish the same selected managed profile/session after clean retry and continue from the same pending message/checkpoint state",
+    "Surface waiting/recovery state in Runtime Inspector without enabling Start again while the recovery worker is still alive",
+    "Bump product/release version to 2.0.38 and add regression coverage"
+  ],
+  "DO_NOT_TOUCH": [
+    "Do not weaken exactly-once protection after a physical send attempt with uncertain disposition",
+    "Do not use New Chat to bypass an active ChatGPT rate limit",
+    "Do not close or mutate the user's ordinary Chrome profile outside the GPTDeskTop managed automation user-data directory",
+    "Do not reset JSON sent checkpoints or resend already checkpointed RUN ONCE messages",
+    "Do not alter database schema",
+    "Do not regress the Start Monitor-only browser launch authorization boundary: passive startup, Connect Profile and Refresh Chats must not launch Chrome"
+  ],
+  "READ_FIRST": [
+    "AGENTS.md",
+    "src/GPTDeskTop/Services/SimpleMonitorProfileSession.cs",
+    "src/GPTDeskTop/Services/SimpleMonitorRunner.cs",
+    "src/GPTDeskTop/Services/ChromeProfileCatalog.cs",
+    "src/GPTDeskTop/UI/SimpleMonitorForm.cs",
+    "tests/GPTDeskTop.RuntimeTests",
+    ".github/workflows/qa-monitor-start-chrome-launch.yml",
+    ".github/workflows/qa-release-x64.yml"
+  ],
+  "REQUIRED_VALIDATION": [
+    "Connect Profile remains passive and does not launch Chrome",
+    "Start Monitor is the only browser-launch authorization boundary",
+    "When the selected managed session already exists, Start Monitor reuses it and does not launch another Chrome process",
+    "Three failed fresh-target attempts no longer terminate the worker; the worker enters a 15-minute clean-retry wait and stays running",
+    "Clean retry closes only automation-owned ChatGPT tabs and then reuses/re-establishes the same selected profile session",
+    "Pending message index/checkpoints survive clean recovery",
+    "Uncertain physical send still blocks automatic resend and rate-limit protection remains intact",
+    "Full GPTDeskTop.RuntimeTests pass",
+    "Build GPTDeskTop passes",
+    "QA Monitor Start Chrome Launch Gate passes",
+    "QA Release x64 passes",
+    "Release Artifact produces GPTDeskTop-Setup.exe version 2.0.38 from exact merged main"
+  ],
+  "REQUIRED_HANDOFF": [
+    "Task ID and exact product head SHA",
+    "Changed files and session/recovery behavioral summary",
+    "Regression and full CI results",
+    "Pull request and merge SHA",
+    "Exact-main v2.0.38 release URL and SHA-256"
+  ]
+}
