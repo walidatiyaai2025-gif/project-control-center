@@ -1,0 +1,40 @@
+{
+  "PROJECT_ID": "GPTDESKTOP",
+  "TASK_ID": "GPTDESKTOP-T0012-SINGLE-PROFILE-RESILIENT-MONITOR-V2038",
+  "RESULT": "RECONCILED_VERIFIED",
+  "RECONCILED_AT": "2026-09-07T20:06:00Z",
+  "ROUTING_PR": 22,
+  "PRODUCT_PR": 370,
+  "PRODUCT_MERGE_SHA": "efe9cdb3e8aab605e83407129c6df6376bedbff8",
+  "CURRENT_MAIN_SHA": "3265be9fd8d152c1db34468ff4cb7e9adea80252",
+  "CURRENT_MAIN_PARENT": "efe9cdb3e8aab605e83407129c6df6376bedbff8",
+  "CURRENT_MAIN_NOTE": "Automated Last release metadata update with [skip ci]; product implementation and verified release source remain the direct parent.",
+  "RELEASE_VERSION": "2.0.38",
+  "RELEASE_TAG": "v2.0.38-build.378",
+  "RELEASE_SOURCE_SHA": "efe9cdb3e8aab605e83407129c6df6376bedbff8",
+  "SETUP_ASSET": "GPTDeskTop-Setup.exe",
+  "SETUP_SHA256": "15878128b3ea10e9897c438ed96ce69eb5058fb39ef39e43a7ced8c81cd1365e",
+  "SETUP_URL": "https://github.com/walidatiyaai2025-gif/GPTDeskTop/releases/download/v2.0.38-build.378/GPTDeskTop-Setup.exe",
+  "EXACT_RELEASE_SOURCE_CI": {
+    "Build GPTDeskTop": "SUCCESS",
+    "QA Monitor Start Chrome Launch Gate": "SUCCESS",
+    "QA Release x64": "SUCCESS",
+    "QA Hidden Chrome CDP": "SUCCESS",
+    "QA Passive Chat Wait": "SUCCESS",
+    "QA Crash Process Recovery": "SUCCESS",
+    "Development Task Recovery": "SUCCESS",
+    "Development Message Reload": "SUCCESS",
+    "Development Delivery Receipts": "SUCCESS",
+    "Release Artifact": "SUCCESS"
+  },
+  "DELIVERED_BEHAVIOR": [
+    "Start Monitor reuses the selected GPTDeskTop-managed Chrome profile/session when its stable automation endpoint is alive and closes stale GPTDeskTop-managed sessions for other profiles.",
+    "Connect Profile and Refresh Chats remain passive and cannot launch Chrome; explicit Start Monitor remains the browser launch authorization boundary.",
+    "After three clean pre-send fresh-target failures the monitor remains running, waits 15 minutes, closes only ChatGPT tabs owned by the selected managed automation session, re-establishes that same selected profile/session and retries the same pending message.",
+    "The clean recovery loop preserves pending JSON message/checkpoint state and continues until success or explicit Stop/cancellation.",
+    "Uncertain physical-submit outcomes still block automatic resend and active rate limits are never bypassed with New Chat.",
+    "Normal user Chrome is outside the clean recovery mutation boundary."
+  ],
+  "TARGET_MUTATED": true,
+  "UNPUSHED_WORK": "NONE"
+}
