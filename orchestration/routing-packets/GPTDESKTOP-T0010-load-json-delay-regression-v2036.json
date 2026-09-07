@@ -1,0 +1,60 @@
+{
+  "CONTROL_PLANE_VERSION": "2.0.0",
+  "ROUTING_CONTRACT_VERSION": "1.2.0",
+  "PCC_SOURCE_SHA": "8286cdcbbb87a7ff59ffeb28f4497b9f90f34e1a",
+  "PROJECT_ID": "GPTDESKTOP",
+  "repository": "walidatiyaai2025-gif/GPTDeskTop",
+  "PROJECT_MODEL": "STANDALONE",
+  "TASK_ID": "GPTDESKTOP-T0010-LOAD-JSON-DELAY-REGRESSION-V2036",
+  "OWNER_DIRECTIVE_DATE": "2026-09-07",
+  "OWNER_DIRECTIVE": "Fix the Monitor Only Load JSON regression introduced when the effective minimum send delay was raised to 30 seconds. Legacy JSON plans containing 15-29 second delays must continue to load safely and be normalized to the current 30-second minimum; newly generated sample JSON and ChatGPT generation guidance must produce only 30-3600 second delays.",
+  "CANONICAL_TASK_BRANCH": "fix/v2036-load-json-plan-delay",
+  "BASE_BRANCH": "main",
+  "BASE_SHA": "668d78d32a9994a94257fe0a7eb3747e18bc8a93",
+  "SOURCE_RELEASE": "2.0.35",
+  "SOURCE_RELEASE_COMMIT": "1eb7160d59ab213c3a41a3dd04ed33ef8b5b9e7a",
+  "TARGET_RELEASE_VERSION": "2.0.36",
+  "TARGET_SCOPE": "PROJECT",
+  "CHANGE_BOUNDARY": [
+    "Restore reliable Load JSON behavior in Monitor Only after the UI minimum delay became 30 seconds",
+    "Preserve compatibility with legacy valid JSON plans that contain default or per-message delays from 15 through 29 seconds",
+    "Normalize every effective legacy delay below 30 seconds to 30 seconds before it reaches the UI or runtime",
+    "Use a single shared current minimum-delay contract instead of scattered 15/30 literals in JSON-plan load, restore and clear paths",
+    "Update newly generated sample JSON and ChatGPT JSON-generation guidance so all generated delays are 30-3600 seconds",
+    "Persist normalized plan values so a successfully imported legacy plan is upgraded durably",
+    "Add regression coverage for legacy-plan import, sample JSON and generation guidance",
+    "Bump product version to 2.0.36 and produce normal release validation"
+  ],
+  "DO_NOT_TOUCH": [
+    "Do not change the Start-Monitor-only Chrome launch boundary or permit startup/connect/refresh to launch Chrome",
+    "Do not change same-chat targeting, exactly-once checkpoint behavior, uncertain-send fail-closed behavior or physical-send serialization",
+    "Do not weaken current rate-limit/backoff or 30-second physical-send pacing",
+    "Do not change the database schema or unrelated GPTDeskTop UI/workspaces"
+  ],
+  "READ_FIRST": [
+    "AGENTS.md",
+    "src/GPTDeskTop/UI/SimpleMonitorForm.cs",
+    "src/GPTDeskTop/Services/SimpleMonitorMessagePlanService.cs",
+    "src/GPTDeskTop/Services/SimpleMonitorRunner.cs",
+    "tests/GPTDeskTop.RuntimeTests"
+  ],
+  "REQUIRED_VALIDATION": [
+    "A legacy JSON plan with defaultDelaySeconds=15 loads successfully and becomes effective delay 30",
+    "A legacy per-message delay override such as 20 seconds loads successfully and becomes effective delay 30",
+    "Current 30-3600 second delays remain unchanged",
+    "New sample JSON contains no delay below 30 seconds",
+    "ChatGPT JSON-generation guidance requires 30-3600 second delays",
+    "Monitor Only UI restore/apply/clear paths cannot assign a value below NumericUpDown.Minimum=30",
+    "Targeted JSON-plan regression tests pass",
+    "Full GPTDeskTop.RuntimeTests pass",
+    "Release build passes",
+    "QA Monitor Start Chrome Launch Gate passes so the prior browser-startup fix remains intact"
+  ],
+  "REQUIRED_HANDOFF": [
+    "Task ID and exact product head SHA",
+    "Changed files and behavioral summary",
+    "Targeted and full test results",
+    "Pull request and CI status",
+    "Exact-main release/version evidence when merged"
+  ]
+}
