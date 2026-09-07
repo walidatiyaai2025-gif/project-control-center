@@ -1,0 +1,58 @@
+{
+  "CONTROL_PLANE_VERSION": "2.0.0",
+  "ROUTING_CONTRACT_VERSION": "1.2.0",
+  "PCC_SOURCE_SHA": "ad388ce7aa28a71126409426f4fc45b2d53a1947",
+  "PROJECT_ID": "GPTDESKTOP",
+  "repository": "walidatiyaai2025-gif/GPTDeskTop",
+  "PROJECT_MODEL": "STANDALONE",
+  "TASK_ID": "GPTDESKTOP-T0011-INSTALLER-SELF-COPY-ACCESS-DENIED-V2037",
+  "OWNER_DIRECTIVE_DATE": "2026-09-07",
+  "OWNER_DIRECTIVE": "Fix GPTDeskTop Setup failure where installation aborts with Access denied while attempting to overwrite C:\\Users\\<user>\\AppData\\Local\\Programs\\GPTDeskTop\\GPTDeskTop-Setup.exe. Installation must succeed even when the setup executable is running from, or an older setup copy is locked in, the install directory.",
+  "CANONICAL_TASK_BRANCH": "fix/v2037-installer-self-copy-access-denied",
+  "BASE_BRANCH": "main",
+  "BASE_SHA": "e3525d31538f0ec25709c7561c64df48651abd6a",
+  "SOURCE_RELEASE": "2.0.36",
+  "SOURCE_RELEASE_COMMIT": "e3525d31538f0ec25709c7561c64df48651abd6a",
+  "TARGET_RELEASE_VERSION": "2.0.37",
+  "TARGET_SCOPE": "PROJECT",
+  "CHANGE_BOUNDARY": [
+    "Remove the setup self-overwrite collision that can cause UnauthorizedAccessException during installation",
+    "Keep an installed uninstall entry and Start Menu uninstall shortcut working after installation",
+    "Allow installation when the current setup executable is already located in the GPTDeskTop install directory",
+    "Do not fail the application payload installation because a legacy setup copy is locked",
+    "Add regression coverage for the installer self-copy contract and upgrade product version to 2.0.37",
+    "Produce a verified Windows x64 setup release from exact main"
+  ],
+  "DO_NOT_TOUCH": [
+    "Do not change Monitor Only Chrome launch behavior",
+    "Do not change JSON plan behavior fixed in v2.0.36",
+    "Do not change database schema or user data retention behavior",
+    "Do not weaken existing release payload, PE32+/AMD64 or version verification gates"
+  ],
+  "READ_FIRST": [
+    "AGENTS.md",
+    "src/GPTDeskTop.Setup/Program.cs",
+    "src/GPTDeskTop.Setup/InstallerWizardForm.cs",
+    "src/GPTDeskTop.Setup/GPTDeskTop.Setup.csproj",
+    ".github/workflows",
+    "tests/GPTDeskTop.RuntimeTests"
+  ],
+  "REQUIRED_VALIDATION": [
+    "Installer no longer directly overwrites GPTDeskTop-Setup.exe at the destination while that path may be executing",
+    "Install path still receives GPTDeskTop.exe and required payload files",
+    "Uninstall registration and shortcut remain valid",
+    "Installer can safely tolerate a legacy locked setup copy without aborting application installation",
+    "Product version is 2.0.37",
+    "Full GPTDeskTop.RuntimeTests pass",
+    "Build GPTDeskTop passes",
+    "QA Release x64 passes",
+    "Release Artifact produces GPTDeskTop-Setup.exe from exact merged main"
+  ],
+  "REQUIRED_HANDOFF": [
+    "Task ID and exact product head SHA",
+    "Changed files and behavioral summary",
+    "Regression and full CI results",
+    "Pull request and merge SHA",
+    "Exact-main v2.0.37 release URL and SHA-256"
+  ]
+}
