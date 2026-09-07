@@ -1,0 +1,83 @@
+{
+  "CONTROL_PLANE_VERSION": "2.0.0",
+  "ROUTING_CONTRACT_VERSION": "1.2.0",
+  "PCC_SOURCE_SHA": "ae3025af082ddfc8ea1380e26db5084382dbc29c",
+  "PROJECT_ID": "GPTDESKTOP",
+  "repository": "walidatiyaai2025-gif/GPTDeskTop",
+  "PROJECT_MODEL": "STANDALONE",
+  "TASK_ID": "GPTDESKTOP-T0013-REUSE-CONNECTED-CHROME-V2039",
+  "OWNER_DIRECTIVE_DATE": "2026-09-07",
+  "OWNER_DIRECTIVE": "During Monitor Only, do not open a second Chrome when the selected profile is already connected. Connect Profile and Start Monitor must bind to and reuse the same reachable managed CDP browser process/session. Fresh chats during healthy monitoring must be created inside that same browser. Preserve the Start Monitor-only launch authorization boundary and all duplicate-send/rate-limit protections.",
+  "CANONICAL_TASK_BRANCH": "fix/v2039-reuse-connected-chrome-session",
+  "BASE_BRANCH": "main",
+  "BASE_SHA": "3265be9fd8d152c1db34468ff4cb7e9adea80252",
+  "SOURCE_RELEASE": "2.0.38",
+  "SOURCE_RELEASE_COMMIT": "efe9cdb3e8aab605e83407129c6df6376bedbff8",
+  "TARGET_RELEASE_VERSION": "2.0.39",
+  "TARGET_SCOPE": "PROJECT",
+  "INCIDENT_EVIDENCE": {
+    "RUNTIME_CAPTURE_VERSION": "2.0.38+efe9cdb3e8aab605e83407129c6df6376bedbff8",
+    "STATE": "ReadingChatState",
+    "TOTAL_CDP_RETRIES": 0,
+    "CONSECUTIVE_CDP_RETRIES": 0,
+    "RECOVERY": "Healthy",
+    "CONCLUSION": "The observed extra Chrome occurs during healthy monitoring and is not the 15-minute watchdog/recovery relaunch path."
+  },
+  "CHANGE_BOUNDARY": [
+    "Connect Profile must retain explicit identity for the exact reachable managed CDP browser session it connected to, including stable debugging port and browser process identity when available",
+    "Start Monitor must first reuse the exact connected selected-profile session and must perform zero Process.Start calls while that session remains reachable",
+    "Fresh Chat creation during healthy monitoring must use CDP Target/json-new on the same connected browser endpoint and must not create a new browser process or window",
+    "A browser launch remains allowed only after explicit Start Monitor authorization and only when no compatible selected-profile managed CDP browser is reachable",
+    "After an authorized launch, bind the session to that one browser and suppress duplicate launches while its endpoint remains healthy",
+    "Recovery may relaunch only after genuine selected-browser death/unavailability, never merely because a conversation target is missing",
+    "Do not terminate, attach to, or mutate unrelated personal Chrome processes",
+    "Expose browser identity in Runtime Inspector sufficiently to prove selected profile, CDP port, managed user-data directory, and browser PID/session reuse",
+    "Bump product/release version to 2.0.39 and add regression coverage"
+  ],
+  "DO_NOT_TOUCH": [
+    "Do not weaken exactly-once or uncertain-send duplicate protection",
+    "Do not bypass ChatGPT rate limiting or pacing",
+    "Do not launch Chrome from application startup, Connect Profile, or Refresh Chats",
+    "Do not close or mutate ordinary Chrome outside the selected GPTDeskTop managed automation session",
+    "Do not reset JSON plan checkpoints or resend confirmed RUN ONCE messages",
+    "Do not change database schema unless strictly required for transient browser identity; prefer in-memory/session identity"
+  ],
+  "READ_FIRST": [
+    "AGENTS.md",
+    "src/GPTDeskTop/UI/SimpleMonitorForm.cs",
+    "src/GPTDeskTop/Services/SimpleMonitorProfileSession.cs",
+    "src/GPTDeskTop/Services/ChromeDevToolsService.cs",
+    "src/GPTDeskTop/Services/ChromeProfileCatalog.cs",
+    "src/GPTDeskTop/Models/ChromeProfileInfo.cs",
+    "src/GPTDeskTop/Services/SimpleMonitorRunner.cs",
+    "tests/GPTDeskTop.RuntimeTests",
+    ".github/workflows/qa-monitor-start-chrome-launch.yml",
+    ".github/workflows/qa-hidden-chrome.yml",
+    ".github/workflows/qa-release-x64.yml"
+  ],
+  "REQUIRED_VALIDATION": [
+    "Connect Profile remains passive and does not launch Chrome",
+    "Start Monitor remains the sole browser-launch authorization boundary",
+    "Connected selected-profile managed CDP endpoint plus Start Monitor results in zero additional Chrome launches",
+    "Healthy Fresh Chat creation remains on the same browser PID/CDP port and results in zero Process.Start calls",
+    "Missing conversation target alone cannot launch a second browser while the connected endpoint is healthy",
+    "No endpoint plus explicit Start Monitor may launch exactly one selected managed Chrome and then reuses it",
+    "Genuine browser death may trigger one authorized recovery launch, with unrelated Chrome unaffected",
+    "Runtime Inspector exposes enough browser identity to verify same-session reuse",
+    "Full GPTDeskTop.RuntimeTests pass",
+    "Build GPTDeskTop passes",
+    "QA Monitor Start Chrome Launch Gate passes",
+    "QA Hidden Chrome CDP passes",
+    "QA Release x64 passes",
+    "Release Artifact publishes GPTDeskTop-Setup.exe version 2.0.39 from exact merged release-source main"
+  ],
+  "REQUIRED_HANDOFF": [
+    "Task ID and exact product head SHA",
+    "Root-cause explanation distinguishing healthy connected-session reuse from watchdog recovery",
+    "Changed files and browser-process/session identity behavior",
+    "Regression/full CI results",
+    "Pull request and merge SHA",
+    "Exact release-source v2.0.39 release URL and SHA-256",
+    "PCC reconciliation evidence"
+  ]
+}
