@@ -1,0 +1,69 @@
+{
+  "CONTROL_PLANE_VERSION": "2.0.0",
+  "ROUTING_CONTRACT_VERSION": "1.2.0",
+  "PCC_SOURCE_SHA": "6ee8f70ea19f1557bc78d909e52b17a546c83db5",
+  "PROJECT_ID": "GPTDESKTOP",
+  "repository": "walidatiyaai2025-gif/GPTDeskTop",
+  "PROJECT_MODEL": "STANDALONE",
+  "TASK_ID": "GPTDESKTOP-T0016-RUNTIME-EVALUATE-TIMEOUT-CONTROLLED-RESTART",
+  "OWNER_DIRECTIVE_DATE": "2026-09-12",
+  "OWNER_DIRECTIVE": "When an active Monitor Only run reports Chrome DevTools command Runtime.evaluate timed out after 12 seconds, wait exactly 60 seconds, terminate all GPTDeskTop-owned managed Chrome process trees only, relaunch one clean managed Chrome session, automatically restart Monitor Only, and resume from the last safe pending message. Ordinary user Chrome must never be terminated. Stop or app close during the 60-second delay cancels the automatic restart.",
+  "SUPERSEDES_RUNTIME_RECOVERY_RULE_FROM_TASK": "GPTDESKTOP-T0015-MONITOR-ONLY-HARD-CUTOVER-SINGLE-BROWSER-V2041",
+  "SUPERSESSION_SCOPE": "Only the prior rule forbidding every post-attach browser relaunch is amended. Runtime.evaluate timeout recovery may perform one controlled relaunch after the 60-second delay. All other single-browser, exactly-once, pacing, ownership, and rate-limit protections remain in force.",
+  "CANONICAL_TASK_BRANCH": "fix/runtime-evaluate-timeout-auto-restart",
+  "BASE_BRANCH": "main",
+  "BASE_SHA": "33fd279938665d00632efff1f744178220a0d084",
+  "SOURCE_RELEASE": "2.0.44",
+  "TARGET_RELEASE_VERSION": "NEXT_PATCH_AFTER_2.0.44",
+  "TARGET_SCOPE": "PROJECT",
+  "CHANGE_BOUNDARY": [
+    "Detect the active Monitor Only failure specifically when a Chrome DevTools Runtime.evaluate command times out after 12 seconds or its typed equivalent reports the same command timeout",
+    "Transition to one fail-closed recovery episode; never create overlapping restart timers or restart storms",
+    "Wait exactly 60 seconds before destructive recovery; Stop Monitor or application shutdown during this delay cancels the recovery",
+    "After the delay terminate only Chrome process trees whose command lines prove ownership by GPTDeskTop-managed user-data roots; ordinary user Chrome is out of scope and must remain untouched",
+    "Revoke stale managed-browser authorization/session state, use the existing one-legal-launch ownership path to start exactly one clean selected managed Chrome session, and automatically restart Monitor Only",
+    "Resume the selected JSON plan from durable safe checkpoint state: confirmed sends remain sent, uncertain sends remain protected, and only the next lawful pending message may proceed",
+    "Preserve Too Many Requests fail-closed handling, pacing, physical-send lease, same-chat target rules, and single managed Chrome invariants",
+    "Expose precise Runtime Inspector/recovery status during the 60-second wait, managed Chrome cleanup, relaunch, reattach, and monitor restart",
+    "Add regression and Windows physical coverage for the 60-second controlled restart and cancellation/ownership constraints",
+    "Bump application/setup/release identity to the next patch version and reconcile version assertions"
+  ],
+  "DO_NOT_TOUCH": [
+    "Do not kill all operating-system processes",
+    "Do not kill or mutate ordinary user Chrome or ordinary Chrome profiles",
+    "Do not shorten the owner-requested 60-second delay",
+    "Do not restart for unrelated errors, 429 responses, normal passive waits, or user Stop",
+    "Do not bypass rate limiting, duplicate-send, uncertain-send, or confirmed-send protections",
+    "Do not reset JSON plan checkpoints or resend confirmed messages",
+    "Do not permit more than one GPTDeskTop-managed Chrome after recovery"
+  ],
+  "READ_FIRST": [
+    "AGENTS.md",
+    "src/GPTDeskTop/UI/SimpleMonitorForm.cs",
+    "src/GPTDeskTop/Services/SimpleMonitorRunner.cs",
+    "src/GPTDeskTop/Services/SimpleMonitorProfileSession.cs",
+    "src/GPTDeskTop/Services/ChromeDevToolsService.cs",
+    "src/GPTDeskTop/Services/SimpleMonitorChromeOwnershipGate.cs",
+    "src/GPTDeskTop/Services/MonitorOnlyManagedChromeGuard.cs",
+    "Directory.Build.props",
+    ".github/workflows/build.yml"
+  ],
+  "REQUIRED_VALIDATION": [
+    "Existing runtime automation tests remain green",
+    "A Runtime.evaluate timeout cannot terminate managed Chrome before 60 seconds",
+    "After 60 seconds GPTDeskTop-owned managed Chrome is terminated and ordinary Chrome survives",
+    "Exactly one clean managed Chrome may relaunch and Monitor Only restarts automatically",
+    "User Stop or application close during the recovery delay prevents relaunch",
+    "Confirmed messages are not resent; the next safe pending message resumes",
+    "Existing idle-no-managed-Chrome, preserve-healthy-managed-Chrome, single-browser, CDP, 429, pacing and release x64 gates remain green",
+    "Exact-head Windows x64 setup/release verification is green before delivery"
+  ],
+  "REQUIRED_HANDOFF": [
+    "Task branch head SHA",
+    "Pull request number and merged SHA",
+    "Regression/physical recovery evidence",
+    "Exact-main CI evidence",
+    "Release tag and workflow run",
+    "GPTDeskTop-Setup.exe SHA-256"
+  ]
+}
