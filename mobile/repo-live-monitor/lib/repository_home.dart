@@ -140,7 +140,8 @@ class _RepositoryHomeState extends State<RepositoryHome> {
                           color: Colors.white,
                           padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
                           child: DropdownButtonFormField<RepoInfo>(
-                            value: _selected,
+                            key: ValueKey(_selected?.fullName),
+                            initialValue: _selected,
                             isExpanded: true,
                             decoration: const InputDecoration(
                               labelText: 'Project / repository',
