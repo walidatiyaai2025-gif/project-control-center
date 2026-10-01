@@ -1,0 +1,81 @@
+name: PCC MOB 001 Android APK
+
+on:
+  push:
+    branches:
+      - feat/pcc-mob-001-repo-live-monitor
+    paths:
+      - mobile/repo-live-monitor/**
+      - .github/workflows/pcc-mob-001-android-apk.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Generate isolated Android shell
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .pcc-mobile-build
+          flutter create --platforms=android --org com.fiftysolution --project-name pcc_repo_live .pcc-mobile-build
+          rm -rf .pcc-mobile-build/lib
+          cp -R mobile/repo-live-monitor/lib .pcc-mobile-build/lib
+          cp mobile/repo-live-monitor/pubspec.yaml .pcc-mobile-build/pubspec.yaml
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('.pcc-mobile-build/android/app/src/main/AndroidManifest.xml')
+          s = p.read_text(encoding='utf-8')
+          marker = '<manifest xmlns:android="http://schemas.android.com/apk/res/android">'
+          permission = '<uses-permission android:name="android.permission.INTERNET" />'
+          if permission not in s:
+              s = s.replace(marker, marker + '\n    ' + permission)
+          s = s.replace('android:label="pcc_repo_live"', 'android:label="PCC Repo Live"')
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Resolve dependencies
+        working-directory: .pcc-mobile-build
+        run: flutter pub get
+
+      - name: Static analysis
+        working-directory: .pcc-mobile-build
+        run: flutter analyze
+
+      - name: Build release APK
+        working-directory: .pcc-mobile-build
+        run: flutter build apk --release
+
+      - name: Stage immutable artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          short_sha="${GITHUB_SHA:0:7}"
+          cp .pcc-mobile-build/build/app/outputs/flutter-apk/app-release.apk "PCC-Repo-Live-${short_sha}.apk"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: PCC-Repo-Live-APK
+          path: PCC-Repo-Live-*.apk
+          if-no-files-found: error
+          retention-days: 14
