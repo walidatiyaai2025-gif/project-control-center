@@ -138,14 +138,17 @@ class _BranchDashboardState extends State<BranchDashboard> {
     switch (_tab) {
       case BranchTab.overview:
         values = values.where((b) => b.name == widget.repo.defaultBranch);
+        break;
       case BranchTab.yours:
         values = values.where((b) => b.isMine);
+        break;
       case BranchTab.active:
         values = values.where(
           (b) =>
               b.name != widget.repo.defaultBranch &&
               (b.updatedAt == null || b.updatedAt!.isAfter(staleCutoff)),
         );
+        break;
       case BranchTab.stale:
         values = values.where(
           (b) =>
@@ -153,6 +156,7 @@ class _BranchDashboardState extends State<BranchDashboard> {
               b.updatedAt != null &&
               b.updatedAt!.isBefore(staleCutoff),
         );
+        break;
       case BranchTab.all:
         break;
     }
@@ -497,12 +501,15 @@ class _StatusPill extends StatelessWidget {
       case 1:
         foreground = const Color(0xFF9A6700);
         background = const Color(0xFFFFF8C5);
+        break;
       case 2:
         foreground = const Color(0xFFCF222E);
         background = const Color(0xFFFFEBE9);
+        break;
       case 3:
         foreground = const Color(0xFF1A7F37);
         background = const Color(0xFFDAFBE1);
+        break;
       default:
         foreground = const Color(0xFF57606A);
         background = const Color(0xFFF6F8FA);
