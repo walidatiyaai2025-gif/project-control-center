@@ -65,5 +65,26 @@
     "GPTDeskTop-Setup.exe SHA-256",
     "GPTDeskTop portable SHA-256"
   ],
-  "STATUS": "ROUTED"
+  "STATUS": "RELEASED_READY_FOR_USER",
+  "RELEASED_IN_VERSION": "2.0.48",
+  "RELEASE_HANDOFF": {
+    "VERSION": "2.0.48",
+    "SOURCE_SHA": "072761c97241d082f78829062a99e187811294eb",
+    "CURRENT_MAIN_SHA": "f5a7053b476bf2d4cef6a40b5f18d204aed8c756",
+    "BUILD_ID": "v2.0.48-build.443",
+    "QA": "PASS: all 12 candidate gates and all main product/release gates including stable-exe publication succeeded",
+    "RELEASE_STATE": "PUBLISHED_VERIFIED",
+    "PRODUCTION_STATE": "USER_DOWNLOADS_READY; live user installation not yet verified",
+    "PR": 381,
+    "CANDIDATE_SHA": "70bfcefeb71bc8732905d538c2e93ae73956e586",
+    "RELEASE_RUN": 37185118404,
+    "SETUP_SHA256": "1db3547a9c9a41211a119ad7fe23585c75e80cef58779a8f4d5297b94d4f882d",
+    "PORTABLE_SHA256": "ffbec42ad53d6e42fa7642205111bbc6582f8a6f8fd02727ac29ca1d58372c2a",
+    "ARTIFACTS": [
+      "GPTDeskTop-Setup.exe",
+      "GPTDeskTop-Portable-2.0.48-win-x64.zip"
+    ],
+    "RELEASE_URL": "https://github.com/walidatiyaai2025-gif/GPTDeskTop/releases/tag/v2.0.48-build.443",
+    "USER_ACCEPTANCE": "PENDING"
+  }
 }
