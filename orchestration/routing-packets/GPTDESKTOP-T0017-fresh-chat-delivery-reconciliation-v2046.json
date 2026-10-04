@@ -72,5 +72,28 @@
     "published_at": "2026-10-04T06:07:04Z",
     "reason": "Another session merged PR #379 and published 2.0.46 before owner-required typed delivery outcomes were integrated. Immutable Product Version Policy forbids republishing different code under 2.0.46. Continue the SAME T0017 branch via PR #380 and deliver the complete fix as 2.0.47."
   },
-  "CONTINUATION_PR": 380
+  "CONTINUATION_PR": 380,
+  "RELEASED_IN_VERSION": "2.0.47",
+  "STATUS": "RELEASED_READY_FOR_USER",
+  "RELEASE_HANDOFF": {
+    "VERSION": "2.0.47",
+    "SOURCE_SHA": "b8f9c12493ed1fa08619ed1428725634bcf57f98",
+    "BUILD_ID": "v2.0.47-build.441",
+    "QA": "PASS: 872 runtime tests; all 12 candidate gates and all 13 main workflows including Last release succeeded",
+    "RELEASE_STATE": "PUBLISHED_VERIFIED",
+    "PRODUCTION_STATE": "USER_DOWNLOADS_READY; live user installation not yet verified",
+    "ROLLBACK": "v2.0.45-build.436 at b67041efcfbbca3aaa9edd18342eeb4e936a0ed2",
+    "PR": 380,
+    "CANDIDATE_SHA": "34b1921b697d2295a59665dd7bf602d133a14d91",
+    "RELEASE_RUN": 37182195538,
+    "MAIN_BUILD_RUN": 37182195551,
+    "SETUP_SHA256": "d67c98cf2c613dd1f70b3a2ea110a1714b3f98c78c2347acb8138825da4a7274",
+    "PORTABLE_SHA256": "9215ebc7eb0dab9e40c5245ea9864a0183d84c6dc4d91b77761098d88a236eaf",
+    "ARTIFACTS": [
+      "GPTDeskTop-Setup.exe",
+      "GPTDeskTop-Portable-2.0.47-win-x64.zip"
+    ],
+    "RELEASE_URL": "https://github.com/walidatiyaai2025-gif/GPTDeskTop/releases/tag/v2.0.47-build.441",
+    "USER_ACCEPTANCE": "PENDING"
+  }
 }
