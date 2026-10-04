@@ -21,7 +21,10 @@
     "If the fresh-chat URL has not promoted yet, remain in reconciliation and do not roll over, resend, or mark the message sent",
     "Preserve existing generation/user-turn receipt checks, rate-limit handling, global pacing, checkpoint semantics, single managed Chrome ownership, and Runtime.evaluate timeout recovery",
     "Add regression coverage for fresh-chat promotion and for the no-promotion fail-closed/read-only path",
-    "Bump application/setup/release identity to 2.0.46 and reconcile version assertions"
+    "Bump application/setup/release identity to 2.0.46 and reconcile version assertions",
+    "Typed delivery outcome tracking at the physical CDP submit boundary; Monitor Only retries only definitely-not-submitted outcomes through the safety gate",
+    "Fresh-chat URL promotion is binding evidence only; require actual delivery receipt before checkpointing",
+    "Read-only Monitor Only reconciliation after dispatch; no reload, rollover, or second submit"
   ],
   "DO_NOT_TOUCH": [
     "Do not weaken exactly-once protection",
@@ -48,7 +51,10 @@
     "A fresh-chat URL that has not promoted remains under read-only reconciliation and does not become automatic New Chat/resend authority",
     "Existing conversation-identity mismatch remains fail-closed",
     "Existing 429, pacing, single-browser, managed-Chrome recovery, and release x64 gates remain green",
-    "Exact-head Windows x64 setup/release verification is green before delivery"
+    "Exact-head Windows x64 setup/release verification is green before delivery",
+    "Pre-dispatch timeout/editor-not-ready is NotSubmitted; click transport loss is Ambiguous; accepted receipt is Delivered",
+    "Fresh URL promotion without matching user receipt must not checkpoint delivery",
+    "Setup and portable artifacts from accepted v2.0.46 exact source"
   ],
   "REQUIRED_HANDOFF": [
     "Task branch head SHA",
@@ -57,5 +63,6 @@
     "Exact-main CI evidence",
     "Release tag and workflow run",
     "GPTDeskTop-Setup.exe SHA-256"
-  ]
+  ],
+  "OWNER_FOLLOWUP": "Classify stable sender delivery using typed outcomes. A false before dispatch is definitely unsent; a dispatched command without receipt requires read-only reconciliation/rebind and forbids automatic resend. Deliver setup and portable after exact-head green CI and merge."
 }
