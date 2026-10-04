@@ -1,0 +1,63 @@
+{
+  "CONTROL_PLANE_VERSION": "v1.6.0",
+  "ROUTING_CONTRACT_VERSION": "1.2.0",
+  "PCC_SOURCE_SHA": "6c84f7d84259d12198dce529b4bc3f502be4fea3",
+  "PROJECT_ID": "GPTDESKTOP",
+  "repository": "walidatiyaai2025-gif/GPTDeskTop",
+  "PROJECT_MODEL": "STANDALONE",
+  "TASK_ID": "GPTDESKTOP-T0021-SESSION-LOSS-RECOVERY-V2051",
+  "OWNER_DIRECTIVE_DATE": "2026-10-04",
+  "OWNER_DIRECTIVE": "Fix GPTDeskTop v2.0.50 Monitor Only when the selected GPTDeskTop-managed Chrome automation session disappears before any physical submit. Field inspector shows Sent=0, Pending=1, Fresh target attempts exhausted before physical submit, Recovery waiting 15m, and transient automation-session-unavailable. Preserve exactly-once/no-duplicate safety while recovering the same explicitly authorized managed profile automatically instead of waiting 15 minutes.",
+  "CANONICAL_TASK_BRANCH": "fix/t0021-session-loss-recovery-v2051",
+  "BASE_BRANCH": "main",
+  "BASE_SHA": "4c322ba21138ee90150e7f46799da1ed932030db",
+  "SOURCE_RELEASE": "2.0.50",
+  "TARGET_RELEASE_VERSION": "2.0.51",
+  "TARGET_SCOPE": "PROJECT",
+  "CHANGE_BOUNDARY": [
+    "Detect selected managed CDP endpoint loss after fresh-target attempts are exhausted and before any physical submit",
+    "When the endpoint is genuinely unavailable and Start Monitor authorization is still valid, invoke the existing guarded GPTDeskTop-managed Chrome restart path instead of entering the 15-minute clean-retry wait",
+    "Reuse RuntimeEvaluateTimeoutRecoveryService managed-process inventory and selected managed user-data directory safety boundary; ordinary Chrome must remain untouched",
+    "After successful managed restart, continue with the same pending message and no sent checkpoint changes",
+    "If endpoint loss is not proven, preserve the existing fail-closed 15-minute clean-retry behavior",
+    "Never restart from an ambiguous physical-submit state and never authorize resend after physical submit may have occurred",
+    "Add regression coverage for pre-submit endpoint loss recovery, no restart when endpoint remains available, and no restart from the physical-send path",
+    "Bump application/setup/release identity to 2.0.51 and publish verified Windows x64 Setup plus portable artifacts"
+  ],
+  "DO_NOT_TOUCH": [
+    "Do not weaken exactly-once protection",
+    "Do not restart or kill ordinary user Chrome",
+    "Do not restart managed Chrome after an ambiguous physical submit",
+    "Do not bypass 429/rate-limit or pacing gates",
+    "Do not open duplicate managed Chrome sessions"
+  ],
+  "READ_FIRST": [
+    "AGENTS.md",
+    "src/GPTDeskTop/Services/SimpleMonitorRunner.cs",
+    "src/GPTDeskTop/Services/SimpleMonitorProfileSession.cs",
+    "src/GPTDeskTop/Services/RuntimeEvaluateTimeoutRecoveryService.cs",
+    "tests/GPTDeskTop.RuntimeTests/RuntimeEvaluateTimeoutAutoRestartRegressionTests.cs",
+    "Directory.Build.props",
+    ".github/workflows/build.yml",
+    ".github/workflows/release-artifact.yml"
+  ],
+  "REQUIRED_VALIDATION": [
+    "Pre-submit selected endpoint loss invokes guarded managed-Chrome recovery instead of 15-minute wait",
+    "Successful recovery resumes fresh-target creation with the pending message still unsent",
+    "Healthy endpoint/fresh-target failures that are not endpoint loss retain existing fail-closed behavior",
+    "Physical-send path cannot invoke managed restart",
+    "Ordinary Chrome remains outside managed process inventory",
+    "Existing composer-input, typed delivery, fresh-target rebind, receipts, 429, pacing, Chrome ownership and Release x64 gates remain green",
+    "Exact-main Windows x64 Setup/release verification is green before delivery"
+  ],
+  "REQUIRED_HANDOFF": [
+    "Task branch head SHA",
+    "Pull request number and merged SHA",
+    "Regression evidence",
+    "Exact-main CI evidence",
+    "Release tag and workflow run",
+    "GPTDeskTop-Setup.exe SHA-256",
+    "GPTDeskTop portable SHA-256"
+  ],
+  "STATUS": "ROUTED"
+}
