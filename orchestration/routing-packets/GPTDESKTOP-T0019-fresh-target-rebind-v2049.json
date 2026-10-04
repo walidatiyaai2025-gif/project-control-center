@@ -60,5 +60,18 @@
     "GPTDeskTop-Setup.exe SHA-256",
     "GPTDeskTop portable SHA-256"
   ],
-  "STATUS": "ROUTED"
+  "STATUS": "RELEASED_READY_FOR_USER",
+  "RELEASE_HANDOFF": {
+    "VERSION": "2.0.49",
+    "SOURCE_SHA": "989da1726b681c6ad153fc5f9baf745121d3d0ad",
+    "BUILD_ID": "v2.0.49-build.445",
+    "PR": 382,
+    "RELEASE_RUN": 37187826469,
+    "STABLE_EXE_RUN": 37187940000,
+    "QA": "PASS: PR exact-head gates green; all main build, receipts, recovery, Chrome ownership, Release x64, package and publish-stable-exe checks succeeded",
+    "SETUP_SHA256": "699cf72ade917d8369f7525abd08dd5436a5d3660d5e03243b25ed5ae1f12aef",
+    "PORTABLE_SHA256": "3e0c7741e42521d9ae9e78a5872bdcd77f533535a3b3281e1d29735d8deec338",
+    "RELEASE_URL": "https://github.com/walidatiyaai2025-gif/GPTDeskTop/releases/tag/v2.0.49-build.445",
+    "USER_ACCEPTANCE": "PENDING"
+  }
 }
