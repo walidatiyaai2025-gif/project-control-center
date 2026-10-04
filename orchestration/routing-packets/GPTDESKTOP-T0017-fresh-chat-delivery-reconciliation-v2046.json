@@ -1,0 +1,61 @@
+{
+  "CONTROL_PLANE_VERSION": "2.0.0",
+  "ROUTING_CONTRACT_VERSION": "1.2.0",
+  "PCC_SOURCE_SHA": "6269bf9e94b0a4e3225b880d697d64817ccbf606",
+  "PROJECT_ID": "GPTDESKTOP",
+  "repository": "walidatiyaai2025-gif/GPTDeskTop",
+  "PROJECT_MODEL": "STANDALONE",
+  "TASK_ID": "GPTDESKTOP-T0017-FRESH-CHAT-DELIVERY-RECONCILIATION-V2046",
+  "OWNER_DIRECTIVE_DATE": "2026-10-04",
+  "OWNER_DIRECTIVE": "Fix GPTDeskTop v2.0.45 Monitor Only false BLOCKED state where the stable sender does not confirm delivery after a fresh-chat physical submit. Preserve exactly-once safety: never automatically resend a message whose submit may have succeeded, but recognize the same automation-owned Chrome target transitioning from ChatGPT new-chat root to a stable /c/{conversation-id} URL as positive post-submit acceptance evidence and keep uncertain fresh-chat sends in read-only reconciliation instead of failing closed solely because the pre-submit URL had no conversation identity.",
+  "CANONICAL_TASK_BRANCH": "fix/t0017-fresh-chat-delivery-reconciliation-v2046",
+  "BASE_BRANCH": "main",
+  "BASE_SHA": "fc976c2c29cc6827676a491c4cea49cf52d4ebb0",
+  "SOURCE_RELEASE": "2.0.45",
+  "TARGET_RELEASE_VERSION": "2.0.46",
+  "TARGET_SCOPE": "PROJECT",
+  "CHANGE_BOUNDARY": [
+    "Fix false ambiguous-post-submit-reconciliation for Monitor Only sends initiated from the ChatGPT new-chat root",
+    "Treat same-target new-chat root to stable conversation URL promotion after a physical submit as read-only delivery acceptance evidence",
+    "Do not bind a fresh-chat send to another target or another pre-existing conversation",
+    "If the fresh-chat URL has not promoted yet, remain in reconciliation and do not roll over, resend, or mark the message sent",
+    "Preserve existing generation/user-turn receipt checks, rate-limit handling, global pacing, checkpoint semantics, single managed Chrome ownership, and Runtime.evaluate timeout recovery",
+    "Add regression coverage for fresh-chat promotion and for the no-promotion fail-closed/read-only path",
+    "Bump application/setup/release identity to 2.0.46 and reconcile version assertions"
+  ],
+  "DO_NOT_TOUCH": [
+    "Do not weaken exactly-once protection",
+    "Do not automatically create New Chat or resend after a genuinely ambiguous physical submit",
+    "Do not treat navigation to a different target as delivery evidence",
+    "Do not bypass 429/rate-limit waits",
+    "Do not change normal user Chrome ownership behavior",
+    "Do not remove existing v2.0.45 Runtime.evaluate controlled restart behavior"
+  ],
+  "READ_FIRST": [
+    "AGENTS.md",
+    "src/GPTDeskTop/Services/SimpleMonitorRunner.cs",
+    "src/GPTDeskTop/Services/ChromeDevToolsService.cs",
+    "src/GPTDeskTop/Services/MonitorDeliveryRecoveryPolicy.cs",
+    "tests/GPTDeskTop.RuntimeTests/VerifiedSendTransportRecoveryRegressionTests.cs",
+    "tests/GPTDeskTop.RuntimeTests/VerifiedSendReloadHydrationPolicyTests.cs",
+    "Directory.Build.props",
+    ".github/workflows/build.yml",
+    ".github/workflows/release-artifact.yml"
+  ],
+  "REQUIRED_VALIDATION": [
+    "Existing runtime automation tests remain green",
+    "Same tracked target promotion from https://chatgpt.com/ to https://chatgpt.com/c/{id} after physical submit is accepted without a second send",
+    "A fresh-chat URL that has not promoted remains under read-only reconciliation and does not become automatic New Chat/resend authority",
+    "Existing conversation-identity mismatch remains fail-closed",
+    "Existing 429, pacing, single-browser, managed-Chrome recovery, and release x64 gates remain green",
+    "Exact-head Windows x64 setup/release verification is green before delivery"
+  ],
+  "REQUIRED_HANDOFF": [
+    "Task branch head SHA",
+    "Pull request number and merged SHA",
+    "Regression evidence",
+    "Exact-main CI evidence",
+    "Release tag and workflow run",
+    "GPTDeskTop-Setup.exe SHA-256"
+  ]
+}
