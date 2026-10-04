@@ -12,7 +12,7 @@
   "BASE_BRANCH": "main",
   "BASE_SHA": "fc976c2c29cc6827676a491c4cea49cf52d4ebb0",
   "SOURCE_RELEASE": "2.0.45",
-  "TARGET_RELEASE_VERSION": "2.0.46",
+  "TARGET_RELEASE_VERSION": "2.0.47",
   "TARGET_SCOPE": "PROJECT",
   "CHANGE_BOUNDARY": [
     "Fix false ambiguous-post-submit-reconciliation for Monitor Only sends initiated from the ChatGPT new-chat root",
@@ -64,5 +64,13 @@
     "Release tag and workflow run",
     "GPTDeskTop-Setup.exe SHA-256"
   ],
-  "OWNER_FOLLOWUP": "Classify stable sender delivery using typed outcomes. A false before dispatch is definitely unsent; a dispatched command without receipt requires read-only reconciliation/rebind and forbids automatic resend. Deliver setup and portable after exact-head green CI and merge."
+  "OWNER_FOLLOWUP": "Classify stable sender delivery using typed outcomes. A false before dispatch is definitely unsent; a dispatched command without receipt requires read-only reconciliation/rebind and forbids automatic resend. Deliver setup and portable after exact-head green CI and merge.",
+  "VERSION_RECONCILIATION": {
+    "original_requested_version": "2.0.46",
+    "concurrent_release_tag": "v2.0.46-build.438",
+    "concurrent_release_sha": "9ad20a2c0d3bfd62e4c5e825933f9dd72c51910c",
+    "published_at": "2026-10-04T06:07:04Z",
+    "reason": "Another session merged PR #379 and published 2.0.46 before owner-required typed delivery outcomes were integrated. Immutable Product Version Policy forbids republishing different code under 2.0.46. Continue the SAME T0017 branch via PR #380 and deliver the complete fix as 2.0.47."
+  },
+  "CONTINUATION_PR": 380
 }
