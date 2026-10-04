@@ -1,0 +1,61 @@
+{
+  "CONTROL_PLANE_VERSION": "v1.6.0",
+  "ROUTING_CONTRACT_VERSION": "1.2.0",
+  "PCC_SOURCE_SHA": "a3b36caa4e35020ae64dc5dd5ecd823aa2752314",
+  "PROJECT_ID": "GPTDESKTOP",
+  "repository": "walidatiyaai2025-gif/GPTDeskTop",
+  "PROJECT_MODEL": "STANDALONE",
+  "TASK_ID": "GPTDESKTOP-T0020-COMPOSER-INPUT-V2050",
+  "OWNER_DIRECTIVE_DATE": "2026-10-04",
+  "OWNER_DIRECTIVE": "Fix GPTDeskTop v2.0.49 Monitor Only reaching Sending 1/1 on a stable fresh ChatGPT tab while the composer remains visibly empty and the message is never physically submitted. Preserve exactly-once/no-duplicate safety and make composer text entry compatible with the current ChatGPT contenteditable UI.",
+  "CANONICAL_TASK_BRANCH": "fix/t0020-composer-input-v2050",
+  "BASE_BRANCH": "main",
+  "BASE_SHA": "c2c609b223e9bb79077b039c5e824fc272ec4bfe",
+  "SOURCE_RELEASE": "2.0.49",
+  "TARGET_RELEASE_VERSION": "2.0.50",
+  "TARGET_SCOPE": "PROJECT",
+  "CHANGE_BOUNDARY": [
+    "Replace fragile contenteditable document.execCommand insertText dependency with native CDP Input.insertText after focusing/selecting the current ChatGPT composer",
+    "Verify the composer contains the exact expected message before any physical Send click is authorized",
+    "Keep preparation failure definitely NotSubmitted and never mark physical submit before text verification",
+    "Retain native value-setter compatibility for textarea/input only if needed, while contenteditable uses CDP text insertion",
+    "Do not click Send if the composer is empty, partial, stale, disabled, or does not exactly match the pending message",
+    "Keep v2.0.49 fresh-target rebind, typed delivery reconciliation, 429/pacing and single managed Chrome ownership behavior unchanged",
+    "Add regression coverage proving CDP Input.insertText happens before the single Send click and preparation mismatch cannot click",
+    "Bump application/setup/release identity to 2.0.50 and publish verified Windows x64 Setup plus portable artifacts"
+  ],
+  "DO_NOT_TOUCH": [
+    "Do not weaken exactly-once protection",
+    "Do not blindly retry after an ambiguous physical submit",
+    "Do not bypass 429/rate-limit or pacing gates",
+    "Do not launch a second Chrome process during runtime recovery",
+    "Do not reintroduce fresh-tab rollover loops"
+  ],
+  "READ_FIRST": [
+    "AGENTS.md",
+    "src/GPTDeskTop/Services/ChromeDevToolsService.cs",
+    "src/GPTDeskTop/Services/SimpleMonitorRunner.cs",
+    "tests/GPTDeskTop.RuntimeTests/TypedDeliveryOutcomeTests.cs",
+    "Directory.Build.props",
+    ".github/workflows/build.yml",
+    ".github/workflows/release-artifact.yml"
+  ],
+  "REQUIRED_VALIDATION": [
+    "Current ChatGPT contenteditable composer receives the exact pending message through CDP Input.insertText",
+    "Exact composer match is required before the Send click command can be dispatched",
+    "Composer preparation failure/mismatch remains NotSubmitted with zero clicks",
+    "Successful delivery path performs exactly one physical click",
+    "Existing typed delivery, fresh-target rebind, receipts, 429, pacing, Chrome ownership and Release x64 gates remain green",
+    "Exact-main Windows x64 Setup/release verification is green before delivery"
+  ],
+  "REQUIRED_HANDOFF": [
+    "Task branch head SHA",
+    "Pull request number and merged SHA",
+    "Regression evidence",
+    "Exact-main CI evidence",
+    "Release tag and workflow run",
+    "GPTDeskTop-Setup.exe SHA-256",
+    "GPTDeskTop portable SHA-256"
+  ],
+  "STATUS": "ROUTED"
+}
