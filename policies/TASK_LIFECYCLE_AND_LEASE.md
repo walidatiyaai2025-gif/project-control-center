@@ -14,3 +14,12 @@ For product-function Tasks, state promotion is constrained by the Feature Delive
 
 ## Worker and recovery output
 Implementation, continuation and recovery Workers use `SILENT_EXECUTION_BY_DEFAULT=TRUE` under `EXECUTION_OUTPUT_DISCIPLINE_POLICY`. They execute available actions without investigation narration and return only a structured final handoff or a genuine blocker requiring external input. Reclaimed evidence must be reconciled to the exact current head before it is reported as current.
+
+
+## Project-specific stricter branch lifecycle
+
+A routed target constitution or owner-amended project/variant policy may impose stricter canonical-branch rules than this baseline, including a fixed concurrency pool, Worker prohibition on branch creation, and mandatory verified Task-branch retirement after merge.
+
+Such a rule is valid only when it is committed in PCC and the routed target repository governance. Verified deletion of a fully merged canonical Task branch after proving zero unique unmerged commits is Task closure and is distinct from the blind or autonomous branch deletion prohibited by fleet/orphan policy.
+
+When a stricter routed rule exists, routing packets must carry it explicitly and Workers must follow the stricter rule.
