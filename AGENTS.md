@@ -193,6 +193,7 @@ Then:
 - Manager/Dispatcher/Lead/Onboarding Lead: `START_HERE.md`, `policies/GOVERNANCE_LAWS.md`, `policies/CONSTITUTIONAL_DECISION_AND_VARIANT_ONBOARDING_POLICY.md`, `policies/PROJECT_FAMILY_ROUTING_POLICY.md`, `policies/CENTRAL_ORCHESTRATION_POLICY.md`.
 - Production emergency Manager/Lead: also read `policies/EMERGENCY_PRODUCTION_INCIDENT_POLICY.md` and use `schemas/production-incident.schema.json` / `templates/PRODUCTION_INCIDENT.json`.
 - Implementation Worker: routed target repository constitution + routing packet + task-specific policy.
+- AIMWWEB / LARAVEL_AIWMWEB remaining-parity closure: Manager/Dispatcher/Lead, Implementation Worker, Integration, and Recovery roles must also read `policies/AIMWWEB_LARAVEL_CLOSURE_EXECUTION_POLICY.md` and the target repository `.pcc/LARAVEL_AIWMWEB_VARIANT_CHARTER.md` before branch or implementation actions.
 - QA: exact candidate SHA + QA handoff/provenance requirements.
 - Integration/Release: exact-head evidence, structured handoffs, version/release policies, and unresolved incident carry-forward state.
 
