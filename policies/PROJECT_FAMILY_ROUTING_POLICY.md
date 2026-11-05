@@ -42,13 +42,13 @@ A variant with `ROUTING_STATE=READY` must have a verified mapped/external implem
 
 Do not invent a directory, client branch, repository, domain, or shared-core architecture to force READY.
 
-## Owner-approved single-active product default
+## Owner-approved product-family retirement to standalone
 
-A product family can retain an archived legacy implementation for historical traceability while operating a single active production edition. Such a **transitional Laravel-only product** remains a `PRODUCT_FAMILY` record until source cleanup and repository-model reclassification are independently verified; archived editions must have `STATUS=ARCHIVED` and `ROUTING_STATE=ARCHIVED` and are not eligible for new feature work, CI acceptance, release, or deployment.
+When the owner retires every edition except one, the control plane **must reclassify** the product as `PROJECT_MODEL=STANDALONE` rather than keeping an invalid one-active-variant `PRODUCT_FAMILY`. The standalone routing record must set `VARIANTS=[]`, `FAMILY_MANIFEST_PATH=null`, `VARIANT_GOVERNANCE_STATE=NOT_APPLICABLE`, `CORE_ROUTING_STATE=NOT_APPLICABLE`, and `DEFAULT_SCOPE=PROJECT`.
 
-Only where the PCC routing record explicitly declares both `DEFAULT_SCOPE=VARIANT` and `DEFAULT_VARIANT_ID` and has **exactly one** `STATUS=ACTIVE` variant matching that ID, the project alias may route automatically to that active variant. An explicit `CORE` request still requires its separate authorization, and an archived variant alias must fail closed. A normal multi-variant family still requires an explicitly selected scope and variant.
+A standalone product may have a verified, nonroot live implementation directory when historical technology remains in the repository. Record `ACTIVE_IMPLEMENTATION_LOCATION` and `ACTIVE_IMPLEMENTATION_LOCATION_STATE=MAPPED`; the router constrains the implementation boundary to that validated relative path. Historical source must be non-routable and outside the live build/deployment surface. Physical deletion of an archived source tree, obsolete CI or unmerged work requires a separately reviewed and tested cleanup; architectural reclassification alone must not be misrepresented as code removal.
 
-For `AIMWWEB`, the owner decision of **2026-11-05** selects `LARAVEL_AIWMWEB` as the sole active product. `AIMWWEB_CURRENT` is retained only as a non-routable historical source archive until a separately validated migration cleans obsolete source and CI. All new product requirements, issue triage, execution and production release gates target Laravel/WordPress/MySQL and the FOODEX-style signed cPanel installation and dashboard update lifecycle. No legacy .NET/Windows build can be required to approve a Laravel deliverable.
+For `AIMWWEB`, owner decision **2026-11-05** establishes **Laravel-only** as the sole active production product under `variants/laravel-aiwmweb/**`. The former ASP.NET/Windows source may remain as an archive pending audited cleanup; no new ASP.NET issues, features, CI/release obligations, build artifacts or production deployments are authorized. New AIMWWeb work resolves as `TARGET_SCOPE=PROJECT` to the verified Laravel path. Prior `TARGET_VARIANT=LARAVEL_AIWMWEB` records are historical task provenance, not permission to reopen a second product edition. Preserve Laravel tenant isolation, WordPress workflows and FOODEX-style signed cPanel Setup and Admin ZIP update gates.
 
 ## Manager/Lead routing responsibility
 
