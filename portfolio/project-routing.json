@@ -6,7 +6,7 @@
       "PROJECT_ID": "AIMWWEB",
       "DISPLAY_NAME": "AIMWWeb",
       "REPOSITORY": "walidatiyaai2025-gif/AIMWWeb",
-      "PROJECT_MODEL": "PRODUCT_FAMILY",
+      "PROJECT_MODEL": "STANDALONE",
       "ALIASES": [
         "aimwweb",
         "aimw web"
@@ -17,49 +17,26 @@
       "CONSTITUTION_SOURCE_SHA": "2f5c4c24cb01dd0ffafdce3f394e6d4f5bdae38e",
       "ONBOARDING_NORMALIZATION_STATE": "READY",
       "NORMALIZATION_EVIDENCE_SHA": "2f5c4c24cb01dd0ffafdce3f394e6d4f5bdae38e",
-      "FAMILY_MANIFEST_PATH": ".pcc/project-family.json",
-      "VARIANT_GOVERNANCE_STATE": "PARTIAL",
-      "CORE_ROUTING_STATE": "BLOCKED_UNRESOLVED",
-      "DEFAULT_SCOPE": "VARIANT",
-      "VARIANTS": [
-        {
-          "VARIANT_ID": "AIMWWEB_CURRENT",
-          "DISPLAY_NAME": "AIMWWeb Current",
-          "TYPE": "PRODUCT_VARIANT",
-          "STATUS": "ARCHIVED",
-          "DERIVED_FROM": null,
-          "ALIASES": [
-            "legacy aimwweb aspnet",
-            "aspnet aimwweb archive",
-            "aimwweb old desktop"
-          ],
-          "IMPLEMENTATION_LOCATION": ".",
-          "IMPLEMENTATION_LOCATION_STATE": "MAPPED",
-          "ROUTING_STATE": "ARCHIVED",
-          "BOUNDARY_EVIDENCE_SHA": "02efdf27f3dcf79030c578059aaee67fa3676679"
-        },
-        {
-          "VARIANT_ID": "LARAVEL_AIWMWEB",
-          "DISPLAY_NAME": "Laravel AIWMWeb",
-          "TYPE": "PRIMARY",
-          "STATUS": "ACTIVE",
-          "DERIVED_FROM": null,
-          "ALIASES": [
-            "laravel aiwmweb",
-            "laravel aimw web",
-            "aiwmweb laravel",
-            "laravel edition"
-          ],
-          "IMPLEMENTATION_LOCATION": "variants/laravel-aiwmweb",
-          "IMPLEMENTATION_LOCATION_STATE": "MAPPED",
-          "ROUTING_STATE": "READY",
-          "BOUNDARY_EVIDENCE_SHA": "2f5c4c24cb01dd0ffafdce3f394e6d4f5bdae38e"
-        }
-      ],
-      "DEFAULT_VARIANT_ID": "LARAVEL_AIWMWEB",
-      "ACTIVE_PRODUCT_STACK": "Laravel / PHP / MySQL-MariaDB / React / WordPress",
+      "FAMILY_MANIFEST_PATH": null,
+      "VARIANT_GOVERNANCE_STATE": "NOT_APPLICABLE",
+      "CORE_ROUTING_STATE": "NOT_APPLICABLE",
+      "DEFAULT_SCOPE": "PROJECT",
+      "VARIANTS": [],
+      "ACTIVE_PRODUCT_STACK": "Laravel / PHP / React / MySQL-MariaDB / WordPress",
       "LEGACY_SOURCE_STATE": "ARCHIVED_NONPRODUCT_PENDING_TESTED_REPOSITORY_CLEANUP",
-      "OWNER_LARAVEL_ONLY_DECISION_DATE": "2026-11-05"
+      "OWNER_LARAVEL_ONLY_DECISION_DATE": "2026-11-05",
+      "ACTIVE_IMPLEMENTATION_LOCATION": "variants/laravel-aiwmweb",
+      "ACTIVE_IMPLEMENTATION_LOCATION_STATE": "MAPPED",
+      "RETIRED_IMPLEMENTATIONS": [
+        {
+          "ID": "AIMWWEB_CURRENT",
+          "STACK": "ASP.NET / Windows / IIS",
+          "STATUS": "ARCHIVED",
+          "ROUTING_STATE": "ARCHIVED",
+          "SOURCE_LOCATION": "src",
+          "PRODUCTION_TARGET": false
+        }
+      ]
     },
     {
       "PROJECT_ID": "NOTONLYBOOK",
