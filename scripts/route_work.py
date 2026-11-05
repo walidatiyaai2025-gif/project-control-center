@@ -123,21 +123,19 @@ def route(root: Path, identifier: str, variant_name: str | None = None, scope: s
             return blocked("INVALID_SCOPE_FOR_STANDALONE_PROJECT", TARGET_SCOPE=target_scope)
         impacted_variants: list[str] = []
         cross_variant = False
-        change_boundary = "PROJECT"
+        target_location = project.get("ACTIVE_IMPLEMENTATION_LOCATION")
+        target_location_state = project.get("ACTIVE_IMPLEMENTATION_LOCATION_STATE")
+        if target_location:
+            if (target_location_state != "MAPPED"
+                    or target_location.startswith("/")
+                    or ".." in target_location.split("/")
+                    or target_location.strip() != target_location):
+                return blocked("STANDALONE_ACTIVE_IMPLEMENTATION_BOUNDARY_UNVERIFIED",
+                               PROJECT_ID=project.get("PROJECT_ID"))
+        change_boundary = f"PROJECT:{target_location}" if target_location else "PROJECT"
     elif model == "PRODUCT_FAMILY":
         if target_variant and not target_scope:
             target_scope = "VARIANT"
-        # A canonical, owner-approved product with exactly one active edition may
-        # explicitly declare its sole default variant. Never infer a default for
-        # ordinary multi-variant families, and never bypass an explicit CORE scope.
-        if not target_variant and target_scope in (None, "VARIANT"):
-            default_id = project.get("DEFAULT_VARIANT_ID")
-            active = [v for v in project.get("VARIANTS", []) if v.get("STATUS") == "ACTIVE"]
-            if (project.get("DEFAULT_SCOPE") == "VARIANT"
-                    and default_id and len(active) == 1
-                    and active[0].get("VARIANT_ID") == default_id):
-                target_variant = active[0]
-                target_scope = "VARIANT"
         if not target_scope:
             return blocked("TARGET_SCOPE_REQUIRED_FOR_PRODUCT_FAMILY", PROJECT_ID=project.get("PROJECT_ID"), ALLOWED_SCOPES=["CORE", "VARIANT"])
         if target_scope == "CORE":
