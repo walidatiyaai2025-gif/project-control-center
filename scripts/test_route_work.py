@@ -88,47 +88,53 @@ class RouteWorkTests(unittest.TestCase):
         finally:
             d.cleanup()
 
-    def test_explicit_owner_default_routes_sole_active_laravel_variant(self):
+    def test_retired_family_routes_as_standalone_to_laravel_only(self):
         d, root = self.make_root()
         try:
             path = root / "portfolio/project-routing.json"
             routing = json.loads(path.read_text())
-            family = routing["PROJECTS"][1]
-            family["DEFAULT_SCOPE"] = "VARIANT"
-            family["DEFAULT_VARIANT_ID"] = "CLIENTA"
-            family["VARIANTS"][0]["STATUS"] = "ARCHIVED"
-            family["VARIANTS"][0]["ROUTING_STATE"] = "ARCHIVED"
-            family["CORE_ROUTING_STATE"] = "BLOCKED_UNRESOLVED"
+            project = routing["PROJECTS"][1]
+            project["PROJECT_MODEL"] = "STANDALONE"
+            project["VARIANT_GOVERNANCE_STATE"] = "NOT_APPLICABLE"
+            project["CORE_ROUTING_STATE"] = "NOT_APPLICABLE"
+            project["FAMILY_MANIFEST_PATH"] = None
+            project["VARIANTS"] = []
+            project["DEFAULT_SCOPE"] = "PROJECT"
+            project["ACTIVE_IMPLEMENTATION_LOCATION"] = "variants/laravel-aiwmweb"
+            project["ACTIVE_IMPLEMENTATION_LOCATION_STATE"] = "MAPPED"
             path.write_text(json.dumps(routing))
 
-            routed = route_work.route(root, "family", task="laravel-feature")
-            self.assertEqual(routed["ROUTING_STATUS"], "ROUTED")
-            self.assertEqual(routed["TARGET_SCOPE"], "VARIANT")
-            self.assertEqual(routed["TARGET_VARIANT"], "CLIENTA")
-            self.assertEqual(routed["TARGET_IMPLEMENTATION_LOCATION"], "variants/clienta")
-            self.assertEqual(routed["IMPACTED_VARIANTS"], ["CLIENTA"])
-
-            archive = route_work.route(root, "base")
-            self.assertEqual(archive["ROUTING_STATUS"], "BLOCKED")
-            self.assertEqual(archive["REASON"], "TARGET_VARIANT_NOT_ACTIVE")
+            result = route_work.route(root, "family", task="laravel")
+            self.assertEqual(result["ROUTING_STATUS"], "ROUTED")
+            self.assertEqual(result["TARGET_SCOPE"], "PROJECT")
+            self.assertIsNone(result["TARGET_VARIANT"])
+            self.assertEqual(result["TARGET_IMPLEMENTATION_LOCATION"], "variants/laravel-aiwmweb")
+            self.assertEqual(result["CHANGE_BOUNDARY"], "PROJECT:variants/laravel-aiwmweb")
+            self.assertEqual(result["IMPACTED_VARIANTS"], [])
 
             blocked_core = route_work.route(root, "family", scope="CORE")
-            self.assertEqual(blocked_core["REASON"], "SHARED_CORE_BOUNDARY_NOT_READY")
+            self.assertEqual(blocked_core["REASON"], "INVALID_SCOPE_FOR_STANDALONE_PROJECT")
+            no_archived_route = route_work.route(root, "base")
+            self.assertEqual(no_archived_route["REASON"], "PROJECT_OR_VARIANT_NOT_REGISTERED")
         finally:
             d.cleanup()
 
-    def test_default_does_not_infer_or_bypass_multi_variant_family(self):
+    def test_standalone_source_boundary_requires_safe_mapped_path(self):
         d, root = self.make_root()
         try:
             path = root / "portfolio/project-routing.json"
             routing = json.loads(path.read_text())
-            family = routing["PROJECTS"][1]
-            family["DEFAULT_SCOPE"] = "VARIANT"
-            family["DEFAULT_VARIANT_ID"] = "CLIENTA"
+            project = routing["PROJECTS"][1]
+            project["PROJECT_MODEL"] = "STANDALONE"
+            project["VARIANTS"] = []
+            project["FAMILY_MANIFEST_PATH"] = None
+            project["ACTIVE_IMPLEMENTATION_LOCATION"] = "../archived"
+            project["ACTIVE_IMPLEMENTATION_LOCATION_STATE"] = "MAPPED"
             path.write_text(json.dumps(routing))
+
             result = route_work.route(root, "family")
             self.assertEqual(result["ROUTING_STATUS"], "BLOCKED")
-            self.assertEqual(result["REASON"], "TARGET_SCOPE_REQUIRED_FOR_PRODUCT_FAMILY")
+            self.assertEqual(result["REASON"], "STANDALONE_ACTIVE_IMPLEMENTATION_BOUNDARY_UNVERIFIED")
         finally:
             d.cleanup()
 
