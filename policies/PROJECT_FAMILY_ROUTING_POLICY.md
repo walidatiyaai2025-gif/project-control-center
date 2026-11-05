@@ -42,6 +42,14 @@ A variant with `ROUTING_STATE=READY` must have a verified mapped/external implem
 
 Do not invent a directory, client branch, repository, domain, or shared-core architecture to force READY.
 
+## Owner-approved product-family retirement to standalone
+
+When the owner retires every edition except one, the control plane **must reclassify** the product as `PROJECT_MODEL=STANDALONE` rather than keeping an invalid one-active-variant `PRODUCT_FAMILY`. The standalone routing record must set `VARIANTS=[]`, `FAMILY_MANIFEST_PATH=null`, `VARIANT_GOVERNANCE_STATE=NOT_APPLICABLE`, `CORE_ROUTING_STATE=NOT_APPLICABLE`, and `DEFAULT_SCOPE=PROJECT`.
+
+A standalone product may have a verified, nonroot live implementation directory when historical technology remains in the repository. Record `ACTIVE_IMPLEMENTATION_LOCATION` and `ACTIVE_IMPLEMENTATION_LOCATION_STATE=MAPPED`; the router constrains the implementation boundary to that validated relative path. Historical source must be non-routable and outside the live build/deployment surface. Physical deletion of an archived source tree, obsolete CI or unmerged work requires a separately reviewed and tested cleanup; architectural reclassification alone must not be misrepresented as code removal.
+
+For `AIMWWEB`, owner decision **2026-11-05** establishes **Laravel-only** as the sole active production product under `variants/laravel-aiwmweb/**`. The former ASP.NET/Windows source may remain as an archive pending audited cleanup; no new ASP.NET issues, features, CI/release obligations, build artifacts or production deployments are authorized. New AIMWWeb work resolves as `TARGET_SCOPE=PROJECT` to the verified Laravel path. Prior `TARGET_VARIANT=LARAVEL_AIWMWEB` records are historical task provenance, not permission to reopen a second product edition. Preserve Laravel tenant isolation, WordPress workflows and FOODEX-style signed cPanel Setup and Admin ZIP update gates.
+
 ## Manager/Lead routing responsibility
 
 Any Worker assuming Manager/Lead/Dispatcher responsibility MUST perform routing before assigning implementation work. This is a management responsibility and cannot be delegated as ambiguity to the implementation Worker.

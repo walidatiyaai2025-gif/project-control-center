@@ -88,6 +88,56 @@ class RouteWorkTests(unittest.TestCase):
         finally:
             d.cleanup()
 
+    def test_retired_family_routes_as_standalone_to_laravel_only(self):
+        d, root = self.make_root()
+        try:
+            path = root / "portfolio/project-routing.json"
+            routing = json.loads(path.read_text())
+            project = routing["PROJECTS"][1]
+            project["PROJECT_MODEL"] = "STANDALONE"
+            project["VARIANT_GOVERNANCE_STATE"] = "NOT_APPLICABLE"
+            project["CORE_ROUTING_STATE"] = "NOT_APPLICABLE"
+            project["FAMILY_MANIFEST_PATH"] = None
+            project["VARIANTS"] = []
+            project["DEFAULT_SCOPE"] = "PROJECT"
+            project["ACTIVE_IMPLEMENTATION_LOCATION"] = "variants/laravel-aiwmweb"
+            project["ACTIVE_IMPLEMENTATION_LOCATION_STATE"] = "MAPPED"
+            path.write_text(json.dumps(routing))
+
+            result = route_work.route(root, "family", task="laravel")
+            self.assertEqual(result["ROUTING_STATUS"], "ROUTED")
+            self.assertEqual(result["TARGET_SCOPE"], "PROJECT")
+            self.assertIsNone(result["TARGET_VARIANT"])
+            self.assertEqual(result["TARGET_IMPLEMENTATION_LOCATION"], "variants/laravel-aiwmweb")
+            self.assertEqual(result["CHANGE_BOUNDARY"], "PROJECT:variants/laravel-aiwmweb")
+            self.assertEqual(result["IMPACTED_VARIANTS"], [])
+
+            blocked_core = route_work.route(root, "family", scope="CORE")
+            self.assertEqual(blocked_core["REASON"], "INVALID_SCOPE_FOR_STANDALONE_PROJECT")
+            no_archived_route = route_work.route(root, "base")
+            self.assertEqual(no_archived_route["REASON"], "PROJECT_OR_VARIANT_NOT_REGISTERED")
+        finally:
+            d.cleanup()
+
+    def test_standalone_source_boundary_requires_safe_mapped_path(self):
+        d, root = self.make_root()
+        try:
+            path = root / "portfolio/project-routing.json"
+            routing = json.loads(path.read_text())
+            project = routing["PROJECTS"][1]
+            project["PROJECT_MODEL"] = "STANDALONE"
+            project["VARIANTS"] = []
+            project["FAMILY_MANIFEST_PATH"] = None
+            project["ACTIVE_IMPLEMENTATION_LOCATION"] = "../archived"
+            project["ACTIVE_IMPLEMENTATION_LOCATION_STATE"] = "MAPPED"
+            path.write_text(json.dumps(routing))
+
+            result = route_work.route(root, "family")
+            self.assertEqual(result["ROUTING_STATUS"], "BLOCKED")
+            self.assertEqual(result["REASON"], "STANDALONE_ACTIVE_IMPLEMENTATION_BOUNDARY_UNVERIFIED")
+        finally:
+            d.cleanup()
+
     def test_pending_constitution_blocks_write_routing(self):
         d, root = self.make_root()
         try:

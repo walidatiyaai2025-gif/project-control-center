@@ -123,7 +123,16 @@ def route(root: Path, identifier: str, variant_name: str | None = None, scope: s
             return blocked("INVALID_SCOPE_FOR_STANDALONE_PROJECT", TARGET_SCOPE=target_scope)
         impacted_variants: list[str] = []
         cross_variant = False
-        change_boundary = "PROJECT"
+        target_location = project.get("ACTIVE_IMPLEMENTATION_LOCATION")
+        target_location_state = project.get("ACTIVE_IMPLEMENTATION_LOCATION_STATE")
+        if target_location:
+            if (target_location_state != "MAPPED"
+                    or target_location.startswith("/")
+                    or ".." in target_location.split("/")
+                    or target_location.strip() != target_location):
+                return blocked("STANDALONE_ACTIVE_IMPLEMENTATION_BOUNDARY_UNVERIFIED",
+                               PROJECT_ID=project.get("PROJECT_ID"))
+        change_boundary = f"PROJECT:{target_location}" if target_location else "PROJECT"
     elif model == "PRODUCT_FAMILY":
         if target_variant and not target_scope:
             target_scope = "VARIANT"
