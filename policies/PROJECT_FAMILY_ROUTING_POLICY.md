@@ -42,6 +42,14 @@ A variant with `ROUTING_STATE=READY` must have a verified mapped/external implem
 
 Do not invent a directory, client branch, repository, domain, or shared-core architecture to force READY.
 
+## Owner-approved single-active product default
+
+A product family can retain an archived legacy implementation for historical traceability while operating a single active production edition. Such a **transitional Laravel-only product** remains a `PRODUCT_FAMILY` record until source cleanup and repository-model reclassification are independently verified; archived editions must have `STATUS=ARCHIVED` and `ROUTING_STATE=ARCHIVED` and are not eligible for new feature work, CI acceptance, release, or deployment.
+
+Only where the PCC routing record explicitly declares both `DEFAULT_SCOPE=VARIANT` and `DEFAULT_VARIANT_ID` and has **exactly one** `STATUS=ACTIVE` variant matching that ID, the project alias may route automatically to that active variant. An explicit `CORE` request still requires its separate authorization, and an archived variant alias must fail closed. A normal multi-variant family still requires an explicitly selected scope and variant.
+
+For `AIMWWEB`, the owner decision of **2026-11-05** selects `LARAVEL_AIWMWEB` as the sole active product. `AIMWWEB_CURRENT` is retained only as a non-routable historical source archive until a separately validated migration cleans obsolete source and CI. All new product requirements, issue triage, execution and production release gates target Laravel/WordPress/MySQL and the FOODEX-style signed cPanel installation and dashboard update lifecycle. No legacy .NET/Windows build can be required to approve a Laravel deliverable.
+
 ## Manager/Lead routing responsibility
 
 Any Worker assuming Manager/Lead/Dispatcher responsibility MUST perform routing before assigning implementation work. This is a management responsibility and cannot be delegated as ambiguity to the implementation Worker.
