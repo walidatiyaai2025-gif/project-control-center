@@ -88,6 +88,50 @@ class RouteWorkTests(unittest.TestCase):
         finally:
             d.cleanup()
 
+    def test_explicit_owner_default_routes_sole_active_laravel_variant(self):
+        d, root = self.make_root()
+        try:
+            path = root / "portfolio/project-routing.json"
+            routing = json.loads(path.read_text())
+            family = routing["PROJECTS"][1]
+            family["DEFAULT_SCOPE"] = "VARIANT"
+            family["DEFAULT_VARIANT_ID"] = "CLIENTA"
+            family["VARIANTS"][0]["STATUS"] = "ARCHIVED"
+            family["VARIANTS"][0]["ROUTING_STATE"] = "ARCHIVED"
+            family["CORE_ROUTING_STATE"] = "BLOCKED_UNRESOLVED"
+            path.write_text(json.dumps(routing))
+
+            routed = route_work.route(root, "family", task="laravel-feature")
+            self.assertEqual(routed["ROUTING_STATUS"], "ROUTED")
+            self.assertEqual(routed["TARGET_SCOPE"], "VARIANT")
+            self.assertEqual(routed["TARGET_VARIANT"], "CLIENTA")
+            self.assertEqual(routed["TARGET_IMPLEMENTATION_LOCATION"], "variants/clienta")
+            self.assertEqual(routed["IMPACTED_VARIANTS"], ["CLIENTA"])
+
+            archive = route_work.route(root, "base")
+            self.assertEqual(archive["ROUTING_STATUS"], "BLOCKED")
+            self.assertEqual(archive["REASON"], "TARGET_VARIANT_NOT_ACTIVE")
+
+            blocked_core = route_work.route(root, "family", scope="CORE")
+            self.assertEqual(blocked_core["REASON"], "SHARED_CORE_BOUNDARY_NOT_READY")
+        finally:
+            d.cleanup()
+
+    def test_default_does_not_infer_or_bypass_multi_variant_family(self):
+        d, root = self.make_root()
+        try:
+            path = root / "portfolio/project-routing.json"
+            routing = json.loads(path.read_text())
+            family = routing["PROJECTS"][1]
+            family["DEFAULT_SCOPE"] = "VARIANT"
+            family["DEFAULT_VARIANT_ID"] = "CLIENTA"
+            path.write_text(json.dumps(routing))
+            result = route_work.route(root, "family")
+            self.assertEqual(result["ROUTING_STATUS"], "BLOCKED")
+            self.assertEqual(result["REASON"], "TARGET_SCOPE_REQUIRED_FOR_PRODUCT_FAMILY")
+        finally:
+            d.cleanup()
+
     def test_pending_constitution_blocks_write_routing(self):
         d, root = self.make_root()
         try:
