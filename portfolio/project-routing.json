@@ -7,7 +7,10 @@
       "DISPLAY_NAME": "AIMWWeb",
       "REPOSITORY": "walidatiyaai2025-gif/AIMWWeb",
       "PROJECT_MODEL": "PRODUCT_FAMILY",
-      "ALIASES": ["aimwweb", "aimw web"],
+      "ALIASES": [
+        "aimwweb",
+        "aimw web"
+      ],
       "ROUTING_REQUIRED": true,
       "CONSTITUTION_PATH": "AGENTS.md",
       "CONSTITUTION_STATE": "READY",
@@ -17,40 +20,56 @@
       "FAMILY_MANIFEST_PATH": ".pcc/project-family.json",
       "VARIANT_GOVERNANCE_STATE": "PARTIAL",
       "CORE_ROUTING_STATE": "BLOCKED_UNRESOLVED",
-      "DEFAULT_SCOPE": null,
+      "DEFAULT_SCOPE": "VARIANT",
       "VARIANTS": [
         {
           "VARIANT_ID": "AIMWWEB_CURRENT",
           "DISPLAY_NAME": "AIMWWeb Current",
-          "TYPE": "PRIMARY",
-          "STATUS": "ACTIVE",
+          "TYPE": "PRODUCT_VARIANT",
+          "STATUS": "ARCHIVED",
           "DERIVED_FROM": null,
-          "ALIASES": ["aimwweb", "aimw web", "current aimwweb", "aspnet aimwweb"],
+          "ALIASES": [
+            "legacy aimwweb aspnet",
+            "aspnet aimwweb archive",
+            "aimwweb old desktop"
+          ],
           "IMPLEMENTATION_LOCATION": ".",
           "IMPLEMENTATION_LOCATION_STATE": "MAPPED",
-          "ROUTING_STATE": "READY",
+          "ROUTING_STATE": "ARCHIVED",
           "BOUNDARY_EVIDENCE_SHA": "02efdf27f3dcf79030c578059aaee67fa3676679"
         },
         {
           "VARIANT_ID": "LARAVEL_AIWMWEB",
           "DISPLAY_NAME": "Laravel AIWMWeb",
-          "TYPE": "PRODUCT_VARIANT",
+          "TYPE": "PRIMARY",
           "STATUS": "ACTIVE",
-          "DERIVED_FROM": "AIMWWEB_CURRENT",
-          "ALIASES": ["laravel aiwmweb", "laravel aimw web", "aiwmweb laravel", "laravel edition"],
+          "DERIVED_FROM": null,
+          "ALIASES": [
+            "laravel aiwmweb",
+            "laravel aimw web",
+            "aiwmweb laravel",
+            "laravel edition"
+          ],
           "IMPLEMENTATION_LOCATION": "variants/laravel-aiwmweb",
           "IMPLEMENTATION_LOCATION_STATE": "MAPPED",
           "ROUTING_STATE": "READY",
           "BOUNDARY_EVIDENCE_SHA": "2f5c4c24cb01dd0ffafdce3f394e6d4f5bdae38e"
         }
-      ]
+      ],
+      "DEFAULT_VARIANT_ID": "LARAVEL_AIWMWEB",
+      "ACTIVE_PRODUCT_STACK": "Laravel / PHP / MySQL-MariaDB / React / WordPress",
+      "LEGACY_SOURCE_STATE": "ARCHIVED_NONPRODUCT_PENDING_TESTED_REPOSITORY_CLEANUP",
+      "OWNER_LARAVEL_ONLY_DECISION_DATE": "2026-11-05"
     },
     {
       "PROJECT_ID": "NOTONLYBOOK",
       "DISPLAY_NAME": "NotOnlyBook",
       "REPOSITORY": "walidatiyaai2025-gif/notonlybook",
       "PROJECT_MODEL": "PRODUCT_FAMILY",
-      "ALIASES": ["notonlybook", "not only book"],
+      "ALIASES": [
+        "notonlybook",
+        "not only book"
+      ],
       "ROUTING_REQUIRED": true,
       "CONSTITUTION_PATH": "AGENTS.md",
       "CONSTITUTION_STATE": "READY",
@@ -68,7 +87,10 @@
           "TYPE": "PRIMARY",
           "STATUS": "ACTIVE",
           "DERIVED_FROM": null,
-          "ALIASES": ["notonlybook", "not only book"],
+          "ALIASES": [
+            "notonlybook",
+            "not only book"
+          ],
           "IMPLEMENTATION_LOCATION": ".",
           "IMPLEMENTATION_LOCATION_STATE": "MAPPED",
           "ROUTING_STATE": "READY",
@@ -82,7 +104,11 @@
           "TYPE": "CLIENT_VARIANT",
           "STATUS": "ACTIVE",
           "DERIVED_FROM": "NOTONLYBOOK",
-          "ALIASES": ["arabiaswonder", "arabiaswonders", "arabias wonders"],
+          "ALIASES": [
+            "arabiaswonder",
+            "arabiaswonders",
+            "arabias wonders"
+          ],
           "IMPLEMENTATION_LOCATION": ".",
           "IMPLEMENTATION_LOCATION_STATE": "MAPPED",
           "ROUTING_STATE": "READY",
@@ -98,7 +124,11 @@
       "DISPLAY_NAME": "MODRIK",
       "REPOSITORY": "walidatiyaai2025-gif/Modrik",
       "PROJECT_MODEL": "STANDALONE",
-      "ALIASES": ["modrik", "مدرك", "مُدرك"],
+      "ALIASES": [
+        "modrik",
+        "مدرك",
+        "مُدرك"
+      ],
       "ROUTING_REQUIRED": true,
       "CONSTITUTION_PATH": "AGENTS.md",
       "CONSTITUTION_STATE": "READY",
@@ -116,7 +146,13 @@
       "DISPLAY_NAME": "PCC Executive",
       "REPOSITORY": "walidatiyaai2025-gif/walid",
       "PROJECT_MODEL": "STANDALONE",
-      "ALIASES": ["pcc executive", "pcc executive desktop", "project commander", "ai project commander", "walid"],
+      "ALIASES": [
+        "pcc executive",
+        "pcc executive desktop",
+        "project commander",
+        "ai project commander",
+        "walid"
+      ],
       "ROUTING_REQUIRED": true,
       "CONSTITUTION_PATH": "AGENTS.md",
       "CONSTITUTION_STATE": "READY",
@@ -134,7 +170,11 @@
       "DISPLAY_NAME": "GPTDeskTop",
       "REPOSITORY": "walidatiyaai2025-gif/GPTDeskTop",
       "PROJECT_MODEL": "STANDALONE",
-      "ALIASES": ["gptdesktop", "gpt desktop", "gpt desk top"],
+      "ALIASES": [
+        "gptdesktop",
+        "gpt desktop",
+        "gpt desk top"
+      ],
       "ROUTING_REQUIRED": true,
       "CONSTITUTION_PATH": "AGENTS.md",
       "CONSTITUTION_STATE": "READY",
