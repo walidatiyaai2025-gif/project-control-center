@@ -10,7 +10,7 @@
       "ROLLOUT_WAVE": 0,
       "CANARY": true,
       "WRITE_AUTHORIZED": false,
-      "CANONICAL_DEVELOPMENT_LINEAGE": "UNRESOLVED",
+      "CANONICAL_DEVELOPMENT_LINEAGE": "main",
       "AUTH_PROVIDER": "github_actions_or_runtime",
       "VERSION_POLICY": "unknown-existing-project",
       "VERSION_SOURCE": "UNKNOWN",
